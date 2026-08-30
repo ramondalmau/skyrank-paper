@@ -86,8 +86,9 @@ in advance. Simulated on a held-out quarter at
 fuel that the airlines' own later filings confirm, of order 180 to
 210\,kt of CO$_2$ per year, four fifths of it flown by 28 of the 815
 operators. Trained on one year and watched month by month over the
-next half year, the model
-holds its precision target across all six months, ageing by proposing less rather than by erring more. While there
+next half year, the model's proposal precision moves by under two
+points while its coverage falls by about a fifth: it ages by proposing
+less rather than by erring more. While there
 is still room for improvement, particularly on flights that never
 revise their plans, these figures indicate that airline route
 acceptance is learnable from operational records alone.
@@ -248,9 +249,8 @@ expressed relative to those of the other route in the pair, by
 subtracting the pair minimum from each: what reaches the model is not
 2\,000\,kg but the 300\,kg by which one route exceeds the other, which
 carries the same meaning whether the sector is 400 or 4\,000\,km.
-Section~\ref{sec:leakage} shows that this relative encoding is the
-single most important design choice in the system, and quantifies what
-happens without it.
+Section~\ref{sec:ablation-sec} shows that this relative encoding is
+the single most important design choice in the system.
 
 % =====================================================================
 \section{Related work}
@@ -529,7 +529,7 @@ fitted on January 2025 through February 2026, tuned on March 2026, and
 evaluated once on April to June 2026 (225\,181 pairs). Every threshold,
 calibrator and stopping decision is taken on the tuning month alone.
 Flights appearing in the tuning or evaluation months are removed from
-the fitting set, and eleven pre-registered checks verify split
+the fitting set, and eleven automated checks verify split
 disjointness, feature construction and the pair invariants. A second
 split, used only in Section~\ref{sec:horizon}, moves the entire window
 back one year so that the model can be watched for six months beyond
@@ -544,12 +544,9 @@ because the two routes are separated in time as well as in geography:
 the replacement is by construction the later message, and any feature
 that drifts with time can therefore identify the answer without saying
 anything at all about the quality of the route. This section is devoted
-to that problem, because on this archive it is not a technicality: it
-is worth 9.7 percentage points of apparent accuracy, and a model built
-without attention to it would report excellent figures while knowing
-nothing whatever about routes.
-
-\subsection{Two worked examples}
+to that problem, because on this archive it is not a technicality: a
+model built without attention to it would report excellent figures
+while knowing nothing whatever about routes.
 
 For instance, the time remaining to departure is necessarily smaller
 for the route that replaced the other, so a model given that feature in
@@ -575,26 +572,6 @@ comparison, and it generalises poorly to sectors of other lengths. The
 within-pair encoding subtracts the pair minimum from each indicator, so
 that what reaches the model is 0 against 300\,kg, a pure comparison
 that carries the same meaning whether the sector is 400 or 4\,000\,km.
-
-\subsection{What the encoding is worth}
-\label{sec:encodingworth}
-
-The ablation of Section~\ref{sec:ablation-sec} puts a number on this
-design choice, and the number is remarkable: retraining the screening
-configuration with raw magnitudes instead of within-pair differences
-drops accuracy from 60.6\,\% to 50.8\,\%, i.e.\ to chance. Nothing else
-in the system comes close to this effect; removing the stay-pair
-correction, the waypoint text or the vertical-change filter each moves
-accuracy by a few percentage points at most. The encoding is what
-converts four absolute magnitudes into a comparison, and on this task
-the comparison is everything: a model of route \emph{quantities} learns
-nothing that survives contact with a held-out pair, whereas a model of
-route \emph{differences} carries fifteen points of margin over the best
-single rule. The lesson travels beyond this paper: any system that
-learns from paired administrative records, where the alternatives are
-recorded at different times, should expect its accuracy to be dominated
-by what it does about within-pair normalisation, and should measure
-that before measuring anything else.
 
 % =====================================================================
 \section{Model, training and calibration}
@@ -634,7 +611,7 @@ indistinguishable on every indicator, while only one of them crosses a
 volume whose identifier the model has met in thousands of earlier
 revisions; the token set carries that fact and the aggregate distance
 cannot. Stay pairs enter the fitting set with a group weight $w$, and
-the weight is swept over the values 1, 10, 30 and 100; the selection of
+the weight is swept over the values 10, 30 and 100; the selection of
 $w = 10$ is discussed with the change-bias results in
 Section~\ref{sec:changebias}.
 
@@ -849,8 +826,9 @@ including vertical-only revisions     & $-1.4$ \\
 \end{table}
 
 Expressing the indicators relative to the other route in the pair is
-decisively the most important choice, for the reasons developed at
-length in Section~\ref{sec:leakage}. The waypoint-text result requires
+decisively the most important choice, since removing it costs nearly
+ten percentage points: it is what converts four absolute magnitudes
+into a comparison. The waypoint-text result requires
 care, and illustrates why screening ablations can mislead.
 Interestingly, at screening scale the text feature appears worthless,
 and yet retrained at full scale it is worth $+1.5$ percentage points
@@ -900,7 +878,7 @@ pairs at group weight 10 raises the masked figure to 57.3\,\%
 (intervals $[54.3, 60.2]$ against $[42.8, 48.7]$, non-overlapping) at a
 cost of about one point on the revision metric.
 
-The group weight $w$ was selected by a sweep over $\{1, 10, 30, 100\}$,
+The group weight $w$ was selected by a sweep over $\{10, 30, 100\}$,
 training one model per weight. Raising $w$ from 10 to 100 improves the
 unmasked stay figure from 91.6\,\% to 98.0\,\%, but the masked figure
 only from 58.6\,\% to 60.0\,\%, while revision accuracy falls from
@@ -1323,9 +1301,10 @@ correction. Fourthly, the model weighs route structure more heavily
 than any individual cost indicator, which is precisely the information
 that a formulation based on costs alone cannot represent. Fifthly,
 trained on one year and watched over the following six months, the
-model holds the 80\,\% operating point across all six months, its accuracy
-dipping by at most three points before recovering with the season: it
-ages by proposing less, not by erring more.
+model's proposal precision never leaves the band from 77.2 to
+78.9\,\%, somewhat below the 80\,\% target it was tuned for, while its
+accuracy dips by at most three points before recovering with the
+season: it ages by proposing less, not by erring more.
 
 One practical note should be made before turning to the limits. The
 number that characterises this system is not 68.3\,\% but the curve of

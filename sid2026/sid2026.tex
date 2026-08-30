@@ -377,7 +377,7 @@ The evaluation is strictly out of time, in the sense that the model is
 fitted on January 2025 through February 2026, tuned on March 2026, and
 evaluated once on April to June 2026 (225\,181 pairs). Every threshold,
 calibrator and stopping decision is taken on the tuning month alone. Flights appearing in the tuning or evaluation
-months are removed from the fitting set, and eleven pre-registered checks
+months are removed from the fitting set, and eleven automated checks
 verify split disjointness, feature construction and the pair invariants.
 
 
@@ -398,7 +398,7 @@ function~\cite{prokhorenkova2017}, at a depth of 8, with the learning rate
 selected automatically and with early stopping on the tuning month. Key
 performance indicators are normalised within each pair by subtracting the
 pair minimum. Stay pairs enter the fitting set with a group weight $w$,
-swept over $\{1, 10, 30, 100\}$.
+swept over $\{10, 30, 100\}$.
 
 One detail proved consequential, and is worth recording here. When the fitting set is a weighted mixture
 of revision pairs and stay pairs, the tuning set must carry the same mixture
@@ -564,7 +564,7 @@ remains it scores 45.7\,\%, below chance. Adding stay pairs at group weight
 $[42.8, 48.7]$, non-overlapping) at a cost of about one point on the revision
 metric.
 
-The group weight $w$ was selected by a sweep over $\{1, 10, 30, 100\}$,
+The group weight $w$ was selected by a sweep over $\{10, 30, 100\}$,
 training one model per weight. Raising $w$ from 10 to 100 improves the
 unmasked stay figure from 91.6\,\% to 98.0\,\%, but the masked figure only
 from 58.6\,\% to 60.0\,\%, while revision accuracy falls from 68.2\,\% to
