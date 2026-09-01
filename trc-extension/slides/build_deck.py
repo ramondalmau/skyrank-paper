@@ -530,7 +530,7 @@ def build():
         "How accuracy and confidence are measured",
         [
             ("Score both routes in a held-out pair", "Never used in training, tuning, or calibration"),
-            ("Correct = higher score matches the choice", "Accuracy is this, averaged across all pairs: 68.3% overall"),
+            ("Correct = higher score matches the choice", "Accuracy is this, averaged across all pairs: 68.1% overall"),
             ("The score gap is a confidence signal", "A bigger gap between the two scores means a more confident call"),
             ("Coverage = share of cases answered", "Answering only the surest fifth raises accuracy to 95%"),
         ],
@@ -541,7 +541,7 @@ def build():
         prs, L,
         "The headline, and the curve behind it",
         "fig_coverage.png",
-        "68.3% accuracy across all cases; 95% on the most confident fifth.",
+        "68.1% accuracy across all cases; 95% on the most confident fifth.",
     )
 
     image_slide(
@@ -605,7 +605,7 @@ def build():
         "From a score to a decision",
         "fig_tradeoff.png",
         "More confidence required means fewer suggestions but better precision. "
-        "At this threshold: 16.4 kt fuel a quarter, ~200 kt CO₂/yr.",
+        "At this threshold: 20.1 kt fuel a quarter, ~240 kt CO₂/yr.",
     )
 
     flow_slide(
@@ -624,7 +624,7 @@ def build():
         prs, L,
         "Where the value sits",
         "fig_concentration.png",
-        "Six of 815 airlines account for half of the confirmed fuel;\n"
+        "Six of 882 airlines account for half of the confirmed fuel;\n"
         "28 account for four-fifths.",
     )
 

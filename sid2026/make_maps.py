@@ -29,7 +29,7 @@ import pandas as pd  # noqa: E402
 sys.path.insert(0, str(Path(__file__).parent))
 import style  # noqa: E402
 
-WT = Path("/data/rdcodina/skyrank/_audit/worktree")
+WT = Path("/home/rdcodina/projects/skyrank")
 sys.path.insert(0, str(WT / "src"))
 sys.path.insert(0, str(WT / "studies/2026-07-fuel-study/code"))
 

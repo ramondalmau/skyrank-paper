@@ -151,9 +151,9 @@ The heterogeneity story the conference had one sentence for:
 - Sensitivity without stay pairs (`muac_sweep_nostay.csv`): the whole case
   recomputed with the bias correction removed, showing what a naive model
   would have promised.
-- Concentration (`fuel_concentration.csv`, restored figure): 6 of 815
-  operators fly half of the confirmed fuel, 28 fly 80 %; by city pair, 145
-  of 10 020 carry half. Monthly breakdown (`muac_breakdown_month.csv`)
+- Concentration (`fuel_concentration.csv`, restored figure): 6 of 882
+  operators fly half of the confirmed fuel, 28 fly 80 %; by city pair, 153
+  of 10 939 carry half. Monthly breakdown (`muac_breakdown_month.csv`)
   shows the quarter is not carried by one month (4.8-5.9 Mkg each).
 
 ### S8. Generalisation **[NEW RUN, the only expensive addition]**

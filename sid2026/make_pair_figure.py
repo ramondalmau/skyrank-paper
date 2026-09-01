@@ -24,7 +24,7 @@ import pandas as pd  # noqa: E402
 import style  # noqa: E402
 from style import GREEN, INK, RED, apply  # noqa: E402
 
-WT = Path("/data/rdcodina/skyrank/_audit/worktree")
+WT = Path("/home/rdcodina/projects/skyrank")
 sys.path.insert(0, str(WT / "src"))
 from skyrank.analysis.visualise import _airac_from_snapshot  # noqa: E402
 from skyrank.aviation.waypoints import load_waypoints  # noqa: E402
