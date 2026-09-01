@@ -23,7 +23,7 @@ FAMILY = {
     "icaoRoutePoints": ("the route itself", ACCENT),
     "atfmDelay": ("regulation", RED),
     "numberOfRegulations": ("regulation", RED),
-    "lookAheadTime": ("regulation", RED),
+    "lookAheadTime": ("rotation and context", GREY),
     "kpiConsumedFuelIndicator": ("cost", GREEN),
     "kpiRouteChargeIndicator": ("cost", GREEN),
     "kpiLength": ("cost", GREEN),
