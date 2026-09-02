@@ -3,7 +3,8 @@
 *Which Reroute Will an Airline Accept? Learning Route Preferences from
 Flight-Plan Revisions*
 
-Dalmau, Perez, Belkoura, Taverniers, Deransy, Cramet, Gustin (EUROCONTROL).
+Dalmau, Perez, Belkoura, Taverniers, Deransy, Cramet, Gustin, Ballerini
+(EUROCONTROL).
 
 ## Status
 
