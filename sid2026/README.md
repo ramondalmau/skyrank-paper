@@ -62,7 +62,7 @@ python make_maps.py            # map_escape, map_saver
 python make_pair_figure.py     # pair_idea
 ```
 
-`fig_pipeline.png` (Fig. 3) is a raster made with an image model, shared by
+`fig_pipeline.png` (Fig. 2) is a raster made with an image model, shared by
 both papers: the author ran PaperBanana's own Planner, Stylist, Visualizer
 and Critic prompts by hand in ChatGPT
 (`../trc-extension/figures-src/fig_pipeline_paperbanana_chatgpt.md` is the

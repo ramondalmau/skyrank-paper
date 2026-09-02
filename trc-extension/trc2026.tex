@@ -84,23 +84,21 @@ may never have seen. This paper fits a pairwise ranking model on
 1\,134\,000 of these pairs, expressing each route's indicators
 relative to the other's, and identifies the chosen route in
 68.1\,\% of
-held-out decisions. Simple cost rules do strictly worse than chance:
+held-out decisions. Simple cost rules do worse than chance:
 preferring the route with less planned fuel scores 45.0\,\%. The model
 knows its own uncertainty, reaching 94.9\,\% on its most confident
 fifth, so a proposal channel, offering airlines cheaper routes before
 they file, can be run at a confidence threshold set in advance, so that
 a set fraction of proposals turn out right. On a held-out quarter at
 an 80\,\% precision target, such a channel would have proposed
-20.1 kilotonnes (kt) of planned-fuel savings per quarter, of order 220
-to 250\,kt of CO$_2$ per year, on routes the airlines themselves later
-filed and thereby showed acceptable. Four fifths of that value is
-flown by 28 of the 882 airlines. Trained on one year and watched over
+20.1 kilotonnes of planned-fuel savings per quarter, of order 220
+to 250 kilotonnes of CO$_2$ per year, on routes the airlines themselves later
+filed and thereby showed acceptable. Trained on one year and watched over
 the next half year, the model's proposal precision moves by under two
 points while the share of flights it proposes on falls by about a
 fifth: it ages by proposing less, not by erring more. While there
 is still room for improvement, particularly on flights that never
-revise, these figures indicate that airline route
-acceptance is learnable from operational records alone.
+revise, airline route acceptance is learnable from operational records alone.
 \end{abstract}
 
 \begin{keyword}
@@ -228,8 +226,9 @@ used throughout the paper. An
 airline facing such a delay has a choice that is genuinely economic:
 accept it, or file a route that avoids the constrained volume at the
 cost of distance, fuel and en-route charges. Neither answer is
-universally correct. For instance, a flight with a tight aircraft
-rotation may find forty minutes of delay far more expensive than a
+universally correct. For instance, a flight with a tight aircraft rotation (i.e., a schedule in which the
+same aircraft flies several legs in the day, so that delay on one leg
+propagates to the next) may find forty minutes of delay far more expensive than a
 tonne of fuel, whereas the same delay on the last leg of the day may
 well be cheaper than the detour. This is why the decision is worth
 learning rather than deriving: the trade depends on airline-specific
@@ -362,7 +361,8 @@ to predict the flight plans not yet filed so that traffic demand could
 be estimated earlier than the filing horizon allows, was constructed in
 that way \citep{dalmau2024}. Its training pairs take the filed plan as
 preferred and a set of generated proposals (up to eleven route options
-produced by the Network Manager) as less preferred, and on the
+produced by the Network Manager, the network-level flow-management
+function of EUROCONTROL) as less preferred, and on the
 pre-tactical set none of the latter need match the filed route at all.
 Ranking the filed plan above such candidates may therefore require only
 that the model recognise which route looks like a filed plan, which is
@@ -379,7 +379,7 @@ Revisions remove that difficulty (Fig.~\ref{fig:pairidea}). Both routes
 were filed by the same airline, for the same flight, on the same day,
 so the negative is not a plausible alternative constructed after the
 fact but the route that the airline had committed to and then
-abandoned. In the vocabulary of the preceding subsection, the
+abandoned. In this vocabulary, the
 constructed pair records what a filed plan looks like, whereas the
 revision pair records a preference that the airline expressed itself.
 The question also narrows: the model is not asked what an airline will
@@ -989,7 +989,8 @@ decisively the most important choice, since removing it costs nearly
 ten percentage points: it is what converts four absolute magnitudes
 into a comparison. The waypoint-text result requires
 care, and illustrates why screening ablations can mislead.
-Interestingly, at screening scale the text feature appears worthless,
+Interestingly, at screening scale (the reduced setting of
+Table~\ref{tab:ablation}) the text feature appears worthless,
 and yet retrained at full scale it is worth $+1.4$ percentage points
 (68.2 against 66.8), the reason being that a bag-of-words
 representation spread over thousands of rare tokens cannot repay its
@@ -1006,7 +1007,9 @@ its own, and when regulation features are masked so that only route
 understanding remains it scores 47.8\,\%, below chance. Adding stay
 pairs at group weight 10 raises the masked figure to 58.1\,\%
 (intervals $[55.1, 61.0]$ against $[44.8, 50.7]$, non-overlapping) at a
-cost of about one point on the revision metric.
+cost of about one point on the revision metric at full scale (the 3.7
+points of Table~\ref{tab:ablation} are measured at the reduced screening
+setting).
 
 The group weight $w$ was selected by a sweep over $\{10, 30, 100\}$,
 training one model per weight; the sweep's own $w=10$ run lands within
@@ -1041,7 +1044,9 @@ preference can only have come from the waypoint sequence itself,
 presumably a learned structural preference that overrode the
 indicators; confident errors are therefore not all of the
 hidden-information kind (decisions driven by facts, like a slot swap
-or a curfew, visible in no route-level record).
+(an exchange of departure slots between an airline's own flights) or a
+curfew (a night-time closure at an airport), visible in no route-level
+record).
 
 Opportunely, such cases cost less than their share of the error rate
 would suggest, because a proposal channel would have said nothing at
@@ -1539,11 +1544,12 @@ the writing process}
 During the preparation of this work the authors used Claude
 (Anthropic) to assist with drafting and editing the manuscript text
 and with producing the analysis figures from the study's result
-tables, and Gemini (Google) to develop the layout of the methodology
-schematic of Fig.~\ref{fig:method}, which was then redrawn as vector
-code. After using these tools, the
-authors reviewed and edited the content as needed and take full
-responsibility for the content of the published article.
+tables, and an OpenAI image-generation model, driven through the
+PaperBanana agent prompts, to produce the methodology schematic of
+Fig.~\ref{fig:method}; that figure is a model-generated image whose
+every label the authors checked against the method. After using these
+tools, the authors reviewed and edited the content as needed and take
+full responsibility for the content of the published article.
 
 \section*{Declaration of competing interest}
 The authors declare that they have no known competing financial

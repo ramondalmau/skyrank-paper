@@ -34,8 +34,10 @@ of that naive counter; do not chase it.
   phrases; every section opens with a lead-in paragraph.
 - **The SID prose is the core.** Sections shared with the conference paper
   were carried over nearly verbatim and the journal material written around
-  them. The abstract is held at 250 words (count with LaTeX markup stripped;
-  agents counting braces report ~10 too many).
+  them. The abstract is held at 250 words under the strictest count: strip
+  macros and braces, treat `\,` as a space, and replace `\%` BEFORE dropping
+  `%` comments (a naive comment strip deletes the rest of every line with a
+  percentage and under-counts by ~20; that mistake was made once).
 - **Neutrality**: no operator, waypoint, volume or city pair is named in any
   table; the per-city-pair and per-waypoint tables of the study were
   deliberately left out. The introduction keeps the Amsterdam–Barcelona

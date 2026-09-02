@@ -34,9 +34,15 @@ The author block is VISIBLE (\blindfalse), per the organisers' 2026-08-06
 confirmation above. (An earlier version of this line wrongly said the block
 was anonymised.)
 
-CAMERA-READY STATUS (2026-08-21)
-- Build verified: 8 pages, 0 LaTeX errors, 0 undefined references, all 15
-  fonts embedded, figures drawn at print size (see README).
+CAMERA-READY STATUS (2026-09-02; supersedes 2026-08-21)
+- Build verified: exactly 8 pages, 0 overfull boxes, 0 undefined references,
+  figures drawn at print size (see README). Section structure simplified to
+  plain IMRAD headings on 2026-09-02.
+- Fig. 2 (`fig_pipeline.png`) is an image-model raster at 287 dpi at its
+  0.85\textwidth include; IEEE's guidance for raster art is 300 dpi. The
+  author chose to keep the raster (no vector fallback is held). Elsevier-
+  style restrictions on generative-AI images do not apply to SID, but the
+  figure's origin should be disclosed if the venue asks.
 - Official page re-checked 2026-08-21: 8-page limit, PDF-only, deadline
   21 September 2026, notification 12 November 2026 — all unchanged.
 - The template download requires an EasyChair login, so the transplant is

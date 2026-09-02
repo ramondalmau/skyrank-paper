@@ -358,7 +358,7 @@ fact and the aggregate distance cannot. Neither
 decision is novel in isolation, and Section~\ref{sec:ablation-sec} shows
 that the first of them matters far more than the authors expected.
 
-\label{sec:trap} Every revision pair is, by construction, a flight that
+Every revision pair is, by construction, a flight that
 \emph{did} change route, and that creates a trap. A model trained only on such events learns that change is what happens, and
 recommends it far too eagerly against traffic that mostly stays, a bias
 that Section~\ref{sec:changebias} measures. Put another way, the archive answers one question only, namely: when an
@@ -467,7 +467,8 @@ offered this route will take it''. That conversion is what calibration provides,
 namely a monotone mapping from score gap to observed acceptance rate, fitted
 on the tuning month alone~\cite{zadrozny2002}. Three mappings were compared on the tuning month, namely the raw sigmoid of
 the score gap, Platt scaling and isotonic regression. Isotonic regression
-was selected on tuning-month log loss, and is what the pipeline uses. Miscalibration is common in this class of model~\cite{guo2017}, but it is
+was selected on tuning-month log loss, before the evaluation months were
+touched, and is what the pipeline uses. Miscalibration is common in this class of model~\cite{guo2017}, but it is
 worth reporting that on the held-out quarter the raw sigmoid was already
 well calibrated, at an expected calibration error (the mean gap between
 stated probability and observed rate) of 0.8 percentage points against 1.7
@@ -543,8 +544,8 @@ span a schedule change, and accuracy does not step down across it.
 % December; March 2026 is the last month of the winter season and April
 % the first of the summer one, when route availability, traffic and
 % airline schedules change together; the best of the six months is the
-% last one. Six
-months rule out rapid decay, but they do not establish the retraining
+% last one.
+Six months rule out rapid decay, but they do not establish the retraining
 cadence that a deployed system would need.
 
 \subsection{Ablation and change bias}
@@ -602,7 +603,8 @@ and when regulation features are masked so that only route understanding
 remains it scores 47.8\,\%, below chance. Adding stay pairs at group weight
 10 raises the masked figure to 58.1\,\% (intervals $[55.1, 61.0]$ against
 $[44.8, 50.7]$, non-overlapping) at a cost of about one point on the revision
-metric.
+metric at full scale (the 3.7 points of Table~\ref{tab:ablation} are
+measured at the reduced screening setting).
 
 Raising $w$ from 10 to 100 moves three separate quantities. Stay accuracy
 with the regulation features visible rises from 90.3\,\% to 97.6\,\%; stay
@@ -664,8 +666,8 @@ of this particular model.
 \centering
 \includegraphics[width=0.948\columnwidth]{fig_shap.pdf}
 \caption{Mean absolute Shapley value per feature on the held-out quarter.
-The waypoint sequence alone accounts for more of the score than the four cost
-indicators combined, and attributed ATFM delay outweighs planned fuel.}
+The waypoint sequence is the largest single term, ahead of every cost
+indicator, and attributed ATFM delay outweighs planned fuel.}
 \label{fig:shap}
 \end{figure}
 
