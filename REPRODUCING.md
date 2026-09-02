@@ -63,7 +63,7 @@ STIXGeneral, which ships with matplotlib, so no system font is required.
 | `sid2026/make_maps.py` | scored test parquet and the navigation database under the repository's `data/` (raw data, Section 1) |
 | `sid2026/make_pair_figure.py` | `data/ich_dataset/ich_dataset_2026-04.parquet` (raw data) |
 | `trc-extension/make_horizon_figure.py` | `studies/2026-08-trc-horizon/tables/*.csv` |
-| `trc-extension/figures-src/fig_pipeline.tex` | nothing; TikZ, compiled by tectonic |
+| `trc-extension/figures-src/fig_pipeline_paperbanana_chatgpt.md` | the PaperBanana agent prompts (Planner, Stylist, Visualizer, Critic) that the author runs by hand in ChatGPT to produce `fig_pipeline.png`; `fig_pipeline_chatgpt_original.png` is the untouched output |
 
 All drivers hard-code the repository root as `/home/rdcodina/projects/skyrank`
 and the staging directory as `/data/rdcodina/skyrank/_audit/paper/figures`.
@@ -88,9 +88,11 @@ cp /data/rdcodina/skyrank/_audit/paper/figures/{fig_coverage,fig_shap,pair_idea}
 cd ../trc-extension
 python make_trc_figures.py && python make_horizon_figure.py
 
-# 3. Pipeline diagram (shared by both papers)
-cd figures-src && ~/.local/bin/tectonic -X compile fig_pipeline.tex --outdir "$TMPDIR/pipe"
-cp "$TMPDIR/pipe/fig_pipeline.pdf" ../figures/ && cp "$TMPDIR/pipe/fig_pipeline.pdf" ../../sid2026/figures/
+# 3. Pipeline diagram (shared by both papers): run the four PaperBanana prompts in
+#    figures-src/fig_pipeline_paperbanana_chatgpt.md in ChatGPT, download the accepted
+#    image at full size, trim its white margin (PIL getbbox against white, 8 px pad),
+#    save losslessly as fig_pipeline.png into BOTH figures/ directories, and check the
+#    dpi at the include widths (SID 0.85\textwidth, TRC 0.95\textwidth).
 ```
 
 After **every** copy, check the MediaBox against the size the paper expects

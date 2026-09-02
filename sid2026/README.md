@@ -29,7 +29,7 @@ mkdir -p "$TMPDIR/sid"
 ~/.local/bin/tectonic -X compile sid2026.tex --outdir "$TMPDIR/sid"
 ```
 
-The committed `figures/*.pdf` are sufficient to build. There is no `pdflatex`
+The committed `figures/*.pdf` and `figures/fig_pipeline.png` are sufficient to build. There is no `pdflatex`
 on the analysis host; use tectonic. Check after every build: page count 8, no
 `Overfull` lines, no `??` in the PDF.
 
@@ -62,8 +62,16 @@ python make_maps.py            # map_escape, map_saver
 python make_pair_figure.py     # pair_idea
 ```
 
-`fig_pipeline.pdf` is TikZ, compiled from
-`../trc-extension/figures-src/fig_pipeline.tex` and shared by both papers.
+`fig_pipeline.png` (Fig. 3) is a raster made with an image model, shared by
+both papers: the author ran PaperBanana's own Planner, Stylist, Visualizer
+and Critic prompts by hand in ChatGPT
+(`../trc-extension/figures-src/fig_pipeline_paperbanana_chatgpt.md` is the
+exact prompt bundle; `fig_pipeline_chatgpt_original.png` next to it is the
+untouched model output). The installed PNG is that output with its white
+margin trimmed, re-encoded losslessly. At `0.85\textwidth` it sits at
+287 dpi (IEEE asks for 300 for raster art; the earlier raster went in at
+274); its smallest labels are about 4.5 pt on the page. Every label was
+checked against the method text before installation.
 The SID uses `fig_coverage`, `fig_shap`, `pair_idea` and `fig_pipeline`;
 `fig_tradeoff`, `fig_concentration` and the two maps are produced by the same
 drivers but appear only in the journal paper.

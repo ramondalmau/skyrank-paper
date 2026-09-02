@@ -314,20 +314,15 @@ two constructions.
 % =====================================================================
 \section{Methodology} \label{sec:method}
 
-Figure~\ref{fig:method} shows the procedure end to end. The first
-subsection covers the archive, the pairs built from it and their encoding,
-and the second the model, its calibration and the proposal policy. Thus, a
-reader interested only in the outcome can move on to
-Section~\ref{sec:results}.
+Figure~\ref{fig:method} shows the procedure end to end; the two
+subsections that follow cover the data and the model. Thus, a reader
+interested only in the outcome can move on to Section~\ref{sec:results}.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.85\textwidth]{fig_pipeline.pdf}
-\caption{How a filing archive becomes a proposal. Each revision yields two routes for
-the same flight, exactly one of which the airline chose (tick); stay pairs
-(flights that kept their route, Section~\ref{sec:method}) invert that
-construction and enter at a group weight of 10. The score gap becomes an acceptance probability, compared
-with a threshold fixed in advance.}
+\includegraphics[width=0.85\textwidth]{fig_pipeline.png}
+\caption{How a filing archive becomes a proposal: the five stages of this
+section, followed for one flight, above the fit, tune and test periods.}
 \label{fig:method}
 \end{figure*}
 
@@ -495,11 +490,9 @@ this way, and the fifth is simply not taken.
 \section{Results}
 \label{sec:results}
 
-This section reports predictive performance and its stability first, then
-which design choices earn their place and how far the change bias is
-corrected, then what the errors look like and what the model weighs, and
-finally one proposal followed end to end, together with what deployment
-would require.
+This section reports predictive performance, then the design choices and
+the change bias, then the errors and what the model weighs, and finally one
+proposal followed through to deployment.
 
 \subsection{Predictive performance}
 
@@ -543,12 +536,14 @@ A model that scores well on average but decays from month to month is not
 deployable, and accuracy is therefore reported per month rather than
 pooled. Across the three test months it moves between 67.5\,\% and
 69.0\,\%, and a replication run of the same recipe on 2025 alone scores
-67.3\,\% and 67.5\,\%, at or just below the same band. The 2025 replication was fitted to September and tested on November and
-December. Those six months span a schedule change, since March 2026 is the
-last month of the winter season and April the first of the summer one,
-when route availability, traffic and airline schedules change together,
-and accuracy does not step down across it; the best of the six months is
-the last one. Six
+67.3\,\% and 67.5\,\%, at or just below the same band. Those six months
+span a schedule change, and accuracy does not step down across it.
+% Cut for space (the journal extension measures model ageing directly):
+% the 2025 replication was fitted to September and tested on November and
+% December; March 2026 is the last month of the winter season and April
+% the first of the summer one, when route availability, traffic and
+% airline schedules change together; the best of the six months is the
+% last one. Six
 months rule out rapid decay, but they do not establish the retraining
 cadence that a deployed system would need.
 
@@ -736,10 +731,10 @@ departure, a route the airline itself went on to prefer. That is the
 strongest validation available without running the channel, and the form on
 which every fuel figure in this paper rests.
 
-Nothing about this flight is exotic: it carried no delay, it faced no
-regulation, and the saving came from a different track rather than from a
-shorter one. It is the ordinary case that a proposal channel exists to
-surface.
+% Cut for space: Nothing about this flight is exotic: it carried no delay,
+% it faced no regulation, and the saving came from a different track rather
+% than from a shorter one. It is the ordinary case that a proposal channel
+% exists to surface.
 
 
 One proposal followed end to end says little about a channel making tens of

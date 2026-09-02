@@ -43,7 +43,9 @@ of that naive counter; do not chase it.
 - **Figures** are re-rendered at the elsarticle text width (390 pt) by
   `make_trc_figures.py`, which overrides `style.SIZES` from the SID drivers
   and copies the results into `figures/`; `fig_horizon.pdf` comes from
-  `make_horizon_figure.py`. Nothing is scaled at include time. See
+  `make_horizon_figure.py`. `fig_pipeline.png` is the image-model figure
+  shared with the SID (see `figures-src/`; 341 dpi at its `0.95\textwidth`
+  include). Nothing is scaled at include time. See
   `../REPRODUCING.md` for the order of operations, because this driver
   overwrites the shared staging directory used by the SID.
 
