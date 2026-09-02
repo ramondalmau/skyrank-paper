@@ -422,7 +422,8 @@ group & content \\
 \midrule
 indicators & flight time, distance, planned fuel, route charges \\
 regulation & attributed delay (own, inbound, outbound), \\
-           & their count, reason, protected volume \\
+           & their count, reason, and the type and \\
+           & identifier of the protected volume \\
 rotation   & inbound and outbound connection times and states \\
 context    & operator, aircraft type, city pair, hour, \\
            & weekday, month, time to departure \\
@@ -468,7 +469,9 @@ at the same weights, since a tuning set composed only of revision pairs
 measures a different objective from the one being optimised. Unfortunately,
 this mismatch caused training to halt at the very first iteration and to
 return a below-chance model, which is a measurement failure that presents
-itself as a model failure.
+itself as a model failure. The pipeline therefore carries the same mixture
+into both splits, and warns when it cannot, so the models reported here are
+unaffected.
 
 \subsection{From scores to proposals}
 \label{sec:proposals}
