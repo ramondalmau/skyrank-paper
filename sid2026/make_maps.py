@@ -25,6 +25,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import pandas as pd  # noqa: E402
+from shapely.geometry import Point  # noqa: E402
 
 sys.path.insert(0, str(Path(__file__).parent))
 import style  # noqa: E402
@@ -100,6 +101,32 @@ for name, (uid, adep, ades) in CASES.items():
                 linestyle=dash if dash else "solid",
                 path_effects=style.halo(style.LW + 1.5), zorder=3)
 
+    # Name the two routes on the routes themselves. Dash against solid
+    # already survives greyscale, but the reader should not have to reach
+    # for the caption to learn which line is which. Each label is placed at
+    # the vertex where its own route is furthest from the other one, which
+    # is by construction the part of the map where there is room for it.
+    for line, other, colour, word in ((l0, l1, OLD, "abandoned"),
+                                      (l1, l0, NEW, "filed")):
+        # Candidates are sampled by DISTANCE along the track, not by vertex
+        # index: waypoints bunch near the terminal areas, so an index-based
+        # middle slice still resolved to a point a few miles from the
+        # departure marker and the word landed on its own first segment.
+        cand = [line.interpolate(f / 100.0, normalized=True)
+                for f in range(45, 71, 2)]
+        best = max(cand, key=lambda q: other.distance(q))
+        pt = (best.x, best.y)
+        px, py = style.project([pt[0]], [pt[1]])
+        # the two words go to opposite sides of their own track, by role
+        # rather than by map half: on a route pair that runs diagonally
+        # both labels landed in the upper half and stacked on each other
+        up = word == "abandoned"
+        ax.annotate(word, (px[0], py[0]), (0, 10 if up else -10),
+                    textcoords="offset points", ha="center",
+                    va="bottom" if up else "top", fontsize=style.FS_SMALL,
+                    color=colour, zorder=7,
+                    path_effects=style.halo(2.2))
+
     # The saver case sits on a thin seasonal sector, where naming both ends
     # plus the geometry would point at a single operator. Its endpoints stay
     # unlabelled; the caption says so.
@@ -131,6 +158,6 @@ for name, (uid, adep, ades) in CASES.items():
     ax.set_ylim(y0, y1)
     ax.set_aspect("equal")
     style.frame(ax)
-    fig.savefig(OUT / f"{name}.pdf")
+    style.save(fig, OUT / f"{name}.pdf")
     plt.close(fig)
     print(f"wrote {name}.pdf")

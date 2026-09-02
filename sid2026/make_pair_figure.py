@@ -99,7 +99,7 @@ mx, my = (max(allx) - min(allx)) * 0.08 + 0.4, (max(ally) - min(ally)) * 0.12 + 
 BBOX = (min(allx) - mx, min(ally) - my, max(allx) + mx, max(ally) + my)
 PANEL_ASPECT = _w * style.SIZES["pair_idea"][0] / ((1 - TOP) * style.SIZES["pair_idea"][1])
 
-for ax, title in ((axA, "candidates"), (axB, "a revision")):
+for ax, letter, title in ((axA, "a", "candidates"), (axB, "b", "a revision")):
     style.basemap(ax, BBOX, borders=True)
     BX, BY = style.project([BBOX[0], BBOX[2], BBOX[0], BBOX[2]],
                            [BBOX[1], BBOX[3], BBOX[3], BBOX[1]])
@@ -114,11 +114,11 @@ for ax, title in ((axA, "candidates"), (axB, "a revision")):
     ax.set_xlim(x0, x1); ax.set_ylim(y0, y1)
     ax.set_aspect("equal")
     style.frame(ax)
-    ax.set_title(title, fontsize=style.FS_ANNOT, color=INK, pad=3.0)
+    style.panel(ax, letter, title, pad=3.0)
 
 DASH = (0, (3.4, 1.6))
 for ls in cands:
-    axA.plot(*style.project(*ls.xy), color="#9c9a95", lw=0.75, alpha=0.9,
+    axA.plot(*style.project(*ls.xy), color=style.MUTED, lw=0.75, alpha=0.9,
              zorder=2, solid_capstyle="round")
 axA.plot(*style.project(*chosen.xy), color=GREEN, lw=1.5, zorder=4,
          solid_capstyle="round", path_effects=style.halo(2.9))
@@ -134,18 +134,34 @@ for ax in (axA, axB):
         ax.plot(px[0], py[0], "o", ms=2.8, mfc="white", mec=INK, mew=0.8,
                 zorder=6)
 
-for ax, items in ((axA, [("#9c9a95", "candidates", "solid"),
-                         (GREEN, "filed", "solid")]),
-                  (axB, [(RED, "abandoned", DASH),
-                         (GREEN, "filed instead", "solid")])):
-    for col, lab, ls in items:
-        ax.plot([], [], color=col, lw=1.5, linestyle=ls, label=lab)
-    # the legend sat directly on the coastline and was unreadable; give it
-    # an opaque plate rather than moving it out of the panel
-    ax.legend(fontsize=style.FS_TICK, frameon=True, loc="lower left",
-              handlelength=1.4, labelspacing=0.22, borderaxespad=0.15,
-              handletextpad=0.4, facecolor="white", edgecolor="none",
-              framealpha=0.9, borderpad=0.3).set_zorder(8)
+# Direct labels on the routes, not legend plates in the corner. The two
+# opaque white boxes the panels used to carry were the heaviest objects in
+# a figure whose subject is geometry, and they still made the reader match
+# a swatch to a line. Each label goes at the vertex where its own route is
+# furthest from the route it is being contrasted with, so it lands in the
+# empty part of the panel by construction.
+from shapely.geometry import Point  # noqa: E402
 
-fig.savefig(OUT / "pair_idea.pdf")
+
+def label_route(ax, line, other, colour, word):
+    # only the middle of the track is eligible: near an endpoint the two
+    # routes are still together and the label crowded the terminal dot
+    cs = list(line.coords)
+    mid = cs[int(len(cs) * 0.25):max(int(len(cs) * 0.75), 2)] or cs
+    pt = max(mid, key=lambda c: other.distance(Point(c)))
+    px, py = style.project([pt[0]], [pt[1]])
+    up = pt[1] > (BBOX[1] + BBOX[3]) / 2
+    ax.annotate(word, (px[0], py[0]), (0, 6 if up else -6),
+                textcoords="offset points", ha="center",
+                va="bottom" if up else "top", fontsize=style.FS_SMALL,
+                color=colour, zorder=8, path_effects=style.halo(2.2))
+
+
+widest = max(cands, key=lambda l: l.hausdorff_distance(chosen))
+label_route(axA, widest, chosen, style.MUTED, "candidates")
+label_route(axA, chosen, widest, GREEN, "filed")
+label_route(axB, aband, chosen, RED, "abandoned")
+label_route(axB, chosen, aband, GREEN, "filed instead")
+
+style.save(fig, OUT / "pair_idea.pdf")
 print(f"wrote pair_idea.pdf  ({len(cands)} candidates, {CITY})")

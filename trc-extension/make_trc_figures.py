@@ -15,6 +15,7 @@ remain the authoritative SID versions.
 """
 from __future__ import annotations
 
+import os
 import runpy
 import shutil
 import sys
@@ -53,5 +54,11 @@ for script in ("make_pair_figure.py", "make_data_figures.py",
 OUT = Path("/data/rdcodina/skyrank/_audit/paper/figures")
 for name in ("pair_idea", "fig_coverage", "fig_shap", "fig_tradeoff",
              "fig_concentration", "map_escape", "map_saver"):
-    shutil.copy(OUT / f"{name}.pdf", HERE / "figures" / f"{name}.pdf")
+    # copy through a temporary name in the destination directory and rename
+    # over the target: an interrupted copy then leaves the previous good
+    # figure in place instead of a truncated PDF the build cannot read
+    dst = HERE / "figures" / f"{name}.pdf"
+    tmp = dst.with_name(f".{name}.partial.pdf")
+    shutil.copyfile(OUT / f"{name}.pdf", tmp)
+    os.replace(tmp, dst)
     print(f"copied {name}.pdf")
