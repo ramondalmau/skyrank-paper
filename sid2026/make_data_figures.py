@@ -16,7 +16,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
 import style
-from style import ACCENT, FAINT, GREEN, GREY, INK, LW, MUTED, RED, apply, clean
+from style import ACCENT, GREEN, GREY, INK, LW, MUTED, RED, apply, clean
 
 apply()
 T = Path("/home/rdcodina/projects/skyrank/studies/2026-07-fuel-study/tables")
@@ -101,7 +101,9 @@ style.panel(axF, "b")
 
 for ax, val, colour in ((axP, op.precision * 100, RED),
                         (axF, op.realized_kg / 1e6, GREEN)):
-    ax.axvline(0.60, color=FAINT, lw=0.9, zorder=1)
+    # GREY, not FAINT: at print size the faint rule vanished and the two
+    # panels lost the vertical line that ties their operating points together
+    ax.axvline(0.60, color=GREY, lw=0.9, zorder=1)
     ax.plot(0.60, val, "o", ms=5.0, mfc="white", mec=colour, mew=1.6, zorder=6)
     clean(ax)
     ax.set_xlim(0.44, 0.91)
@@ -109,12 +111,15 @@ for ax, val, colour in ((axP, op.precision * 100, RED),
 axP.set_xticks([0.5, 0.6, 0.7, 0.8, 0.9])
 # One written reading, in the panel where the threshold is chosen; the
 # vertical rule carries it down into the fuel panel.
-style.note(axP, f"operating point\n$\\tau$ = 0.60, {op.precision * 100:.0f}%",
+style.note(axP, f"operating point\n$\\tau$ = {op.tau:.3f}, {op.precision * 100:.0f}%",
            xy=(0.60, op.precision * 100), xytext=(0.735, 71.0), colour=INK,
            ha="center")
 style.tag(axF, 0.615, op.realized_kg / 1e6,
           f"{op.realized_kg / 1e6:.1f} kt", colour=GREEN, ha="left",
           va="bottom", size=style.FS_SMALL)
+# the two y labels are different lengths, so without this they start at
+# different x and the panels look mis-stacked
+fig.align_ylabels([axP, axF])
 style.save(fig, OUT / "fig_tradeoff.pdf"); plt.close(fig)
 
 # --- 3. where the value sits ----------------------------------------------

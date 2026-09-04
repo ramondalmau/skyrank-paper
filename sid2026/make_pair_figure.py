@@ -150,10 +150,14 @@ def label_route(ax, line, other, colour, word):
     mid = cs[int(len(cs) * 0.25):max(int(len(cs) * 0.75), 2)] or cs
     pt = max(mid, key=lambda c: other.distance(Point(c)))
     px, py = style.project([pt[0]], [pt[1]])
-    up = pt[1] > (BBOX[1] + BBOX[3]) / 2
-    ax.annotate(word, (px[0], py[0]), (0, 6 if up else -6),
-                textcoords="offset points", ha="center",
-                va="bottom" if up else "top", fontsize=style.FS_SMALL,
+    # The direction comes from the geometry, not from which half of the map
+    # the point happens to sit in: with the old rule the "filed instead"
+    # label of panel (b) was written across the abandoned track and its
+    # white halo cut the red dashes in two.
+    dx, dy, ha, va = style.away_offset(line, pt, other, dist=7.5)
+    ax.annotate(word, (px[0], py[0]), (dx, dy),
+                textcoords="offset points", ha=ha, va=va,
+                fontsize=style.FS_SMALL,
                 color=colour, zorder=8, path_effects=style.halo(2.2))
 
 

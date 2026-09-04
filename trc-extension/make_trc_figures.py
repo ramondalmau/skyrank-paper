@@ -27,6 +27,15 @@ sys.path.insert(0, str(SID))
 
 import style  # noqa: E402  (the SID style module)
 
+# The type in the SID figures was calibrated against a 10 pt body. The
+# elsarticle preprint sets 12 pt, so the same figures arrived with 7.4 pt
+# secondary annotation beside 12 pt prose -- the smallest type on the page
+# by a wide margin. One step up across the whole scale, applied before the
+# generators run, so every figure in this paper is drawn at these sizes and
+# the conference sizes in style.py are left alone.
+style.FS_PANEL, style.FS_TICK, style.FS_LABEL, style.FS_ANNOT, \
+    style.FS_SMALL = 9.5, 9.0, 10.0, 9.5, 8.5
+
 # width x height in TeX pt; same aspect ratios as the SID sizes.
 # style.size() divides by 72, i.e. it treats these numbers as big points
 # (1/72 in), while LaTeX's \textwidth is measured in TeX points
@@ -39,8 +48,12 @@ TRC_SIZES_PT = {
     "fig_shap":          (270, 201),
     "fig_tradeoff":      (270, 160),
     "fig_concentration": (270, 169),
-    "map_escape":        (195, 190),
-    "map_saver":         (250, 124),
+    # The two maps are stacked in one float, so they are drawn to a common
+    # width; each keeps its own aspect ratio, so the change is a pure scale
+    # and neither map's geographic extent moves.
+    "map_escape":        (220, 214),
+    "map_saver":         (220, 109),
+    "fig_shap_direction": (390, 172),
 }
 style.SIZES.update({
     name: (w * PT2BP, h * PT2BP) for name, (w, h) in TRC_SIZES_PT.items()
@@ -52,8 +65,8 @@ for script in ("make_pair_figure.py", "make_data_figures.py",
     runpy.run_path(str(SID / script), run_name="__main__")
 
 OUT = Path("/data/rdcodina/skyrank/_audit/paper/figures")
-for name in ("pair_idea", "fig_coverage", "fig_shap", "fig_tradeoff",
-             "fig_concentration", "map_escape", "map_saver"):
+for name in ("pair_idea", "fig_coverage", "fig_shap", "fig_shap_direction",
+             "fig_tradeoff", "fig_concentration", "map_escape", "map_saver"):
     # copy through a temporary name in the destination directory and rename
     # over the target: an interrupted copy then leaves the previous good
     # figure in place instead of a truncated PDF the build cannot read

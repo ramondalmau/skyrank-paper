@@ -72,6 +72,7 @@ SIZES = {
     "fig_shap":          (239, 178),
     "fig_tradeoff":      (239, 142),
     "fig_concentration": (239, 150),
+    "fig_shap_direction": (516, 228),
 }
 
 
@@ -221,6 +222,53 @@ def halo(lw: float = 2.4, colour: str = "white"):
     their length render as one thick smear at column width.
     """
     return [pe.Stroke(linewidth=lw, foreground=colour), pe.Normal()]
+
+
+def away_offset(line, pt_lonlat, other, dist: float = 9.0):
+    """Where to put a label on `line` so it steps off `line`, away from `other`.
+
+    Returns (dx, dy, ha, va) for an offset-points annotation.
+
+    Two earlier versions chose the direction from which half of the map the
+    point fell in, or from a fixed (0, +/-10). Both are blind to the
+    geometry: on a near-vertical track a vertical offset walks the word
+    along its own route instead of off it, which is how the red route came
+    to run through the word "abandoned", and on a diagonal pair the "up"
+    label crossed the other track and its white halo cut that track's
+    dashes.
+
+    The direction that is right in every case is the PERPENDICULAR to the
+    label's own track -- so the word always steps off its own line -- taking
+    whichever of the two perpendicular senses points away from the other
+    route. Everything is computed in the projected frame, because a degree
+    of longitude and a degree of latitude are not the same distance.
+    """
+    from shapely.geometry import Point
+    from shapely.ops import nearest_points
+
+    here = Point(pt_lonlat)
+    # local tangent, from a short chord centred on the label point
+    s = line.project(here)
+    step = max(line.length * 0.02, 1e-6)
+    b = line.interpolate(max(s - step, 0.0))
+    f = line.interpolate(min(s + step, line.length))
+    (bx, fx), (by, fy) = project([b.x, f.x], [b.y, f.y])
+    tx, ty = fx - bx, fy - by
+    tn = (tx * tx + ty * ty) ** 0.5 or 1.0
+    nx, ny = -ty / tn, tx / tn          # unit normal to the track
+
+    # the sense that points away from the other route
+    there = nearest_points(other, here)[0]
+    (hx, ox), (hy, oy) = project([here.x, there.x], [here.y, there.y])
+    if nx * (hx - ox) + ny * (hy - oy) < 0:
+        nx, ny = -nx, -ny
+
+    dx, dy = nx * dist, ny * dist
+    # anchor the text on the side the offset came from, so the gap between
+    # the word and its own track is the offset and not half a word besides
+    ha = "center" if abs(dx) < 0.30 * dist else ("left" if dx > 0 else "right")
+    va = "center" if abs(dy) < 0.30 * dist else ("bottom" if dy > 0 else "top")
+    return dx, dy, ha, va
 
 
 def project(lons, lats):

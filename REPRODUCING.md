@@ -34,6 +34,31 @@ scored parquets) are mirrored to the bucket, not committed.
 The horizon experiment is one script, `studies/2026-08-trc-horizon/code/run_horizon.py`;
 see its README.
 
+Two stages produce tables that the 2026-09 revision added to the manuscripts
+and that are cheap to rerun on their own, because both read cached artefacts
+rather than the raw parquet:
+
+| Stage | Produces | Reads |
+|-------|----------|-------|
+| `run_18_logistic_baseline.py` | `tables/logistic_baselines.csv` (the learned-baseline ladder of the journal paper's baseline table) | the cached split parquets |
+| `run_20_decision_context_accuracy.py` | `tables/context_accuracy_test.csv`, `results/context_accuracy.json` (what each revision did to the attributed delay, with accuracy) | `data/cache/study2026/scores_model_main_sw10_seed42_test.parquet` |
+| `run_21_shap_direction.py` | `tables/shap_dependence.csv` (which way each feature pushes; drives `fig_shap_direction`) | the cached SHAP matrix, `data/cache/study2026/shap_matrix.npz` |
+| `run_22_calibration_bands.py` | `tables/calibration_bands.csv`, `results/calibration_bands.json` (score gap to acceptance probability) | `data/cache/study2026/calibrated_test.parquet` |
+
+A second trap, in `run_22` and worth stating because it produced a wrong table
+column in a draft: the pipeline's `p_pref` is the calibrated probability for
+the route the airline *chose*, so on pairs the model gets wrong it is below one
+half. The operationally meaningful quantity is the probability for the route
+the model ranks *first*, which is `p_pref` where the model is right and
+`1 - p_pref` where it is not.
+
+**A convention trap worth knowing before quoting either.** Stage 14 and the
+strata table call a route *regulated* when a regulation was attributed to it,
+which leaves the delay free to be zero; stage 20 keys on the delay itself.
+The two disagree by about six points on the share of the held-out quarter
+that is untouched (63.3 % against 71.0 %), and the manuscripts say so where
+both are used. Never quote one under the other's name.
+
 Both studies are heavy (hundreds of thousands of pairs, gradient-boosted
 training). Observe the memory discipline in `AGENTS.md`: probe, then cap.
 
@@ -62,7 +87,8 @@ STIXGeneral, which ships with matplotlib, so no system font is required.
 | `sid2026/make_shap_figure.py` | `studies/2026-07-fuel-study/tables/shap_importance.csv` |
 | `sid2026/make_maps.py` | scored test parquet and the navigation database under the repository's `data/` (raw data, Section 1) |
 | `sid2026/make_pair_figure.py` | `data/ich_dataset/ich_dataset_2026-04.parquet` (raw data) |
-| `trc-extension/make_horizon_figure.py` | `studies/2026-08-trc-horizon/tables/*.csv` |
+| `trc-extension/make_horizon_figure.py` | `studies/2026-08-trc-horizon/tables/horizon_accuracy.csv` and `horizon_policy.csv` (two stacked panels: accuracy, then precision and proposal share) |
+| `sid2026/make_shap_figure.py` (second figure) | `studies/2026-07-fuel-study/tables/shap_dependence.csv`, for `fig_shap_direction` |
 | `trc-extension/figures-src/fig_pipeline_paperbanana_chatgpt.md` | the PaperBanana agent prompts (Planner, Stylist, Visualizer, Critic) that the author runs by hand in ChatGPT to produce `fig_pipeline.png`; `fig_pipeline_chatgpt_original.png` is the untouched output |
 
 All drivers hard-code the repository root as `/home/rdcodina/projects/skyrank`

@@ -53,6 +53,16 @@
 
 \journal{Transportation Research Part C: Emerging Technologies}
 
+
+% Typesetting: no single line of a paragraph may be stranded at the top or
+% the bottom of a page or column, and no word may be hyphenated across a
+% page break. These are the standard penalties; they cost a little vertical
+% justification and buy pages that read continuously.
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\brokenpenalty=10000
+
 \begin{document}
 
 \begin{frontmatter}
@@ -65,9 +75,10 @@
 \author[ih]{Franck Ballerini}
 \author[muac]{Seddik Belkoura}
 \author[muac]{Vincent Taverniers}
+\author[muac]{Gratiel Marius Marin}
 \author[ih]{Robin Deransy}
 \author[hq]{Benjamin Cramet}
-\author[hq]{Gregory Gustin}
+\author[hq]{Grigori Gustin}
 \cortext[cor]{Corresponding author.}
 \affiliation[ih]{organization={EUROCONTROL Innovation Hub},
   city={Br\'etigny-sur-Orge}, country={France}}
@@ -79,27 +90,28 @@
 \begin{abstract}
 Every flight-plan revision records a choice an airline actually made:
 the route it dropped and the route it filed instead. Eighteen months
-of European traffic contain 1.48 million such pairs, a label arguably
-stronger than earlier work's generated alternatives, which the airline
-may never have seen. This paper fits a pairwise ranking model on
-1\,134\,000 of these pairs, expressing each route's indicators
-relative to the other's, and identifies the chosen route in
-68.1\,\% of
-held-out decisions. Simple cost rules do worse than chance:
-preferring the route with less planned fuel scores 45.0\,\%. The model
-knows its own uncertainty, reaching 94.9\,\% on its most confident
-fifth, so a proposal channel, offering airlines cheaper routes before
-they file, can be run at a confidence threshold set in advance, so that
-a set fraction of proposals turn out right. On a held-out quarter at
-an 80\,\% precision target, such a channel would have proposed
-20.1 kilotonnes of planned-fuel savings per quarter, of order 220
-to 250 kilotonnes of CO$_2$ per year, on routes the airlines themselves later
-filed and thereby showed acceptable. Trained on one year and watched over
-the next half year, the model's proposal precision moves by under two
-points while the share of flights it proposes on falls by about a
-fifth: it ages by proposing less, not by erring more. While there
-is still room for improvement, particularly on flights that never
-revise, airline route acceptance is learnable from operational records alone.
+of European traffic contain 1.48 million such pairs, a stronger record
+of preference than the generated alternatives of earlier work, which an
+airline may never have seen. The aim is to cut carbon dioxide by
+offering cheaper routes only where they would be taken. This paper fits
+a pairwise ranking model on 1\,134\,000 pairs, expressing each route's
+indicators relative to the other's, and identifies the chosen route in
+68.1\,\% of held-out decisions. Cost rules fail here: preferring the
+route with less planned fuel scores 45.0\,\%, so the strongest simple
+rule is its inverse, at 55.0\,\%. A channel offering the cheaper route
+to every flight would therefore be wrong more often than right, and
+what it needs is a way of telling the flights that would take it from
+those that would not. The model supplies one, being right 94.9\,\% of
+the time on the fifth of cases it is most confident about. Aimed at
+80\,\% precision on a held-out quarter, such a channel reached
+79.2\,\%, against the 44.9\,\% of proposing the cheaper route on every
+flight that has one, and its proposals carried 20.1 kilotonnes of
+planned fuel per quarter on routes the airlines went on to file for
+themselves, which is between about 220 and 255 kilotonnes of CO$_2$ a
+year. A second model, watched over the six months after its training
+cutoff, ages by proposing less rather than by erring more. The clearest
+gap is the flights that never revise, and even so, airline route
+acceptance is learnable from operational records alone.
 \end{abstract}
 
 \begin{keyword}
@@ -129,44 +141,53 @@ records the route replaced and the route that replaced it, and
 therefore a preference that the airline expressed with its own filing
 system rather than in answer to a survey.
 
-The operational interest is concrete, and the network-level context is
-reported annually by the Performance Review Commission
-\citep{prc2026}: airlines frequently revise onto routes that
-\emph{cost} fuel in order to escape delay, while fuel-cheaper
-alternatives for other flights are not identified in time to be filed.
-The difficulty is not generating candidate routes; it is knowing which
+The operational interest is concrete. Europe's air traffic is planned
+across national borders by a single network function, and its
+performance is reviewed each year by an independent commission, which
+reports how much further than the shortest available track the traffic
+actually flies \citep{prc2026}. The archive used here shows one of the
+behaviours behind that extra distance directly: airlines frequently revise onto routes that
+\emph{cost} fuel in order to escape delay. That fuel-cheaper
+alternatives also go unfiled for want of being noticed in time is a
+premise of this work rather than a finding of it, and
+Section~\ref{sec:validity} says so.
+Candidate routes are not hard to come by; what is hard is knowing which
 candidate is acceptable to this particular airline, on this day, with
 this rotation to protect, and knowing it inside the planning window
 rather than under tactical time pressure. What the network lacks is
 therefore a proposal channel, that is, a service that would offer an
-airline, before it files, an alternative route that burns less fuel
-and that the model judges the airline would accept. Needless to say, proposing
-routes that airlines reject is worse than proposing nothing at all,
-because a channel that is ignored is a channel that is eventually
-switched off.
+airline an alternative route that burns less fuel and that the model
+judges the airline would accept, inside the planning window and before
+the flight departs. The timing is not free: two of the model's
+strongest inputs, the attributed delay and the regulation picture,
+exist only once a plan has been filed, so the channel would speak after
+a first filing rather than before one, and
+Section~\ref{sec:validity} returns to what that costs.
+
+The objective of such a channel, and of this paper, is twofold. The
+first half is environmental: a route that burns less planned
+fuel emits less carbon dioxide when it is flown. The second half is
+that the saving must not be bought at the airline's expense, because a
+route that saves a tonne of fuel while costing an hour of delay or a
+broken rotation is not a saving any airline will take. What this paper
+supplies is the instrument that allows the two to be pursued together,
+namely a way of ranking candidate routes by how likely the airline is
+to accept them, so that the environmentally cheaper proposals can be
+aimed at the flights on which they are also cheap in the airline's own
+terms. Needless to say, proposing routes that airlines reject is worse
+than proposing nothing at all, because a channel that is ignored is a
+channel that is eventually switched off.
 
 A preliminary version of this work was presented at the SESAR
-Innovation Days 2026. The two papers deliberately headline different
-things: the conference version headlines the model, that is, whether
-route acceptance can be predicted at all, and closes with a single
-paragraph of fuel outlook, whereas the present paper headlines the
-channel and is the only treatment of what such a channel would
-address. An operating point is the confidence threshold that fixes how
-selective the channel is. That treatment runs from the operating points
-at which the channel could be run, through the concentration of its
-value across airlines and its sensitivity to the design decisions, to
-one proposal followed end to end, from the archive record to the
-airline's own later filing. The present paper
-also extends the conference version with
-the material a feasibility claim actually rests on: the composition of the archive and
-the behaviour it records, the evidence that simple cost rules fail on
-this task, the strata in which the model earns and loses its accuracy,
-the sensitivity of every fuel figure to the bias correction (the
-correction that supplements training with constructed pairs for flights
-that did not revise, because the archive contains only flights that did
-change route, described in Section~\ref{sec:stay}), and a
-retraining-horizon experiment in which the model is trained on one year
-and watched, month by month, over the following half year.
+Innovation Days 2026, where the question was whether route acceptance
+can be predicted at all. The present paper is the treatment of the
+channel: what it would address, at which operating points, for which
+airlines, and how the figure survives the design decisions behind it.
+It adds the composition of the archive, the evidence that simple cost
+rules fail on this task, the strata in which the model earns and loses
+its accuracy, and a retraining-horizon experiment in which the model is
+trained on one year and watched month by month over the following
+half year.
 
 The contribution is fourfold. First, this paper shows that airline
 route acceptance is learnable at network scale from revision events
@@ -213,45 +234,57 @@ Section~\ref{sec:related}.
 
 \subsection{Flight-plan revisions as preference data}
 
-In the European network, a filed flight plan may be revised before
-departure. When the revision changes the horizontal route, the system
-records a route change event containing the flight-plan message that was replaced
-and the message that replaced it. Each event therefore yields two
-routes for the same flight, the same day and the same airline, exactly
-one of which the airline chose.
+In the European network a flight plan is filed before departure and may
+be revised at any time until the flight leaves. Each filing is a
+separate message, and the network keeps the whole sequence. There is no
+single record holding a route change; what exists is a message that
+changed the horizontal route of the plan, and the message that preceded
+it. Those two messages together describe a decision, because the
+airline had committed to the earlier route and then filed the later one
+for the same flight on the same day. The later route is therefore the
+one it chose and the earlier route the one it abandoned. That the pair
+is assembled from two messages sent at different times is not a
+detail of bookkeeping: it shapes the encoding, and
+Section~\ref{sec:leakage} returns to it.
 
-When capacity is constrained, the network applies regulations
-(temporary capacity restrictions declared on volumes of airspace) and
-assigns each crossing flight a delay; this is the attributed ATFM delay
-used throughout the paper. An
-airline facing such a delay has a choice that is genuinely economic:
+Revisions are often a response to air traffic flow management, and the
+term used throughout this paper needs stating plainly. When the traffic expected in a
+volume of airspace exceeds what the controllers there can safely handle,
+whether because of demand, staffing, weather or equipment, a
+\emph{regulation} is placed on that volume for a period, and the flights
+planning to cross it are given calculated take-off times at the rate the
+volume can absorb. A flight held back in this way is given a
+take-off time later than the one it requested, and the difference
+between the two is its \emph{attributed ATFM delay}: the aircraft waits
+on the ground rather than in the air. Not every flight crossing a
+regulated volume is delayed, since a lightly binding regulation absorbs
+most of its traffic at the requested times, and a flight caught by
+several regulations is counted against the one that penalises it most.
+
+An airline facing such a delay has a choice that is genuinely economic:
 accept it, or file a route that avoids the constrained volume at the
-cost of distance, fuel and en-route charges. Neither answer is
-universally correct. For instance, a flight with a tight aircraft rotation (i.e., a schedule in which the
+cost of distance, fuel, en-route charges and the departure slot it
+already holds. Neither answer is universally correct. For instance, a
+flight with a tight aircraft rotation (i.e., a schedule in which the
 same aircraft flies several legs in the day, so that delay on one leg
-propagates to the next) may find forty minutes of delay far more expensive than a
-tonne of fuel, whereas the same delay on the last leg of the day may
-well be cheaper than the detour. This is why the decision is worth
-learning rather than deriving: the trade depends on airline-specific
-and flight-specific costs that the network does not observe, and that
-airlines weigh against published reference values for the cost of delay
-\citep{cook2015}.
-
-The archive reflects this trade directly. Slightly under a third of the
-revision pairs involve any attributed delay at all, and the newly filed
-route is more often longer, slower and more fuel-intensive than the one
-it replaced. Consequently, a proposal channel is not looking for the
-common case, but rather for the minority of flights on which a
-genuinely cheaper alternative exists and would be accepted.
+propagates to the next) may find forty minutes of delay far more
+expensive than a tonne of fuel, whereas the same delay on the last leg
+of the day may well be cheaper than the detour. This is why the
+decision is worth learning rather than deriving: the trade depends on
+airline-specific and flight-specific costs that the network does not
+observe. Published European reference values \citep{cook2015} give the
+order of magnitude of the cost of delay and are widely used for
+analysis, but they are not the cost function any particular airline
+applies, and what an individual operator would charge itself for forty
+minutes is not known outside it.
 
 \subsection{Two operational use cases}
 \label{sec:usecases}
 
-Before the model is described, it is worth stating plainly what it
-would be used for, since the two intended uses share exactly one
-quantity, namely the probability that a particular airline would
-accept a particular alternative for a particular flight, and differ in
-almost everything else.
+The two uses the model is intended for share exactly one quantity,
+namely the probability that a particular airline would accept a
+particular alternative for a particular flight, and differ in almost
+everything else.
 
 The first use case is a proposal channel. For a flight whose filed
 route has an alternative that burns less planned fuel, the channel
@@ -266,66 +299,42 @@ Section~\ref{sec:channel} simulates, with the airlines' own later
 filings standing in for the answers a real channel would collect.
 
 The second use case is the release of an overloaded volume of airspace.
-When the demand on a volume exceeds the capacity declared for it, some
-flights have to be moved off it, and the network must choose which of
-them. The formulations that make such a choice optimise an objective
-defined by the network, whether as a deterministic network flow
-\citep{bertsimas2000} or as a stochastic one that reroutes flights as
-capacity evolves \citep{mukherjee2009}; neither of them models whether
-the airline would accept the assignment it is given. The collaborative
-variants treat airline preferences as an input to be supplied by the
-airline rather than as a quantity to be estimated
-\citep{murca2018,xu2020}, as does the collaborative trajectory options
-programme, in which the airline attaches to each alternative route it
-submits a cost relative to the option it prefers \citep{kulkarni2018},
-and the user-driven
-prioritisation process already in operational use
-\citep{pilon2021,ruiz2019}. A calibrated acceptance probability
-supplies that input for every flight, whether or not its airline has
-declared anything. It also changes the selection criterion: among the
-flights that could be moved, preferring those for which an acceptable
-and environmentally cheaper alternative exists means that one action
-relieves the overload, reduces the environmental impact of the flight,
-and minimises the disruption imposed on the airline. Note that this is
-a reordering of a decision that is taken in any case, rather than a new
-intervention added to the ones already made.
+When the demand on a volume exceeds the capacity declared for it, the
+network's response is a regulation, and the flights it catches may
+reroute of their own accord. A channel of the kind just described could
+instead put a specific alternative to specific flights, and would then
+have to decide which flights to approach first. The formulations
+that make such a choice optimise a network objective and do not model
+whether the airline would fly what it is offered, while the
+collaborative variants treat the airline's preference as an input the
+airline must supply (Section~\ref{sec:related}). A calibrated
+acceptance probability supplies that input for every flight, whether or
+not its airline has declared anything, and it changes the ordering:
+approaching first those flights for which an acceptable and
+environmentally cheaper alternative exists means that one action
+relieves the overload, reduces the fuel burnt on the flight, and asks
+the least of the airline. Acceptance remains voluntary, and this is a
+reordering of a decision taken in any case rather than a new
+intervention.
 
-Neither use case has been tested end to end, and the two are not
-equally far along. The first is simulated, in the sense that every
-proposal is checked against what the airline subsequently filed, so the
-figures reported herein are what a channel would have achieved had the
-airlines behaved as they in fact behaved; it is not a trial, because
+Neither use case has been tested end to end. The first is simulated,
+in the sense that every proposal is checked against what the airline
+subsequently filed, so the figures reported herein are what a channel
+would have achieved had the airlines behaved as they in fact behaved;
 no airline was ever asked anything. The second is enabled rather than
-demonstrated: the model supplies the input that the network-side
-formulations lack, but no overload-release experiment is run in this
-paper, and the claim made here concerns the availability of that input
-and not the outcome of using it.
+demonstrated, in that the model supplies the input the network-side
+formulations lack while no overload-release experiment is run here.
 
-Both uses would, once deployed, produce the labels they need. Every
-proposal that is answered and every release that is accepted or refused
-is a new observation of precisely the kind the model is trained on, so
-the model would improve with use. The responses, however, are no more a
-random sample of flights than revisions are, since an airline can only
-answer the proposals it is sent, and those are the proposals about
-which the model was already confident. Consequently, the shadow-mode
-trial named in Section~\ref{sec:conclusions} (a trial in which the
-channel runs alongside operations, its proposals put to the airlines
-and their answers logged, without any proposal changing what the
-network does) is the honest first step,
-and measuring that bias is as much its purpose as measuring acceptance.
+Both uses would, once deployed, produce the labels they need, since
+every proposal answered is a new observation of exactly the kind the
+model is trained on. Those answers would be a biased sample even so,
+because an airline can only answer the proposals it is sent and those
+are the proposals about which the model was already confident.
+Measuring that bias is as much the purpose of a trial in which real
+proposals are made and the airlines' answers logged
+(Section~\ref{sec:conclusions}) as measuring acceptance is.
 
-One could argue that a channel which selects flights by predicted
-acceptance is not neutral between airlines, and the concern is raised
-here rather than left to the reader. A model trained on filing
-behaviour will send more proposals to the airlines whose behaviour it
-predicts best. Section~\ref{sec:concentration} shows, in addition,
-that the fuel at stake is in any case concentrated in few hands. Any deployment
-should therefore monitor how proposals and confirmed savings are
-distributed across airlines, and should treat a systematic burden on
-particular airlines as a defect of the channel rather than as a
-property of the traffic.
-
-\subsection{Discrete choice and the construction of pairs}
+\subsection{Revealed preference and the construction of pairs}
 \label{sec:discrete}
 
 Readers of this journal will recognise the setting as a route-choice
@@ -337,23 +346,22 @@ that route-choice models must otherwise solve, and the estimator is a
 gradient-boosted ranker rather than a parametric logit. Roughly
 speaking, the model of this paper is a conditional logit whose utility
 function is learned nonparametrically: the training objective
-penalises the model whenever the abandoned route scores at least as
-high as the chosen one, exactly as a binary logit on utility
-differences would, but the score is an arbitrary function of the
-features rather than a linear index. What is given up is the economic
+penalises the model according to how far the abandoned route's score
+sits above the chosen one's, and keeps pressing even once the order is
+right, exactly as a binary logit on utility differences would; what
+differs is that the score is an arbitrary function of the features
+rather than a linear index. What is given up is the economic
 interpretability of coefficients; what is gained is the ability to
-absorb the waypoint sequence itself, which
-Section~\ref{sec:weigh} shows carries more of the decision than any
-cost indicator. The economic tradition supplies the framing that
+absorb the waypoint sequence itself, which Section~\ref{sec:weigh}
+shows to be the largest single term in what moves the model. The economic tradition supplies the framing that
 matters here, namely revealed rather than stated preference
 \citep{samuelson1938}: every label in this paper is something an
 airline did, not something it said it would do.
 
 \label{sec:pairsvsets}
 Revealed preference has a direct consequence for how a training pair
-ought to be built, and it is worth drawing out before the data are
-described, because it is the decision on which everything that follows
-rests.
+ought to be built, and it is the decision on which everything that
+follows rests.
 
 The natural way to build a pair without revisions is to take the filed
 plan as preferred and a set of generated routes as less preferred. The
@@ -365,37 +373,55 @@ preferred and a set of generated proposals (up to eleven route options
 produced by the Network Manager, the network-level flow-management
 function of EUROCONTROL) as less preferred, and on the
 pre-tactical set none of the latter need match the filed route at all.
-Ranking the filed plan above such candidates may therefore require only
-that the model recognise which route looks like a filed plan, which is
-a different and much easier skill than knowing which route an airline
-would prefer, and accuracy alone cannot distinguish the two. For
-instance, a generated candidate may cross airspace that the airline
-never uses, or follow a track that its own flight-planning system would
-discard on company policy; telling such a route from a filed plan calls
-for no knowledge of preference whatsoever. No dataset offers both label
+The weakness of such a label is easiest to see in a single case.
+Suppose an airline filed route A, and that the training pair ranks A
+above a route B that the analyst generated. Filing A shows that A was
+acceptable. Nothing in the record shows that the airline ever saw B,
+still less that it compared B with A and turned B down. The pair
+therefore asserts a preference that was never expressed, and a model
+can satisfy it by learning what a filed plan looks like rather than
+what an airline wants. For instance, a generated candidate may cross
+airspace that the airline never uses, or follow a track that its own
+flight-planning system would discard on company policy; telling such a
+route from a filed plan calls for no knowledge of preference
+whatsoever. Recognising filed plans and ranking routes by preference
+are different skills, and an accuracy figure cannot tell them apart.
+
+A revision pair carries no such doubt (Fig.~\ref{fig:pairidea}). Both
+routes were filed by the same airline, for the same flight, on the same
+day, so the route labelled less preferred is not an alternative
+constructed after the fact but one the airline had committed to and
+then dropped. Whatever else was happening, both routes were on its own
+table, and it moved from one to the other. No dataset offers both label
 sources for the same flights, so this is an argument about how the
 labels are built rather than a measured comparison.
 
-Revisions remove that difficulty (Fig.~\ref{fig:pairidea}). Both routes
-were filed by the same airline, for the same flight, on the same day,
-so the negative is not a plausible alternative constructed after the
-fact but the route that the airline had committed to and then
-abandoned. In this vocabulary, the
-constructed pair records what a filed plan looks like, whereas the
-revision pair records a preference that the airline expressed itself.
-The question also narrows: the model is not asked what an airline will
-file, but which of two specific routes it prefers, which is a strictly
-easier question and precisely the one a proposal channel needs
-answered. The price to be paid is that revisions are not a random
-sample of flights, but rather flights that changed, which introduces a
-bias of its own. Rather than assuming that bias away,
+The question also narrows. The model is not asked what an airline will
+file, but which of two routes it prefers, which is a strictly easier
+question and precisely the one a proposal channel needs answered. It
+should be noted, however, that the pair is the unit of \emph{training}
+and not a limit on use. The trained model gives a score to one route at
+a time, against the other candidates on offer for the same flight: the
+encoding of Section~\ref{sec:leakage} expresses each indicator as the
+amount by which that route exceeds the cheapest candidate, so what the
+model needs is the candidate set, not a pair. A flight offered five
+routes is therefore scored five times against the cheapest of the five,
+and a flight offered fifty is scored fifty times, with the pairwise
+objective doing nothing more than teaching the model where to place
+those scores relative to one another. Every figure in this paper is
+nonetheless measured on pairs, because pairs are what the archive
+records.
+
+The price to be paid is that revisions are not a random sample of
+flights, but rather flights that changed, which introduces a bias of
+its own. Rather than assuming that bias away,
 Section~\ref{sec:changebias} measures it.
 
 \begin{figure*}[t]
 \centering
 \includegraphics{pair_idea.pdf}%
 \caption{Two ways to build a training pair, on one city pair; each
-route is named where it is drawn. Panel (a): the filed route (solid
+route is labelled by its role where it is drawn. Panel (a): the filed route (solid
 green) is ranked above candidates from a route generator (grey), which
 the airline may never have evaluated; those drawn here are other
 routes observed on the same city pair. Panel (b): a revision supplies
@@ -426,10 +452,14 @@ channel simulated herein but does not address which proposals would be
 taken up. The closest work in this thread incorporates airline
 preferences into collaborative rerouting decisions and shows that
 accounting for them changes which reroutes are selected
-\citep{murca2018}. Those preferences, however, are inputs to an
-optimisation, whereas this paper learns the preference function itself,
-at network scale, from what airlines did rather than from what they
-stated. Preferences have on occasion been estimated rather than
+\citep{murca2018,xu2020}, as does the collaborative trajectory options
+programme, in which the airline attaches to each alternative route it
+submits a cost relative to the option it prefers \citep{kulkarni2018}.
+In all of these the preference is an input the airline must supply,
+whereas this paper learns the preference function itself, at network
+scale, from what airlines did rather than from what they stated, and so
+supplies the input for every flight whether or not its airline has
+declared anything. Preferences have on occasion been estimated rather than
 collected, since trajectory options and the preferences over them have
 been derived from historical traffic by clustering and classification
 and then passed to a demand-capacity optimisation
@@ -440,12 +470,14 @@ activating it \citep{dalmau2022}. Both estimate what airlines tend to do
 in the absence of a proposal, whereas releasing an overloaded volume
 requires knowing whether a particular flight would accept a particular
 alternative, which is the quantity the present model supplies. Beyond
-the research literature, airlines already express their
-priorities through the user-driven prioritisation process \citep{pilon2021,ruiz2019}, a legacy and
-trusted mechanism that a preference model of this kind would complement
-rather than replace.
+the research literature, airlines already express flight-level
+priorities within a regulation through the user-driven prioritisation
+process \citep{pilon2021,ruiz2019}, an operational mechanism concerned
+with the ordering of delay among an airline's own flights rather than
+with route choice; a preference model of this kind addresses a
+different quantity and would complement it rather than replace it.
 
-Almost concurrently with the network-side work, route choice in Europe
+Earlier than any of these, route choice in Europe
 was studied as a trade between fuel and en-route charges
 \citep{delgado2015}, which establishes that the choice is economic and
 therefore learnable, but which uses no label in which the airline
@@ -468,16 +500,12 @@ that this paper inherits, namely that logged data reflects the
 behaviour of the system that logged it, a point returned to in
 Section~\ref{sec:validity}.
 
-The direct predecessor of this work applies learning to rank to flight
-routes for a different purpose: predicting the flight plans that have
-not yet been filed, so that traffic demand can be estimated earlier
-than the filing horizon allows \citep{dalmau2024}. That work
-established the framing adopted herein, namely a gradient-boosted
-ranker that scores routes by their indicators in context, and it
-reported the very difficulty that motivates the present paper, namely
-that a pair assembled from generated candidates need not record a
-preference at all. Section~\ref{sec:pairsvsets} sets out that argument
-in full, together with the label construction that follows from it.
+The direct predecessor of this work \citep{dalmau2024} established the
+framing adopted here, namely a gradient-boosted ranker that scores
+routes by their indicators in context, and reported the difficulty that
+motivates the present paper, namely that its training pairs rank the
+filed plan above candidates the airline may never have examined. Section~\ref{sec:pairsvsets} sets out
+that argument and the label construction that follows from it.
 
 % =====================================================================
 \section{Data and pair construction}
@@ -496,7 +524,8 @@ Section~\ref{sec:model}.
 two routes for the same flight, exactly one of which the airline chose, giving 1.48 million revision pairs; stay pairs (flights that
 kept their route, Section~\ref{sec:stay}) invert that construction and
 contribute 6\,672 pairs, entered at a group weight of 10 so that the
-smaller set is not swamped by the larger one. Encoding takes
+smaller set is not swamped by the larger one; the value is chosen by the
+sweep of Section~\ref{sec:changebias}. Encoding takes
 differences within the pair rather than absolute values. The ranking
 model returns one score per route, drawn as the two bars in that box:
 the taller green bar is the route it prefers, the shorter red bar the
@@ -521,25 +550,30 @@ shorthand and is worth spelling out: the protected volume is the
 volume of airspace whose capacity the regulation was declared to
 protect.
 
-All the data used is held by the network for operational purposes and
-was processed under existing data-handling arrangements. Accordingly,
-airline identity enters the model as a categorical feature only, and
-no airline, flight or airspace volume is identified anywhere in this
-paper, so that no finding can be read as an assessment of any airline
-or airspace.
+Two conventions apply throughout. ``Airline'' is used loosely for any
+aircraft operator, since the archive contains business, cargo and
+non-scheduled traffic as well as scheduled airlines, and the figures
+say ``operator'' where the count is over all of them. And all the data
+used is held by the network for operational purposes and was processed
+under existing data-handling arrangements, so operator identity enters
+the model as a categorical feature only, and no operator, flight or
+airspace volume is identified anywhere in this paper.
 
 \begin{table}[t]
 \caption{What the model sees for each route; some rows summarise
-several features (twenty-three in all, seven regulation-derived).
-Indicators enter as differences within the pair; the rest are identical
-on both routes and act as context.}
+several features (twenty-three in all). The first two groups and the
+last belong to the route and differ within a pair, the indicators
+entering as differences from the pair minimum; the rotation and context
+rows belong to the flight and carry the same value on both routes.}
 \label{tab:features}
 \centering\small
 \begin{tabular}{ll}
 \toprule
 group & content \\
 \midrule
-indicators & flight time, distance, planned fuel, route charges \\
+indicators & flight time, distance, planned fuel, en-route \\
+           & charges (the fees an airspace user pays for \\
+           & crossing each charging zone) \\
 regulation & attributed delay (own, inbound, outbound), \\
            & their count, reason, protected volume \\
 rotation   & inbound and outbound connection times and states \\
@@ -551,16 +585,19 @@ route      & the ordered waypoint sequence, as text \\
 \end{table}
 
 \label{sec:composition}
-A journal reader deserves to know what these 1.48 million decisions
-actually look like before any model touches them, and
-Table~\ref{tab:composition} therefore breaks the archive down by the
-regulation context in which each revision was made.
+What those 1.48 million decisions look like matters before any model
+touches them, and Table~\ref{tab:composition} breaks the archive down
+by the regulation context in which each revision was made.
 
 \begin{table}[t]
-\caption{The revision archive by decision context: unregulated pairs
-carry no delay on either route, escapes carry delay on the abandoned
-route only, the next two contexts carry delay on both, and in the final
-context only the newly filed route carries delay. The median fuel
+\caption{The revision archive by decision context, over all eighteen
+months. A pair is counted as regulated here when a regulation was
+attributed to the route, which leaves the delay itself free to be zero;
+Table~\ref{tab:context} sorts the held-out quarter by the delay instead,
+and the two conventions do not give the same counts. Unregulated pairs
+carry no regulation on either route, escapes carry one on the abandoned
+route only, the next two contexts carry one on both, and in the final
+context only the newly filed route is regulated. The median fuel
 difference is between the two routes of a pair; the final column is the
 share of pairs in which the newly filed route burns less planned fuel
 than the one it replaced.}
@@ -601,10 +638,11 @@ drawn from the archive, an escape and a fuel saver.
 \includegraphics{map_escape.pdf}\\[2mm]
 \includegraphics{map_saver.pdf}
 \caption{Two revisions from the archive, in the visual language used
-throughout this paper: the abandoned route is dashed red, its
-replacement solid green, each named on the track itself. Top: an
-escape, in which the airline paid
-fuel and time to leave a regulated volume. Bottom: a fuel saver, in
+throughout this paper: the abandoned route is dashed red and its
+replacement solid green, each labelled on the track itself. Top: an
+escape, in which the airline paid fuel and time to leave a regulated
+volume; the volume itself is not drawn, since naming the airspace would
+identify it. Bottom: a fuel saver, in
 which the replacement was cheaper outright. The first kind dominates
 the regulated part of the archive; the second is what a proposal
 channel exists to surface earlier.}
@@ -617,9 +655,8 @@ channel exists to surface earlier.}
 Every revision pair is, by construction, a flight that \emph{did}
 change route, and that creates a trap. A model trained only on such
 events learns that change is what happens, and recommends it far too
-eagerly against traffic that mostly stays: an uncorrected model prefers
-the alternative route in 65.2\,\% of the cases in which the flight
-demonstrably kept its own. Put another way, the archive answers one
+eagerly against traffic that mostly stays, by a margin that
+Section~\ref{sec:changebias} measures. Put another way, the archive answers one
 question only, namely: when an airline changed its route, which route
 did it move to? It cannot answer the complementary question, because a
 flight that kept its route generates no record of the alternative that
@@ -652,21 +689,18 @@ when a demonstrated, comparably priced alternative exists, which is
 revealed preference for stability itself, and precisely the behaviour
 an over-eager proposal channel would violate.
 
-One property of this construction should be stated here rather than
-left to the results. Because the regulated flight is always the one
-whose route was kept, regulation status identifies the labelled answer
-within the stay dataset. A rule as crude as ``prefer the route of the
-flight that was regulated'' is therefore right on every stay pair by
-construction, without examining a route at all, and a model with access
-to the delay features can score well on those pairs for the same empty
-reason. Accordingly, when the change-bias metric is reported, the seven
-regulation-derived features are masked at scoring time, which forces
-the decision onto route geometry and indicators. Training still sees
-them, so the masked figure measures what transferred to the route
-features rather than what was learned in their absence. It should be
-noted that this is a repair applied after the fact rather than a clean
-design, and Section~\ref{sec:changebias} quantifies how much it limits
-what can be concluded.
+One property of this construction has to be stated alongside it,
+because it bounds what the stay pairs can ever be used to measure. The
+regulated flight is always the one whose route was kept, so regulation
+status identifies the labelled answer. Concretely, in all 1\,093 stay
+pairs of the test months the kept route carries a positive attributed
+delay and at least one regulation, and the alternative carries neither,
+with no exceptions. A rule as crude as ``prefer the route of the flight
+that was regulated'' is therefore right on every stay pair without
+examining a route at all. Whether the model takes that shortcut is a
+question the archive can answer, because it also contains the mirror
+population in which the same rule is always wrong;
+Section~\ref{sec:changebias} puts the two side by side.
 
 \subsection{Encoding and leakage control}
 \label{sec:leakage}
@@ -680,10 +714,18 @@ to that problem, because on this archive it is not a technicality: a
 model built without attention to it would report excellent figures
 while knowing nothing whatever about routes.
 
-For instance, the time remaining to departure is necessarily smaller
-for the route that replaced the other, so a model given that feature in
-its raw form could answer ``the one filed later'' and be right on
-essentially every pair while knowing nothing about routes. This is
+One pair from the held-out quarter shows the size of the problem. Its
+original plan was filed at 00:30 and the plan that replaced it at
+10:56, for a flight due off the blocks at about 12:30. Left as filed,
+the time remaining to departure would read 720 minutes on the abandoned
+route against 94 on the one that replaced it. That gap is not an
+outlier in kind: across the held-out quarter the median distance
+between the two filings is 33 minutes, a quarter of the pairs are more
+than an hour and a half apart, and the revision is the later message in
+all but a thousandth of them, where the two filings carry the same
+recorded time. A model given the feature in its raw form could
+therefore answer ``the one filed later'' and be right on essentially
+every pair while knowing nothing whatever about routes. This is
 leakage rather than learning, and it would be invisible in the accuracy
 figure: the model would score close to perfectly on held-out revisions,
 for the empty reason that held-out revisions carry the same timestamp
@@ -694,7 +736,7 @@ collapsed to the pair minimum, which gives it an identical value on
 both routes.
 
 A subtler shortcut hides in the absolute indicator values. Let us
-consider a 400\,km sector on which the two routes burn 2\,000 and
+consider a 400\,km flight on which the two routes burn 2\,000 and
 2\,300\,kg. A model shown the raw magnitudes learns, inevitably, what
 2\,000\,kg means on this kind of sector, and with it everything that
 correlates with sector length: which airlines fly it, at which hours,
@@ -703,22 +745,26 @@ hands the model a way to answer from the flight rather than from the
 comparison, and it generalises poorly to sectors of other lengths. The
 within-pair encoding subtracts the pair minimum from each indicator, so
 that what reaches the model is 0 against 300\,kg, a pure comparison
-that carries the same meaning whether the sector is 400 or 4\,000\,km.
+that carries the same meaning whether the flight is 400 or 4\,000\,km.
 
 \subsection{Splits}
 \label{sec:splits}
 
 The evaluation is strictly out of time, in the sense that the model is
-fitted on January 2025 through February 2026, tuned on March 2026, and
-evaluated once on April to June 2026 (281\,720 pairs), the held-out
-quarter cited throughout. Every threshold,
+fitted on January 2025 through February 2026 (1\,134\,064 pairs),
+tuned on March 2026 (67\,349), and evaluated once on April to June 2026
+(281\,720), the held-out quarter cited throughout; the three account for
+all 1.48 million pairs of the archive. Every threshold,
 calibrator and stopping decision is taken on the tuning month alone.
 Flights appearing in the tuning or evaluation months are removed from
 the fitting set, and eleven automated checks verify split
-disjointness, feature construction and the pair invariants. A second
-split, used only in Section~\ref{sec:horizon}, moves the entire window
-back one year so that the model can be watched for six months beyond
-its training cutoff.
+disjointness, feature construction and the pair invariants. A second split, used only in
+Section~\ref{sec:horizon}, ends earlier so that the model can be
+watched for six months beyond its training cutoff: it is fitted on
+January to October 2025, tuned on November and December 2025, and
+evaluated month by month on January to June 2026. It is a shorter
+window ending three months sooner, not the same window moved back a
+year.
 
 % =====================================================================
 \section{Model, training and calibration}
@@ -746,13 +792,12 @@ conditional-logit tradition of Section~\ref{sec:discrete}.
 
 Gradient-boosted decision trees \citep{prokhorenkova2017} are used as
 the scoring function, at a depth of 8, with the learning rate
-selected automatically and with early stopping on the tuning month. Key
-performance indicators are normalised within each pair by subtracting
-the pair minimum. The ordered waypoint sequence is carried as text and
-encoded as a bag of tokens (i.e., each waypoint identifier is treated
-as a word and the route as the unordered collection of its words),
-which lets the model exploit route structure rather than aggregate
-distance alone. For instance, two routes on the same city pair may
+selected automatically and with early stopping on the tuning month. The waypoint sequence is carried as text and
+encoded as a bag of tokens, which is to say that each waypoint
+identifier is treated as a word and the route as the unordered
+collection of its words. Order is discarded; what survives is which
+published points a route uses, and that is already enough to let the
+model exploit route structure rather than aggregate distance alone. For instance, two routes on the same city pair may
 differ by under one per cent in distance and in planned fuel, and so be
 indistinguishable on every indicator, while only one of them crosses a
 volume whose identifier the model has met in thousands of earlier
@@ -762,44 +807,80 @@ the weight is swept over the values 10, 30 and 100; the selection of
 $w = 10$ is discussed with the change-bias results in
 Section~\ref{sec:changebias}.
 
-One detail proved consequential, and is worth recording for anyone
-reproducing this design. When the fitting set is a weighted mixture of
-revision pairs and stay pairs, the tuning set must carry the same
-mixture at the same weights, since a tuning set composed only of
-revision pairs measures a different objective from the one being
-optimised. Unfortunately, this mismatch caused training to halt at the
-very first iteration and to return a below-chance model, which is a
-measurement failure that presents itself as a model failure, and which
-cost the authors some days of confusion before it was traced.
-
 \label{sec:calibration}
-Once trained, the model has still to be connected to a decision. Roughly
-speaking, a score gap of 3.7 tells an operations room nothing
-at all, and before the model can be used to decide anything its scores
-have to be turned into statements of the form ``about eight times in
-ten, an airline offered this route will take it''. That conversion is what
-calibration provides, namely a monotone mapping from score gap to
-observed acceptance rate, fitted on the tuning month alone
-\citep{zadrozny2002}. Three mappings were compared on the tuning month:
-the raw sigmoid of the score gap, Platt scaling (a two-parameter
-sigmoid fit) and isotonic regression (a stepwise monotone fit).
-Isotonic regression was selected on tuning-month log loss,
-and is what the pipeline uses. Miscalibration is common in this class
-of model \citep{guo2017}, but it is worth reporting that on the
-held-out quarter the raw sigmoid was already well calibrated, at an
-expected calibration error (the mean gap between stated probability
-and observed rate) of 0.8 percentage points against 1.7 for isotonic
-regression, so that the fitted mapping is a safeguard here
-rather than a large correction. It was selected on the tuning month
-without inspecting the evaluation months, and that outcome is reported
-rather than revised after the fact \citep{gneiting2007}.
+Once trained, the model has still to be connected to a decision, and a
+raw score will not do it. Let us consider a real pair from the held-out
+quarter, on which the model scores the two routes $-2.82$ and $+0.90$.
+Neither number means anything on its own: the score has no units, and
+the same two numbers on another flight would carry no comparable
+meaning. What can be read is their difference, here 3.7 in favour of
+the second route. Even that is not yet a decision, because nobody in an
+operations room knows what a gap of 3.7 is worth. Calibration is the
+step that turns the gap into a statement of the form ``about eight
+times in ten, the route the model prefers is the one the airline goes
+on to file''.
 
-Calibration is also what makes a precision target meaningful, since
-without it one can rank proposals but cannot decide how many of them to
-make. On the held-out quarter, the stated and observed rates agree to
-within 1.7 percentage points on average. The proposal policy built on
-this mapping is described with the channel results in
-Section~\ref{sec:channel}.
+The conversion is a monotone mapping from score gap to observed rate,
+fitted on the tuning month alone \citep{zadrozny2002} and applied
+unchanged to the evaluation months. Table~\ref{tab:calibration} shows
+what it does and what it is worth. A gap of half a point maps to a
+probability of about 0.72, against which the higher-scoring route in
+that band was the one the airline filed in 68.5\,\% of held-out cases;
+the 3.7 of the example above maps to 0.99, and in that band the model
+was right 97.4\,\% of the time. The stated probability runs a little
+above the observed share through the middle of the range, by at most
+4.4 points, and the paragraph below reports that gap as one number. It is the probability, never the gap, that
+the proposal policy of Section~\ref{sec:channel} compares against its
+threshold, and it is calibration that makes a precision target
+meaningful at all, since without it one can rank proposals but cannot
+decide how many of them to make.
+
+\begin{table}[t]
+\caption{From score gap to acceptance probability, on the held-out
+quarter. The first column is the gap between the two routes' scores,
+the third the probability the calibrator assigns to the higher-scoring
+route, and the fourth the share of those cases in which that route was
+in fact the one the airline filed. The two track each other, the
+stated probability running above the observed share by 4.4 points in
+the worst of these six bands and by 1.7 points across them, weighting
+each band by the pairs in it (the text quotes 1.8, the same average
+taken over fifteen finer bands). The model
+is mildly
+over-confident in the middle of its range, and a channel that read its
+probabilities as exact would slightly overestimate how often it is
+right.}
+\label{tab:calibration}
+\centering\small
+\begin{tabular}{lrrr}
+\toprule
+score gap & pairs & calibrated & airline filed \\
+          &       & probability & that route [\%] \\
+\midrule
+below 0.5 & 144\,518 & 0.551 & 54.7 \\
+0.5 to 1  & 49\,784  & 0.718 & 68.5 \\
+1 to 2    & 40\,524  & 0.876 & 83.2 \\
+2 to 3    & 19\,520  & 0.958 & 93.3 \\
+3 to 5    & 18\,645  & 0.988 & 97.4 \\
+above 5   & 8\,729   & 0.997 & 99.8 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three mappings were compared on the tuning month: the raw sigmoid of
+the score gap, Platt scaling (a two-parameter sigmoid fit) and isotonic
+regression (a stepwise monotone fit). Isotonic regression won on
+tuning-month log loss and is what the pipeline uses. Miscalibration is
+common in flexible models fitted this way \citep{guo2017}, and the
+outcome here is
+worth reporting because it runs the other way: on the held-out quarter
+the raw sigmoid was the better calibrated of the two, at an expected
+calibration error (the mean gap between stated probability and observed
+rate) of 0.9 percentage points against 1.8 for the isotonic fit. The
+selection was made on the tuning month before the evaluation months
+were touched and is reported unrevised. The reading the authors draw
+from it is that on this archive the fitted mapping is a safeguard
+rather than a correction, and that a deployment could reasonably use
+the sigmoid instead.
 
 % =====================================================================
 \section{Predictive performance}
@@ -836,80 +917,204 @@ horizontal axis is the share of cases the model is required to answer,
 lowest confidence dropped first; the vertical axis is the share of
 answered cases it gets right. Moving left, the model answers fewer
 cases and is right more often: 95\,\% of the fifth it is surest about,
-against 68\,\% when it must answer everything. The shaded band is the
-95\,\% confidence interval and the dotted line is chance. It is this
+against 68\,\% when it must answer everything. A ``case'' here is one pair of routes, and answering it means naming
+one of the two. The dotted line is chance; the 95\,\% confidence
+interval is drawn but is narrower than the line itself at every point. It is this
 curve, rather than any single figure on it, that characterises the
 system.}
 \label{fig:coverage}
 \end{figure}
 
 \label{sec:heuristics}
-The curve is one reference; the other is what simple rules achieve.
-Table~\ref{tab:heuristics} evaluates the single-feature rules a
-practitioner would try first, each preferring the route that is cheaper
-on one indicator. Every cost rule scores \emph{below} chance:
-preferring the route with less planned fuel identifies the airline's
-choice in 45.0\,\% of pairs, less flight time in 46.8\,\%, shorter
-distance in 46.2\,\% and lower en-route charges in 47.2\,\%.
+The curve is one reference; the other is what simpler methods achieve
+on the same held-out quarter. Table~\ref{tab:baselines} sets out the
+whole ladder, from a coin toss to the model of this paper, so that a
+reader can see where the accuracy is bought and judge whether the
+complexity earns its place.
 
 \begin{table}[t]
-\caption{Single-feature rules on the held-out quarter. A rule decides
-only where the two routes differ on its indicator; the final column is
-its accuracy on those pairs, and the first accuracy column scores the
-undecided pairs as a coin toss. Rules preferring the cheaper route
-score below the 50\,\% of a coin toss.}
-\label{tab:heuristics}
+\caption{Every baseline on the held-out quarter, 281\,720 pairs. A
+single-feature rule decides only where both routes carry a value for
+its indicator and the two values differ, and is scored as a coin toss on
+the rest; the ``decides'' column gives that share. A route under no
+regulation carries no delay figure rather than a zero, which is why the
+delay rule decides on fewer pairs than the share on which the revision
+changed the delay in Table~\ref{tab:context}. The logistic models are fitted on the same
+1\,134\,000 training pairs as the model of this paper, with the same
+within-pair encoding, and their regularisation strength is selected on
+the tuning month.}
+\label{tab:baselines}
 \centering\small
 \begin{tabular}{lrrr}
 \toprule
-rule & accuracy & decides & accuracy \\
-     & [\%]     & [\%]    & where it decides [\%] \\
+baseline & inputs & decides & accuracy \\
+         &        & [\%]    & [\%] \\
 \midrule
-prefer less planned fuel     & 45.0 & 97.9 & 44.9 \\
-prefer less flight time      & 46.8 & 96.7 & 46.7 \\
-prefer shorter distance      & 46.2 & 81.1 & 45.3 \\
-prefer lower route charges   & 47.2 & 53.6 & 44.8 \\
-prefer less attributed delay & 53.2 & 14.6 & 71.6 \\
+coin toss                        & 0  & --   & 50.0 \\
+\midrule
+prefer less planned fuel         & 1  & 97.9 & 45.0 \\
+prefer shorter distance          & 1  & 81.1 & 46.2 \\
+prefer less flight time          & 1  & 96.7 & 46.8 \\
+prefer lower route charges       & 1  & 53.6 & 47.2 \\
+prefer \emph{more} planned fuel  & 1  & 97.9 & 55.0 \\
+prefer less attributed delay     & 1  & 14.6 & 53.2 \\
+\midrule
+logistic, cost indicators        & 4  & --   & 54.9 \\
+logistic, and regulation         & 6  & --   & 56.4 \\
+logistic, all numeric            & 14 & --   & 56.4 \\
+logistic, and categorical context & 22 & --  & 57.5 \\
+\midrule
+this paper's model               & 23 & --   & 68.1 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-This result deserves a moment, because it is the cleanest statement of
-why this problem needs learning at all. Filing behaviour does not
-merely fail to minimise planning cost; it runs against it more often
-than not, for the structural reason that Table~\ref{tab:composition}
-already showed, namely that most revisions buy something (a regulation
-escape, a slot, operational room) and pay for it in fuel and time. A
-proposal system built on ``offer the cheaper route'' would therefore
-disagree with the airline's own subsequent behaviour on most revised
-flights. The one partial exception is instructive: preferring the route
-with less attributed delay is right 71.6\,\% of the time, but only ever
-decides on the 14.6\,\% of pairs where delay differs, and scores 53.2\,\%
-overall. Delay avoidance is real, and the model must and does learn
-it, but it explains only a modest corner of the archive.
+Two things in that table matter. The first is that every rule
+preferring the \emph{cheaper} route scores below chance: less planned
+fuel identifies the airline's choice in 45.0\,\% of pairs, less flight
+time in 46.8\,\%, shorter distance in 46.2\,\% and lower en-route
+charges in 47.2\,\%. Filing behaviour on revised flights does not
+merely fail to minimise planning cost, it runs against it more often
+than not, for the structural reason that
+Table~\ref{tab:context} sets out below: most revisions buy something,
+usually relief from delay, and pay for it in fuel and time. A proposal
+system built on ``offer the cheaper route'' and nothing else would
+therefore disagree with the airline's own subsequent behaviour on most
+revised flights, which is exactly the finding that
+Section~\ref{sec:channel} turns into a design constraint.
+
+The second follows from the first. A binary rule that
+scores 45.0\,\% is a rule that scores 55.0\,\% when its sign is
+reversed, so the strongest single-feature baseline available on this
+archive is ``prefer the route that burns \emph{more} planned fuel'',
+at 55.0\,\%, and not the delay rule at 53.2\,\%. The model's margin
+over the best rule built on any one indicator is accordingly thirteen
+points rather than fifteen. That inversion is not a rule anyone would deploy, since it
+tells an airline to burn more fuel for no stated reason, but it is the
+right bar, and it is the bar the model clears. The delay rule remains the instructive one: it is right 71.6\,\% of
+the time, but only ever decides on the 14.6\,\% of pairs where delay
+differs at all, and scoring the rest as coin tosses gives
+$0.146 \times 71.6 + 0.854 \times 50 = 53.2\,\%$. Delay
+avoidance is real, the model must and does learn it, and it explains
+only a modest corner of the archive.
+
+The learned baselines settle the remaining question. A logistic model
+given the four cost indicators as within-pair differences reaches
+54.9\,\%; adding the regulation features takes it to 56.4\,\%, and
+adding the categorical context to 57.5\,\%, at which point it has seen
+every input the model of this paper sees except the waypoint sequence.
+The gradient-boosted model reaches 68.1\,\% on those same inputs plus
+the route text. Roughly eleven points therefore come from the
+nonlinearity and the route representation together, and not from the
+choice of features, which is the clearest available answer to whether
+the additional complexity is doing work.
+
+That margin establishes that route choice
+carries structure that neither a cost rule nor a linear index in the
+same inputs recovers, which was by no means self-evident. It does not
+establish that 68.1\,\% is anywhere near the ceiling. Some of the
+residual is not information at all. The two routes of a pair are very
+often nearly the same route: where they share more than nine tenths of
+their waypoints the model scores 61.9\,\%, against 74.9\,\% where they
+share less than a quarter, and on a pair whose two routes differ by a
+single kilogramme of planned fuel there may be no reason for the
+airline to prefer either. The rest is a property of the decision rather
+than of the archive. A route is chosen by a person, and by different
+people on different days, from information no route-level record holds:
+how much duty time the crew has left, a swap of departure slots between
+the airline's own flights, a company routing policy, a judgement about weather that
+has not yet materialised. Two competent flight planners facing the same
+situation may reasonably file differently, and neither of them is
+making a mistake. Perfect prediction would require that route choice be
+a deterministic function of what the network records, and there is no
+reason to expect that it is.
 
 \subsection{Accuracy by stratum}
 \label{sec:strata}
 
-The 68.1\,\% headline is an average over strata whose difficulty
-differs enormously, and Table~\ref{tab:strata} reports the
-decomposition. On pairs in which neither route is regulated, a stratum
-holding somewhat over six pairs in ten of the held-out quarter, the
-model scores 64.0\,\%; on pairs in which the old route was regulated and the new one
-escapes, it scores 88.0\,\%.
-Between these poles the accuracy climbs steeply with the delay on
-the abandoned route: 63.9\,\% at zero, 70.3\,\% up to a quarter of an
-hour, 79.3\,\% up to half an hour, and about 84\,\% beyond it, where
-the climb levels off. The pattern
-is exactly what an economic reading predicts: the larger the delay, the
-clearer the incentive, and the easier the decision is to call.
+The 68.1\,\% headline is an average over decisions of very different
+kinds, and the first question a reader should ask is what kinds of
+decision the archive actually contains. Table~\ref{tab:context} answers
+that and the performance question together, on one population: it sorts
+the held-out quarter by what the revision did to the flight's
+attributed ATFM delay, and reports how often the model called each sort
+correctly.
+
+\begin{table}[t]
+\caption{What each revision did to the flight's attributed ATFM delay,
+on the held-out quarter, and how well the model reads it. Fuel and time
+differences are the new route minus the one it replaced, so a positive
+number is a cost the airline accepted. Intervals are Wilson 95\,\%
+intervals. This table is keyed on the delay itself, whereas
+Table~\ref{tab:composition} is keyed on whether a regulation was
+attributed to a route. A regulation can be attributed and leave the
+delay at zero, which is why 71.0\,\% of this quarter's pairs touch no
+delay while only 63.3\,\% of the same pairs carry no regulation
+(Table~\ref{tab:strata}).}
+\label{tab:context}
+\centering\small
+\setlength{\tabcolsep}{4pt}%
+\begin{tabular}{lrrrrr}
+\toprule
+what the revision did & pairs & share & median & new saves & accuracy \\
+                      &       & [\%]  & $\Delta$fuel [kg] & fuel [\%] & [\%] \\
+\midrule
+no delay either route  & 199\,932 & 71.0 & 0     & 47.7 & 64.0 [63.8, 64.2] \\
+removed the delay      & 35\,890  & 12.7 & 103   & 26.8 & 88.2 [87.8, 88.5] \\
+reduced the delay      & 21\,202  & 7.5  & 56    & 31.8 & 81.5 [81.0, 82.1] \\
+left the delay alone   & 10\,234  & 3.6  & 1     & 45.5 & 60.4 [59.5, 61.4] \\
+increased the delay    & 9\,189   & 3.3  & $-2$  & 52.2 & 61.0 [60.0, 62.0] \\
+took delay on          & 5\,273   & 1.9  & $-10$ & 53.2 & 60.9 [59.5, 62.2] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The table answers both halves of the question at once, and the answer
+is unusually clean. Seven revisions in ten touch no delay on either
+route, and the median such revision moves the flight to a route costing
+the same planned fuel to the kilogramme: this is ordinary flight-plan
+housekeeping, and the model reads it at 64.0\,\%, which is well above
+chance but not by much. The two rows in which the airline bought relief
+from delay are the ones the model reads well. When a revision removes
+the attributed delay outright, one revision in eight, the model
+identifies the chosen route 88.2\,\% of the time, and it is worth
+noticing what that relief cost: the median such move burns 103\,kg more
+fuel, and only 26.8\,\% of these moves are cheaper on fuel at all.
+Reducing rather than removing the delay costs a median 56\,kg and is
+read at 81.5\,\%. The three remaining rows, in which the delay stayed
+put, grew, or was newly taken on, together account for 8.8\,\% of the
+quarter and are read at about 61\,\%.
+
+The shape of that answer is what an operational reader most needs. The
+model is good, at 81 to 88\,\%,
+precisely where an airline is trading fuel against delay and the stake
+is large; it is weak, at 60 to 64\,\%, precisely where the two routes
+cost almost the same and the choice between them carries little
+consequence either way. That is a defensible division of labour rather
+than a defect, since it is the first kind of decision that a proposal
+channel is built to reason about. It is also, however, exactly the
+wrong way round for the channel of Section~\ref{sec:channel}, which
+proposes on fuel and therefore speaks precisely where the model is
+weakest; that section takes the tension up.
+
+Accuracy also climbs steeply with the size of the delay on the
+abandoned route: 63.9\,\% where that route carried none, 70.3\,\%
+up to a quarter of an hour, 79.3\,\% up to half an hour, and about
+84\,\% beyond it, where the climb levels off (Table~\ref{tab:strata}).
+The pattern is exactly what an economic reading predicts: the larger
+the delay, the clearer the incentive, and the easier the decision is to
+call.
 
 \begin{table}[t]
 \caption{Accuracy by stratum on the held-out quarter (Wilson 95\,\%
-intervals, the standard interval for a proportion). The final block
-counts how many of the three cost indicators (fuel, time and charges;
-distance, the fourth indicator, is not part of this count) favour the
-newly filed route.}
+intervals, the standard interval for a proportion). The first block
+splits on whether a regulation was attributed to each route, which is
+the convention of Table~\ref{tab:composition} and not the delay-keyed
+one of Table~\ref{tab:context}, so the counts differ from that table's. The third block
+counts how many of the three cost indicators favour the newly filed
+route; the count is over the quantities an airline pays for directly,
+so distance, which is a driver of those costs rather than a bill in its
+own right, is not part of it.}
 \label{tab:strata}
 \centering\small
 \begin{tabular}{lrr}
@@ -917,9 +1122,9 @@ newly filed route.}
 stratum & pairs & accuracy [\%] \\
 \midrule
 neither route regulated        & 178\,370 & 64.0 [63.8, 64.2] \\
-escape (old route only)        & 30\,953  & 88.0 [87.6, 88.3] \\
-new route only regulated       & 4\,810   & 58.6 [57.2, 60.0] \\
+old route only regulated       & 30\,953  & 88.0 [87.6, 88.3] \\
 both routes regulated          & 67\,587  & 70.6 [70.2, 70.9] \\
+new route only regulated       & 4\,810   & 58.6 [57.2, 60.0] \\
 \midrule
 delay on old route: none       & 205\,205 & 63.9 [63.7, 64.1] \\
 \quad up to 15 min             & 19\,672  & 70.3 [69.7, 71.0] \\
@@ -958,18 +1163,25 @@ configuration removed in turn and the model retrained.
 
 \begin{table}[t]
 \caption{Screening ablations. Each variant is retrained from scratch at
-a reduced screening setting (depth 6, 800 rounds) that reaches 60.6\,\% on
-revision pairs; values are the change in revision accuracy against that
-baseline, not headline accuracies. A positive value means the variant
-scores \emph{higher} on revisions than the adopted configuration does. For the
-stay-pair correction that is expected: it is the price paid for the
-change-bias reduction reported below. Differences are
+a deliberately reduced setting, depth 6 and 800 boosting rounds, which
+reaches 60.6\,\% on revision pairs; the setting is cheap enough to run
+every variant and is not the configuration reported elsewhere in this
+paper. Values are the change in revision accuracy against that reduced
+baseline of 60.6\,\%, and against nothing else; they are not headline
+accuracies and are not differences from the 68.1\,\% model. A positive
+value means the variant scores \emph{higher} on revisions than the
+adopted configuration does, which for the stay-pair correction is the
+price paid for the change-bias reduction reported below rather than an
+argument against it. Differences are
 significant under McNemar's test, which asks whether two models'
 disagreements on the same flights fall asymmetrically rather than by
 chance, at $p<0.001$ except the waypoint text at screening scale
-($p=0.58$). The monotone constraint (the score forced never to rise
-as the number of regulations on a route grows) costs a fifth of a
-point, which is why none is imposed.}
+($p=0.58$). The monotone constraint (the score forced never to rise as the number
+of regulations on a route grows) costs a fifth of a point, which is why
+none is imposed. A vertical-only revision changes the requested cruise
+level and leaves the horizontal route untouched, so its two routes are
+identical and the pair is unanswerable; such pairs are excluded from
+the archive, and the row shows what including them would cost.}
 \label{tab:ablation}
 \centering\small
 \begin{tabular}{@{}lr@{}}
@@ -993,45 +1205,126 @@ care, and illustrates why screening ablations can mislead.
 Interestingly, at screening scale (the reduced setting of
 Table~\ref{tab:ablation}) the text feature appears worthless,
 and yet retrained at full scale it is worth $+1.4$ percentage points
-(68.2 against 66.8), the reason being that a bag-of-words
+(68.2 against 66.8, the 68.2 being a separate run of the adopted
+configuration and within the half point of run-to-run variation these
+numbers carry), the reason being that a bag-of-words
 representation spread over thousands of rare tokens cannot repay its
 cost in 800 shallow rounds. It is a real but secondary contributor,
 worth about a tenth of the model's margin over the best single rule of
 Section~\ref{sec:heuristics}. Yet attribution ranks the same feature
 first, an apparent tension that Section~\ref{sec:weigh} resolves.
 
-\label{sec:changebias}
-The stay-pair correction whose price the table records buys the
-following. Measured on the held-out stay pairs, a model trained without correction
-prefers the alternative route in 65.2\,\% of cases where the flight kept
-its own, and when regulation features are masked so that only route
-understanding remains it scores 47.8\,\%, below chance. Adding stay
-pairs at group weight 10 raises the masked figure to 58.1\,\%
-(intervals $[55.1, 61.0]$ against $[44.8, 50.7]$, non-overlapping) at a
-cost of about one point on the revision metric at full scale (the 3.7
-points of Table~\ref{tab:ablation} are measured at the reduced screening
-setting).
+A bag of tokens is a deliberately crude way to carry a route, and a
+more principled alternative was tried before it was settled on. Each
+route was recast as a sequence of segment descriptors invariant to
+translation, rotation and scale, each leg encoded by its change of
+bearing relative to the great circle between origin and destination
+together with its length as a fraction of the whole, and a neural
+encoder was trained on that representation under the same pairwise
+objective. On its own it did worse than the tokens, and supplied alongside them it
+was worth a fraction of a point, far too little to repay a second model
+and a waypoint-coordinate service in the serving path. Fitting a linear classifier on the encoder's own
+representation recovered the waypoint identities barely better than
+chance, which points at the geometric input rather than the training
+objective as the limitation. The likely reason is that what
+the token representation carries is not geometry: an identifier records
+which published structure a route uses, and two geometrically similar
+routes through different structures are not interchangeable to an
+airline. The simpler representation was therefore kept. Those trials
+predate a repair to the archive, which had keyed pair completeness on an
+identifier that is reused from one day to the next and had therefore
+dropped about a quarter of the valid pairs. Every accuracy reported in
+this paper is computed after that repair and the trials are not, so only
+their ordering is claimed.
 
-The group weight $w$ was selected by a sweep over $\{10, 30, 100\}$,
-training one model per weight; the sweep's own $w=10$ run lands within
-half a point of the adopted model's figures (58.5 against 58.1 on the
-masked metric), which is the run-to-run variation these numbers carry. Raising $w$ from 10 to 100 improves the
-unmasked stay figure from 90.3\,\% to 97.6\,\%, but the masked figure
-only from 58.5\,\% to 59.7\,\%, while revision accuracy falls from
-68.2\,\% to 66.7\,\%. Most of what the additional weight buys is
-therefore the construction's giveaway (regulation status identifies
-the stayed route) rather than route judgement, and in this paper $w = 10$ is used, because it takes almost
-all of the available change-bias reduction at the smallest cost on
-revisions. The same run-to-run variation separates the sweep's
-68.2\,\% from the 68.1\,\% headline.
+\label{sec:changebias}
+The change bias is measured on the held-out stay pairs, and one thing
+has to be settled before the figure can be read. Section~\ref{sec:stay}
+established that regulation status identifies the answer on every stay
+pair, so a model could in principle score well on them by reading the
+regulation and nothing else. The question is whether this one does, and
+the archive answers it directly, because it contains a second
+population with the same regulation signature and the opposite label.
+
+Those are the escapes. In an escape the abandoned route is the
+regulated one, so the right answer is to prefer the unregulated route;
+in a stay pair the kept route is the regulated one, so the right answer
+is to prefer the regulated route. A rule that reads regulation status
+alone must therefore score 100\,\% on one population and zero on the
+other. The model scores 88.0\,\% on the 30\,953 escapes of the held-out
+quarter and 90.0\,\% on its 1\,093 stay pairs, and it does so at a cost
+of 0.8 points of revision accuracy, 68.1\,\% against the 68.9\,\% of a
+model trained without stay pairs. No reading of regulation status
+produces that pair of numbers. Telling the two situations apart
+requires the route and the flight around it, which is precisely the
+understanding the stay pairs were added to instil, so the stay figure
+can be read as it stands.
+
+Read that way, the correction buys the following. A model trained on
+revisions alone prefers the alternative route in 65.2\,\% of the cases
+where the flight demonstrably kept its own, and so is right on the
+remaining 34.8\,\%: revisions teach it that a regulated route is one to
+escape, and it carries that lesson into a
+population where the opposite holds. Adding stay pairs at group weight
+10 turns 34.8\,\% into 90.0\,\%, at the 0.8-point cost on revisions
+noted above (the 3.7 points of Table~\ref{tab:ablation} are measured at
+the reduced screening setting, not at full scale).
+
+Two things bound that result, and neither is repaired by how it is
+measured. The stay set is small, 1\,093 pairs in the test months
+against 281\,720 revisions, so the interval around 90.0\,\% is
+$[88.1, 91.7]$. And the two routes of a stay pair belong to two
+different flights, which no revision pair does, so a model could learn
+to recognise the construction itself rather than the preference it
+encodes. The balanced stay set of Section~\ref{sec:validity} would
+settle both bounds properly.
+
+The weight itself was chosen by the sweep of Table~\ref{tab:sweep},
+which trains one model per value. Raising it from 10 to 100 buys 7
+further points of stay accuracy and costs 1.5 points on revisions,
+which is a poor trade, and $w = 10$ is used here because it takes
+nearly all of the available correction at the smallest cost. One caveat
+on reading these figures: the sweep's own $w = 10$ run lands within
+half a point of the adopted model, 90.3 against 90.0 on stay pairs and
+68.2 against the 68.1 headline, and that half point is the run-to-run
+variation these numbers carry.
+
+\begin{table}[t]
+\caption{The stay-weight sweep, one model trained per value. The stay
+column is accuracy on the held-out stay pairs and the last column is
+the price paid on revisions. With no stay pairs at all the model scores
+34.8\,\% on them, far below the 50\,\% of a coin toss, because it
+has learned from revisions alone that a regulated route is one to leave
+and stay pairs are exactly the population where that is wrong. The
+trade turns bad above a weight of 10: seven further points of stay
+accuracy cost a point and a half of revision accuracy.}
+\label{tab:sweep}
+\centering\small
+\begin{tabular}{lrr}
+\toprule
+stay weight & stay & revisions \\
+            & [\%] & [\%] \\
+\midrule
+none & 34.8 & 68.9 \\
+10   & 90.3 & 68.2 \\
+30   & 95.2 & 67.7 \\
+100  & 97.6 & 66.7 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Error analysis}
 
-Fortunately, errors concentrate where the model is already unsure: in
-27.7\,\% of the errors the two routes scored within a quarter of the
-median margin, and only 5.6\,\% of the errors sit in the top quarter of
-the score margin, against the 25\,\% that would obtain if error were
-independent of confidence. This is the
+Fortunately, errors concentrate where the model is already unsure.
+Only 5.6\,\% of them fall among the quarter of pairs whose two routes
+score furthest apart, against the 25\,\% that would fall
+there if error were independent of confidence.
+% CORRECTED 2026-09-04: the 25 % reference describes this quartile
+% statistic alone; the near-tie share below is a threshold, not a
+% quartile (run_07_performance_analysis.py:367), and the reference was
+% previously attached to both.
+The same pattern from the other end: 27.7\,\% of the errors are near-ties, the two
+scores landing within a quarter of the archive's median gap. This is the
 property that makes confidence filtering work.
 
 The confident errors are nevertheless instructive, and one example from
@@ -1040,10 +1333,10 @@ flight re-filed off a route carrying 124 minutes of attributed delay
 onto a route that carried no delay at all, saving 152\,kg of fuel and
 about a minute of flight time; every indicator the model sees favoured
 the move, and yet the model confidently backed the abandoned route. The
-flight-level context is identical within a pair by construction, so the
-preference can only have come from the waypoint sequence itself,
-presumably a learned structural preference that overrode the
-indicators; confident errors are therefore not all of the
+flight-level context is identical within a pair by construction, and here
+every route-level quantity except one, the delay included, favoured the
+move, so the preference came from the waypoint sequence itself:
+presumably a learned structural preference that overrode the rest; confident errors are therefore not all of the
 hidden-information kind (decisions driven by facts, like a slot swap
 (an exchange of departure slots between an airline's own flights) or a
 curfew (a night-time closure at an airport), visible in no route-level
@@ -1061,54 +1354,132 @@ for their rate.
 \label{sec:weigh}
 
 A ranking model that cannot be interrogated is of little use to an
-operational user who is asked to trust it, and Shapley attributions
-were therefore computed over the held-out quarter. Principles from game
-theory can be used to interpret the prediction of a model for a given
-input, assuming that each feature is a player and that the model output
-is the payout. Let us consider the following scenario: all the features
-participate in the game (i.e., contribute to the model output) and
-enter the room where the game is played in a random order. The
-attribution of a feature is the average change in the payout received
-by the coalition already in the room when the corresponding player
-joins them, and this measure is the Shapley value \citep{lundberg2017}.
-Averaging their magnitude over the quarter gives Fig.~\ref{fig:shap},
-which is a ranking not of what correlates with acceptance, but of what
-moves the score of this particular model.
+operational user who is asked to trust it. Shapley attributions were
+therefore computed over the held-out quarter: each feature is credited
+with the share of the score that is attributable to it, averaged over
+every order in which the features could have been supplied to the model
+\citep{lundberg2017}. Because the model decides on a comparison rather
+than on one route, what is reported here is the \emph{difference}
+between a feature's attribution on the two routes of a pair, averaged
+in magnitude over the quarter (Fig.~\ref{fig:shap}). That is a ranking
+not of what correlates with acceptance, but of what moves this
+particular model's decisions.
 
 \begin{figure}[t]
 \centering
 \includegraphics{fig_shap.pdf}
-\caption{Mean absolute Shapley value per feature on the held-out
-quarter, in units of the ranking score, with each bar's value printed
-beside it. Fill colour and hatching give the feature group of
-Table~\ref{tab:features}, as keyed at lower right. The waypoint
-sequence is the largest single term, ahead of every cost indicator, and
-attributed ATFM delay outweighs planned fuel.}
+\caption{What moves a decision: the mean absolute \emph{difference}
+between a feature's Shapley value on the two routes of a pair, over the
+held-out quarter, in units of the ranking score, with each bar's value
+printed beside it. Fill colour and hatching group the features, with
+the rotation and context groups of Table~\ref{tab:features} drawn
+together. The waypoint sequence is the largest single term, ahead of
+every individual cost indicator, though the cost indicators taken
+together sum to more. A large attribution is not the same as a large
+ablation cost: removing the waypoint sequence and retraining costs 1.4
+points of accuracy, and Table~\ref{tab:ablation}'s $+0.03$ is a
+screening-scale artefact. The two measure different things, as the text
+below explains.}
 \label{fig:shap}
 \end{figure}
 
-Two results stand out. First, the waypoint sequence is the single
-largest term, ahead of every cost indicator, which means that route
-structure carries information about the choice that the four cost
-indicators do not, and which is precisely what a cost-only model cannot
-represent and a learned one can. Secondly, attributed ATFM delay moves
-the score more than planned fuel does, which is consistent with delay
-being directly monetisable at planning time whereas the fuel difference
-between two candidate routes is often small beside it. This is a
-property of the score of the model rather than a statement about how
-any airline reasons.
+Three things in that ranking matter, and the third is a caution.
+
+First, the waypoint sequence is the largest single term, at 0.40
+against 0.26 for attributed delay and 0.20 for planned fuel, so route
+structure carries information about the choice that no individual cost
+indicator carries. The claim should be made at exactly that width and
+no wider: the four cost indicators taken together sum to 0.52 and
+therefore outweigh the route text (the figure's bars are rounded to two
+decimals and sum to 0.51). What the attribution supports is
+that route structure is information a cost model does not have, not
+that it dominates the decision.
+
+Secondly, attributed ATFM delay moves the score more than planned fuel
+does. Why it does is not something these figures settle: the ranking is
+of what moves this model, and a tree ensemble responds to how a feature
+is distributed rather than to the units it is measured in.
+% CORRECTED 2026-09-04: the previous reason, the relative magnitude of
+% delay against fuel, cannot hold for a tree ensemble, which is
+% invariant to a feature's scale.
+What can be said is that nothing here shows airlines find delay the
+easier of the two to price. If anything the reverse holds, since fuel
+has a market price and the cost of delay is particular to the airline,
+which is exactly why the trade between them has to be learned rather
+than derived.
+
+Thirdly, and this is the caution, the time remaining to departure
+appears fourth in the ranking, at 0.18, even though the encoding of
+Section~\ref{sec:leakage} makes it identical on both routes of every
+pair. A feature with the same value on both sides cannot by itself
+separate them, and this one does not. What the attribution measures
+here is its interaction with the features that do differ, so that the
+same fuel difference is read differently three hours before departure
+than twenty minutes before it. That is a real effect rather than a
+residue of the shortcut the encoding removed, and the two are worth
+distinguishing because they look alike in the chart.
+
+Magnitude is only half of an attribution, and the other half is
+direction. Fig.~\ref{fig:shapdir} supplies it for the two features that
+carry the argument, plotting what each contributes to the score gap
+against the size of the difference it is describing.
+
+The two run in opposite directions, and both make operational sense.
+Attributed delay is penalised sharply. Where the route the airline kept
+carried an hour and three quarters less delay than the one it dropped,
+the delay term alone contributes 2.3 points in its favour, and that
+contribution falls away monotonically, reaching slightly below zero
+when the kept route is the more delayed of the two. Planned fuel runs
+the other way, and weakly: the fuel term contributes about a fifth of a
+point \emph{against} a route that burns a tonne less, and about as much
+in favour of one that burns a little more. The model has therefore
+learned to reward the more expensive route, which is the same thing the
+below-chance cost rules of Section~\ref{sec:heuristics} say about the
+archive, reached from inside the model rather than from the labels.
+
+\begin{figure}[t]
+\centering
+\includegraphics{fig_shap_direction.pdf}
+\caption{Which way each feature pushes. The horizontal axis is the
+difference in the feature between the route the airline filed and the
+one it abandoned; the vertical axis is what that feature contributes to
+the gap between their scores, as a binned median with the interquartile
+range shaded. Panel (a): attributed ATFM delay is penalised, strongly.
+Panel (b): planned fuel is rewarded, weakly, so on this archive the
+model prefers the costlier route. The waypoint sequence has no scalar
+value and cannot be drawn this way; time to departure is identical on
+both routes by construction, so there is no difference to put on the
+horizontal axis and it is omitted as well. It still carries weight in
+Fig.~\ref{fig:shap}, where what is measured is its effect on the score
+rather than its own spread; a feature that is equal on both routes can
+still change how the model reads the features that differ.}
+\label{fig:shapdir}
+\end{figure}
+
+Two things follow. First, the two effects work on very different
+populations and at very different strengths. The fuel term moves the
+score by a few tenths of a point and does so on almost every pair,
+whereas the delay term moves it by up to two and a half points but only
+on the minority of pairs where a delay exists at all. Their comparable
+mean magnitudes in Fig.~\ref{fig:shap} conceal that difference
+completely. Secondly, the positive fuel direction describes what filing
+behaviour on \emph{revised} flights looks like, and not what airlines
+value. A revision usually buys something and pays for it in fuel, so on
+this archive the costlier route is more often the filed one. A model
+serving a population that also contains the flights which never revise
+should not be expected to keep that sign, which is one more reason the
+change-bias measurement of Section~\ref{sec:changebias} matters.
 
 Descending to individual waypoints sharpens the picture. Deleting a
 single identifier from a route and rescoring shifts the score by up to
 2.5 points for the most influential one, and the affected waypoints
 cluster in a few places along the track rather than spreading evenly, which indicates
 that what the model has acquired is route-specific structure rather
-than a general preference for shorter routes. These are statistical
-regularities in filing behaviour across the network; they carry no
-assessment of any airspace, and individual waypoints and volumes are
-deliberately not reported.
+than a general preference for shorter routes. Which waypoints those are
+is not reported, since naming them would identify the airspace and,
+through it, the operators that use it.
 
-One caveat should nevertheless be carried forward. The waypoint text
+The waypoint text
 ranks first by attribution, yet removing it and retraining costs only
 1.4 points of accuracy. Attribution measures how much a
 feature moves the score of the model we have; ablation measures how
@@ -1123,38 +1494,99 @@ safely be dropped.
 
 How much fuel is at stake, and how confident can one be that it is
 real? The simulation of this section answers both questions by refusing
-to count anything that the airline did not subsequently do. What is
-simulated here is the first of the two use cases of
-Section~\ref{sec:usecases}, the proposal channel; the second, the
-release of an overloaded volume, rests on the same calibrated
-acceptance probability but is not exercised in this paper.
+to count anything that the airline did not subsequently do.
 
 \subsection{Policy and operating points}
 
-The policy is the following: for a flight whose candidate set contains
-an alternative burning less planned fuel than the filed route, propose
-that alternative when its calibrated acceptance probability exceeds a
-threshold $\tau$, with $\tau$ selected on the tuning month for a target
-precision and reported unchanged on the evaluation months. In this
-simulation the candidate set is the revision pair itself, so the
-alternative considered for each flight is the other route of its own
-pair, and the channel is accordingly evaluated only on flights that did
-revise, which is the boundary Section~\ref{sec:validity} returns to. A proposal
-is counted as realised when the airline's own subsequent filing chose
-that alternative. Flights with such a cheaper alternative are the
-eligible flights of the tables that follow. For instance, at 80\,\% precision four proposals in
-five are confirmed in this way, and the fifth is simply not taken.
+The policy is the following. For each pair the channel identifies the
+route that burns less planned fuel, and proposes it when the calibrated
+probability that \emph{that} route is the one the airline will file
+exceeds a threshold $\tau$. The distinction matters, because the
+cheaper route is often the one the model likes less: the calibrator
+maps a score gap to the probability for the higher-scoring route, and
+when the cheaper route is the lower-scoring one the channel compares
+one minus that probability against the threshold, which for any
+threshold at or above a half it cannot clear, so the channel stays
+silent; the lowest operating point reported below sits exactly at a half,
+where it is silent for the same reason. The threshold $\tau$ is selected on the tuning month for
+a target precision and reported unchanged on the evaluation months, and
+a proposal is counted as realised when the airline's own subsequent
+filing chose the proposed route.
+
+Three properties of that policy shape the tables below. First, a
+flight is
+\emph{eligible} whenever its two routes differ in planned fuel at all,
+which is 275\,907 of the 281\,720 held-out pairs, or 97.9\,\%; only
+exact ties are excluded. Secondly, the cheaper of the two routes is not
+usually the one the airline went on to file. In 55.1\,\% of eligible
+pairs the fuel saver is the route the airline was in the act of
+abandoning, so the channel is arguing for staying put at least as often
+as for moving. Thirdly, and as a consequence, a channel that proposed
+the cheaper route on every eligible flight would be right 44.9\,\% of
+the time, which is worse than a coin toss.
+
+That 44.9\,\% is the number the model has to beat, and it is what makes
+the channel a learning problem rather than an arithmetic one. Finding
+the cheaper route is trivial; the whole task is telling the flights on
+which the cheaper route is the one the airline wants from the flights
+on which it is not. Everything Table~\ref{tab:operating} reports is the
+size of that gap.
+
+There is a tension here with Section~\ref{sec:strata}. The model reads
+a revision best when
+the airline was buying relief from delay, and the channel never
+proposes on those grounds: it proposes on fuel, which is the dimension
+along which route choice is hardest to call. The channel's answer to
+that is not accuracy but selectivity. It is free to say nothing, and on
+four eligible flights in five that is what it does; what carries it
+from 44.9\,\% to 79.2\,\% is the choice of when to speak, not a better
+reading of the flights it speaks about.
+
+The simulation takes the airline's own next filing as the alternative,
+and three things follow from that choice. The first is its boundary:
+the alternative considered for each flight is the other route of its
+own pair, so the channel is evaluated only on flights that did revise,
+and Section~\ref{sec:validity} returns to what that leaves out.
+
+The second is a handicap rather than a flaw. At the moment a real
+channel would speak, the flight has a route filed and the channel would
+know which of the two it is. This
+simulation withholds that: the flight-level attributes are harmonised
+and the filing time is collapsed, so nothing in the pair marks which
+route was filed first, and the channel must judge from the routes
+alone. That is why the 55.1\,\% of eligible pairs in which the cheaper
+route is the one already filed are counted rather than set aside. They
+are the cases in which a deployed channel should stay quiet, and the
+model has to work out that it should stay quiet without being told. A
+deployed channel would have that information and should therefore do
+better than the figures reported here, not worse.
+
+The third governs how every number in this section should be read. On
+each flight the simulation counts, the airline found the cheaper
+route by itself and filed it, some hours after the moment at which the
+channel would have spoken. The fuel is therefore not fuel a channel
+would create. It is the fuel riding on decisions the model could
+identify in advance, and it measures the scale of what a channel could
+have surfaced earlier rather than a saving it would add. What a channel
+would genuinely add lies on the flights that never revised at all,
+which is precisely the population this archive cannot measure, and
+Section~\ref{sec:validity} returns to it.
 
 \begin{table}[t]
 \caption{Operating points. The threshold $\tau$ is selected on the
 tuning month for each precision target and evaluated unchanged on the
-held-out quarter; fuel is planned fuel confirmed by the airlines' own
-subsequent filings, per quarter. CO$_2$ uses 3.16\,kg per kg of fuel.}
+held-out quarter. ``Proposed'' is the share of the 275\,907 eligible
+pairs on which the channel speaks, the remaining 5\,813 of the 281\,720
+held-out pairs being exact ties on planned fuel, where there is no
+cheaper route to propose; a channel that spoke on all of them
+would reach 44.9\,\% precision. Fuel is the planned fuel saved on the
+proposals that the airlines' own subsequent filings confirm, per
+quarter. CO$_2$ uses 3.16\,kg per kg of fuel.}
 \label{tab:operating}
 \centering\small
 \begin{tabular}{rrrrrrr}
 \toprule
-target & $\tau$ & precision & proposals & coverage & fuel & CO$_2$ \\
+target & $\tau$ & precision & proposals & proposed & fuel & CO$_2$ \\
 {[\%]} &        & [\%]      &           & [\%]     & [kt] & [kt] \\
 \midrule
 60 & 0.500 & 65.8 & 98\,783 & 35.8 & 24.3 & 76.9 \\
@@ -1167,18 +1599,22 @@ target & $\tau$ & precision & proposals & coverage & fuel & CO$_2$ \\
 
 Table~\ref{tab:operating} reports the four operating points, and
 Fig.~\ref{fig:tradeoff} the continuous trade behind them. Precision is
-bought with volume: moving the target from 60 to 90\,\% cuts the
-coverage to less than a third while giving up somewhat over two fifths of
-the confirmed fuel, because the proposals that survive the higher
-threshold are disproportionately the valuable ones. At the 80\,\% point used
-throughout this paper, the channel surfaces 56\,162 proposals over
-three months carrying 20.1\,kt of planned fuel that the airlines' own
-subsequent filings confirm, equivalent to 63.5\,kt of CO$_2$.
-Annualised, this is 70 to 80\,kt of fuel, or of order 220 to 250\,kt of
-CO$_2$, where the range spans the two extrapolation bases available (a
-simple factor of four on the quarter, and the per-eligible-pair rate
-applied to the annual eligible volume estimated from the eighteen-month
-archive); the corresponding ranges at the other operating points follow
+bought with volume, but not one for one: moving the target from 60 to
+90\,\% cuts the share of eligible flights spoken on to less than a
+third, while giving up only somewhat over two fifths of the confirmed
+fuel, because the proposals that survive the higher threshold are
+disproportionately the valuable ones. At the 80\,\% point used
+throughout this paper, the channel speaks on one eligible flight in
+five and surfaces 56\,162 proposals over three months. The airlines'
+own subsequent filings confirm 79.2\,\% of them, against the 44.9\,\%
+that proposing on every eligible flight would have achieved, and the
+confirmed proposals carry 20.1\,kt of planned fuel, equivalent to
+63.5\,kt of CO$_2$. The mean confirmed saving is 452\,kg.
+Annualised, this is 70 to 80\,kt of fuel, or 222 to 254\,kt of
+CO$_2$, the two ends being the two extrapolation bases available: the
+lower is the per-eligible-pair rate applied to the annual eligible
+volume estimated from the eighteen-month archive, and the upper is a
+simple factor of four on the quarter; the corresponding ranges at the other operating points follow
 the same pattern and reach 85 to 97\,kt of fuel at the 60\,\% target.
 The median accepted proposal saves 130\,kg and the distribution is
 strongly skewed: the top tenth of accepted proposals carries 64\,\% of
@@ -1188,9 +1624,9 @@ the value.
 \centering
 \includegraphics{fig_tradeoff.pdf}
 \caption{What the channel would deliver, as a function of how selective
-it is. Panel (a) gives the precision of the proposals and panel (b) the
-planned fuel that airlines subsequently confirmed, both against the same
-acceptance threshold: raising the threshold buys precision and costs
+it is. Panel (a) gives precision, the share of proposals whose route
+the airline went on to file, and panel (b) the planned fuel saved on
+those confirmed proposals, both against the same acceptance threshold: raising the threshold buys precision and costs
 volume, and the confirmed fuel falls with it. The vertical rule through
 both panels marks the operating point used throughout this paper, which
 was fixed on the tuning month.}
@@ -1200,26 +1636,33 @@ was fixed on the tuning month.}
 \subsection{Concentration of the value}
 \label{sec:concentration}
 
-Of the 882 airlines that receive any proposal, 6 fly half of the
-confirmed fuel and 28 fly four fifths of it
-(Fig.~\ref{fig:concentration}). By city pair the concentration is
-weaker but still pronounced: 153 of the 10\,939 pairs carry half the
-value. The quarter is not carried by one month either; the three test
-months contribute 5.9 to 7.5\,kt each. A channel can therefore start
-with a handful of airlines and still address most of the benefit,
-which matters because any first deployment would be a trial rather than
-a rollout. One could argue that beginning with those few airlines is
-inequitable towards the rest. Nevertheless, the concentration follows
-that of traffic itself rather than any difference in airline practice,
-and nothing in the policy withholds a proposal from any airline that
-qualifies for one.
+Any first deployment would be a trial rather than a rollout, so what
+matters next is whether a trial small enough to run could still reach
+most of the value. It could, because the value is concentrated. Of the
+882 operators that receive any proposal, 6 fly half of the confirmed
+fuel and 28 fly four fifths of it (Fig.~\ref{fig:concentration}). The
+same holds more weakly by city pair, where 153 of the 10\,939 pairs
+carry half the value, and it does not come from one month: the three
+test months contribute between 5.9 and 7.5\,kt each. A trial can
+therefore be small in operators without being small in effect, and the
+quarter it would be measured against is not the accident of a single
+month. The counterweight is that the order in which a deployment
+reaches operators is not neutral. Nothing in the policy withholds a
+proposal from any operator that qualifies for one, but beginning with a
+handful of them decides who benefits first.
 
 \begin{figure}[t]
 \centering
 \includegraphics{fig_concentration.pdf}
-\caption{Cumulative share of confirmed fuel against operator rank (log
-axis). Six operators fly half of the value and twenty-eight fly four
-fifths; the dashed line is the equal-contribution reference.}
+\caption{Cumulative share of confirmed fuel, that is, of the planned
+fuel saved on proposals the airlines' own later filings confirm,
+against operator rank on a log axis. Six operators fly half of the
+value and twenty-eight fly four fifths. The grey dashed line is the
+reference an equal contribution from every operator would trace. The
+blue curve is measured only to rank 15, where it reaches 70.3\,\% of
+the value; the dashed continuation beyond that rank is drawn through
+the two published points, 80\,\% at rank 28 and 100\,\% at rank 882,
+and is an interpolation rather than a measurement.}
 \label{fig:concentration}
 \end{figure}
 
@@ -1229,17 +1672,23 @@ fifths; the dashed line is the equal-contribution reference.}
 Every fuel figure above is computed with the stay-pair correction in
 place, and a fair question is how much of the result it moves. The
 whole simulation was therefore repeated with the uncorrected model. At
-the same threshold of 0.500 the uncorrected variant reaches 64.4\,\%
-precision against the corrected model's 65.8\,\%, and confirms
-24.38\,kt against 24.33\,kt. The precision difference runs in the
-corrected model's favour and the fuel difference is a twentieth of a
-kilotonne: on flights that did revise, the correction costs nothing on
-this simulation metric (its one-point cost on revision accuracy,
-Section~\ref{sec:changebias}, is a different measure). The correction is not there
-to improve the simulation; it is there for the deployed population, in
-which most flights stay, and the honest summary is that the headline
-fuel figures are robust to it while the deployability argument depends
-on it.
+$\tau = 0.600$, the operating point used throughout this paper, the
+uncorrected variant proposes on 54\,139 flights at 81.5\,\% precision
+and confirms 20.101\,kt, against the corrected model's 56\,162
+proposals at 79.2\,\% precision confirming 20.097\,kt. At $\tau =
+0.500$ the comparison runs the other way on precision, 64.4\,\% for the
+uncorrected variant against 65.8\,\%, and again the two confirm the
+same fuel, 24.38 against 24.33\,kt. The pattern is the same at both
+points: the confirmed fuel is identical to within a twentieth of a kilotonne
+at $\tau = 0.500$ and to four tonnes at $\tau = 0.600$, and the precision differs by a point or two in whichever
+direction the threshold happens to favour. On flights that did revise,
+in other words, the correction neither helps nor hurts the quantity
+this section reports. That is the expected result rather than a
+disappointment, because the correction was never aimed at this
+population. It is aimed at the deployed one, in which most flights do
+not revise at all, and the honest summary is that the headline fuel
+figures are robust to the correction while the argument for deploying
+the model at all depends on it.
 
 \subsection{A worked example}
 
@@ -1247,13 +1696,17 @@ One case from the held-out quarter shows what the channel is for, and
 is worth following from end to end, because every step is a step that
 the deployed system would take.
 
-A narrow-body was filed on a medium-haul sector, with no regulation
+A narrow-body was filed on a medium-haul flight, with no regulation
 anywhere in the picture. First, the system considers the filed route
 and one alternative. It then computes their indicators and subtracts
 the pair minimum from each, so that what reaches the model is a
 difference rather than an absolute quantity, and finds that the
-alternative burns 2\,016\,kg less planned fuel, about a fifth of the
-trip fuel, at essentially the same flight time. Both routes carry the
+alternative burns 2\,016\,kg less planned fuel, close to a quarter of
+the trip fuel, at essentially the same distance and flight time. That
+margin is chosen because it is unambiguous, and it is far from typical:
+the median confirmed proposal saves 130\,kg, and among pairs whose two
+routes lie within 50\,km and five minutes of each other only about one
+in a hundred differs by so much. Both routes carry the
 same flight-level context, namely the same airline, the same aircraft,
 the same departure hour and the same inbound and outbound connections.
 Needless to say, nothing that the model sees distinguishes the two
@@ -1284,8 +1737,8 @@ A model that scores well on average but decays from month to month is
 not deployable, and the main split can only partly address the
 question: its three test months rule out rapid decay, but they say
 nothing about the retraining cadence a deployed system would need. This
-section answers with a second experiment. The entire design of
-Section~\ref{sec:splits} is moved back one year: the same
+section answers with a second experiment, on the second split of
+Section~\ref{sec:splits}: the same
 configuration (stay weight 10, within-pair normalisation, waypoint
 text) is fitted on January to October 2025, tuned and calibrated on
 November and December 2025, and then evaluated month by month on
@@ -1294,20 +1747,22 @@ beyond the training cutoff. Nothing from 2026 touches the model, the
 calibrator or the threshold, which is selected on the tuning months for
 the 80\,\% precision target exactly as in Section~\ref{sec:channel}.
 
-Training proceeded exactly as for the production configuration
-(10\,000 iterations at the automatically selected learning rate, early
-stopping at iteration 9\,386), and the threshold selected on the 2025 tuning months
-for the 80\,\% precision target came out at $\tau = 0.600$, the same
-value that the main split produced a year of data later.
+Training proceeded exactly as for the production configuration, and
+the threshold selected on the 2025 tuning months for the 80\,\%
+precision target came out at $\tau = 0.600$, the same value the
+main split produced from its own tuning month three months further on.
 Table~\ref{tab:horizon} reports the six months in full, and
 Fig.~\ref{fig:horizon} the two curves that matter.
 
 \begin{table}[t]
 \caption{The year-2025 model evaluated month by month across the first
-half of 2026 (Wilson 95\,\% intervals). Coverage is the share of
+half of 2026 (Wilson 95\,\% intervals). Coverage here is the channel's,
+not the abstention coverage of Fig.~\ref{fig:coverage}: it is the share of
 eligible flights on which the channel proposes at the threshold fixed
 on the 2025 tuning months; the regulated share is the fraction of test
-pairs whose newly filed route carried attributed delay.}
+pairs whose newly filed route carried attributed delay, and it rises
+through the half year because the summer regulation season arrives, not
+because the model changes.}
 \label{tab:horizon}
 \centering\small
 \setlength{\tabcolsep}{4pt}%
@@ -1329,12 +1784,18 @@ June     & 6 & 68.0 [67.7, 68.3] & 22.6 & 17.3 & 77.8 [77.2, 78.5] \\
 \begin{figure}[t]
 \centering
 \includegraphics{fig_horizon.pdf}
-\caption{How the model ages. Pairwise accuracy (solid) dips and
-recovers across the half year, while proposal precision at the
-year-old threshold (dashed) never leaves a band of under two
-percentage points. What declines steadily is coverage
-(Table~\ref{tab:horizon}): the ageing model proposes less, and errs
-no more.}
+\caption{How the model ages, over the six months following its training
+cutoff. Panel (a): pairwise accuracy dips to 64.6\,\% at three months
+and recovers to 68.0\,\% at six. Panel (b): the precision of the
+channel's proposals, at the threshold fixed on the 2025 tuning
+months, never
+leaves the band from 77.2 to 78.9\,\%, while the share of eligible
+flights it proposes on falls monotonically from 22.2 to 17.3\,\%.
+Shaded bands are 95\,\% confidence intervals; coverage is a count over
+eligible cases rather than an estimate and carries none. The reading is
+that the ageing model proposes less and errs no more, although part of
+the coverage fall within this window is seasonal, and the season-matched
+comparison in the text is the cleaner one.}
 \label{fig:horizon}
 \end{figure}
 
@@ -1343,10 +1804,15 @@ drifts down to 64.6\,\% at three months, and then recovers to 68.0\,\%
 at six. Interestingly, the worst month is not the furthest one: the
 curve is U-shaped, and the best of the six months is the last. Two
 mechanisms plausibly contribute. First, the mix shifts: the regulated
-share of the test pairs grows from 5.7\,\% in January to 22.6\,\% in
-June as the summer regulation season arrives, and
-Section~\ref{sec:strata} showed that regulated pairs are the easier
-stratum. The shift does not explain the recovery on its own, however,
+share of the test pairs, meaning those whose newly filed route carries a
+delay, grows from 5.7\,\% in January to 22.6\,\% in June as the summer
+regulation season arrives, and by June that stratum is the easier one,
+at 71.4\,\% against 67.0\,\% on the unregulated pairs of the same
+month. % CORRECTED 2026-09-04: cross-reference was to the
+% regulation-attribution strata of Sec. strata, which key differently;
+% the figures here are the horizon study's own strata
+% (studies/2026-08-trc-horizon/tables/horizon_accuracy.csv).
+The shift does not explain the recovery on its own, however,
 because the same U-shape appears within the unregulated stratum alone
 (67.0\,\% down to 64.7\,\% and back to 67.0\,\%). Secondly, we
 hypothesise a seasonal re-alignment: June 2026 resembles the June 2025
@@ -1359,44 +1825,57 @@ the two designs overlap the comparison is direct: a model trained
 through February 2026 scores 67.5\,\%, 67.7\,\% and 69.0\,\% on April,
 May and June, so the year-2025 model gives up 1.9, 1.3 and 1.0 points
 on the same months, and 2.9 points on March against the fresher
-model's score on its own tuning month. The accuracy cost of roughly a year of
-staleness is therefore one to three points, largest at the seasonal
-antipode.
+model's score on its own tuning month. It should be said exactly what that gap measures, because it is
+smaller than the design might suggest. The two models differ by three
+months of recency, their data ending in December 2025 and March 2026
+respectively, and also by four months of training volume, since the
+older model is fitted on ten months against fourteen. The one to three
+points are the joint cost of both, largest at the seasonal antipode,
+and this experiment cannot separate them. What it does measure
+directly, and what a deployment plan needs, is the other axis: six
+months elapsed beyond a training cutoff never cost more than three
+points.
 
 The operational question is what happens to the channel, and the
 answer is the striking part. At the threshold fixed on the 2025
 tuning months, precision on proposals is 78.9\,\% one month out and
 77.8\,\% six months out, and never leaves the band from 77.2 to
 78.9\,\% across the half year; the main split's operating point,
-tuned a year later, delivered 79.2\,\% on its own quarter, and the
+tuned on the later month, delivered 79.2\,\% on its own quarter, and the
 aged model sits about a point below it on this measure. What moves
-instead is coverage, which falls from 22.2\,\% of eligible flights in
-January to 17.3\,\% in June, about a fifth in relative terms. As the
+instead is the share of eligible flights the channel speaks on, which
+falls from 22.2\,\% in January to 17.3\,\% in June. As the
 traffic drifts away from what the model was trained on, its
 calibrated confidence clears the threshold less often, and the
 channel becomes quieter rather than wrong. For a proposal channel
 this is the correct failure mode, because a wrong proposal costs
 trust in the way Section~\ref{sec:intro} describes, whereas a missed
 one merely leaves fuel where it was. It should be noted that the
-monthly eligible volume nearly doubles across the window as summer
+monthly eligible volume grows by two thirds across the window as summer
 traffic builds, so part of the coverage movement within the half year
 is seasonal composition rather than ageing. On the held-out quarter,
 however, the two designs face the same flights and the season cancels
 exactly: over April to June the aged model proposes on 18.5\,\% of the
 eligible pairs against the fresh model's 20.4\,\%, at 77.9 against
-79.2\,\% precision. The net cost of roughly a year of staleness to the
+79.2\,\% precision. The net cost of those three months of staleness to the
 channel is therefore about a tenth of the proposal volume and a point
 of precision, which is the cleanest isolation of pure ageing
 this data affords.
 
 For a deployment plan the reading is straightforward. Retraining
-quarterly would recover the one to three accuracy points that
-staleness costs, and even an annual cadence would hold proposal
-precision within two points of the fresh model's at the price of
-roughly a fifth of the proposal volume. Nevertheless, six months and one seasonal transition are the
-extent of the evidence, and nothing here licenses extrapolation to a
-model several years old, still less to one serving traffic whose
-filing behaviour a live channel has itself begun to influence.
+quarterly would recover the one to three accuracy points that separate
+the aged model from the fresh one, of which staleness is one part and
+the smaller training window the other, and a model left to run for six months beyond its
+cutoff still held proposal precision inside a band two points wide. The
+price is quieter operation, and how much quieter depends on which
+comparison is made: the raw fall across the half year is about a fifth
+of the proposal volume, but roughly half of that is the season building
+rather than the model ageing, and the season-matched comparison puts
+the cost of staleness at about a tenth. Six months and one seasonal
+transition are the whole of the evidence, so an annual cadence is not
+something this experiment can recommend, and nothing here reaches a
+model several years old, still less one serving traffic whose filing
+behaviour a live channel has itself begun to influence.
 
 % =====================================================================
 \section{Threats to validity}
@@ -1421,21 +1900,46 @@ degrade.
 that changed its plan. A deployed channel would see every flight, and
 most flights never revise, so the model would be asked a question on
 which it was not evaluated. The honest expectation is that precision
-falls, because the flights that never revise are precisely the ones
-whose airlines were content with what they filed.
-Section~\ref{sec:changebias} quantifies how much of that gap the stay
-pairs close: some of it, not enough. The stay construction itself is
-confounded by design, since regulation status identifies the label, and
-the masked evaluation is a repair rather than a clean design. A
-balanced stay dataset in which regulation status is independent of the
-label requires data that is not currently assembled rather than data
-that does not exist, and is the single most valuable extension of this
+falls, though not for the reason it is tempting to give. Non-revision
+has several causes, of which contentment with the filed plan is only
+one: nothing may have prompted a second look, the dispatch desk may
+have had no capacity for one, or the flight may have departed before
+the regulation that would have prompted it was published. The channel's
+premise is that the second and third of those are common, and this
+paper measures none of them. The value of the channel on that
+population is therefore unmeasured in either direction.
+Section~\ref{sec:changebias} shows that the stay pairs close a large
+part of that gap, from 34.8\,\% to 90.0\,\%, and that the model is not
+reaching the figure by reading regulation status, since the same model
+scores 88.0\,\% on the population where that reading would be wrong.
+Two bounds remain even so. The stay set is small, 1\,093 test pairs,
+and its two routes belong to two different flights, so a model could
+learn to recognise the construction rather than the preference it
+encodes. A balanced stay dataset, in which regulation status is
+independent of the label and both routes belong to the same flight,
+requires data that is not currently assembled rather than data that
+does not exist, and is the single most valuable extension of this
 work. This bound falls harder on the second use case of
 Section~\ref{sec:usecases} than on the first, because an overload
 release has to rank the flights it finds on the volume, most of which
 never revise, which is exactly the population on which the acceptance
 estimates are least reliable. That asymmetry is the reason the second
 use case is described as enabled rather than demonstrated.
+
+\paragraph{The candidates would come from somewhere else} In this
+simulation the alternative offered to a flight is the route the airline
+was about to file. A deployed channel has no such route, and would have
+to obtain candidates from a generator. That is precisely the
+distribution Section~\ref{sec:pairsvsets} argues is a poor source of
+\emph{labels}, and the argument transfers uncomfortably to serving
+time: a model trained on two routes that both passed an airline's own
+flight-planning system may score a generated route low for reasons that
+have nothing to do with preference. Nothing in this paper measures that
+gap, and every figure in Section~\ref{sec:channel} is conditioned on a
+candidate the airline had itself produced. A first trial should
+accordingly draw its candidates from routes that operator has filed
+before on that city pair, where the concern does not arise, rather than
+from a generator.
 
 \paragraph{Planned fuel is not burned fuel} Every fuel figure rests on
 planned fuel, and the two differ by whatever the tactical phase imposes
@@ -1455,51 +1959,75 @@ made, and their acceptance logged, can close this gap, and such a trial
 is also the only way to observe acceptance itself rather than its
 revealed proxy.
 
-\paragraph{Data currency at serving time} Attributed delay and the
-regulation picture are among the strongest inputs, and both are
-properties of a moment rather than of a flight. A score computed
-against a regulation state that has since changed is a score answering
-a question that nobody asked, and the binding constraint at serving
-time is therefore data currency rather than computation: the scoring
-step is a single pass through a fixed tree ensemble.
+\paragraph{The regulation picture is the binding constraint at serving
+time} Attributed delay and the regulation picture are among the
+strongest inputs, and both are properties of a moment rather than of a
+flight. Two things follow. A score computed against a regulation state
+that has since changed answers a question nobody asked, so the binding
+constraint at serving time is data currency rather than computation:
+the scoring step is a single pass through a fixed tree ensemble.
+Harder, and unmeasured here, is that the alternative route's attributed
+delay is known in the archive only because the airline went on to file
+that route. For a route nobody has filed, the delay it would attract is
+a query rather than an observation, and the error in answering it would
+propagate into the acceptance probability.
 
 % =====================================================================
 \section{Conclusions}
 \label{sec:conclusions}
 
 Airline route acceptance is learnable from flight-plan revisions at
-network scale, and the findings of this paper are fivefold. First, a
+network scale, and the findings of this paper are five. First, a
 model fitted on 1\,134\,000 revisions identifies the chosen route in
 68.1\,\% of held-out cases and supports operation at a selected
 precision rather than at a single accuracy figure: on the most
 confident fifth of the decisions it is right 94.9\,\% of the time.
-Secondly, every rule of the form ``prefer the cheaper route'' scores
-below chance on this archive, and the model's advantage concentrates
-exactly where cost logic fails: 79.9\,\% on moves against all three
+Secondly, every rule preferring the route that is cheaper on one of
+the four planning indicators scores below chance on this archive, so
+that the strongest simple rule is an inverted one at 55.0\,\%, and the
+model's advantage concentrates exactly where cost logic fails: 79.9\,\% on moves against all three
 cost indicators, against 53.9\,\% on moves the indicators already
 favoured. Thirdly, a proposal channel operating at 80\,\% precision
 addresses 20.1\,kt of planned fuel per quarter, validated against what
 the airlines subsequently filed, four fifths of it flown by 28 of 882
-airlines, and these figures are robust to the stay-pair bias
-correction. Fourthly, the model weighs route structure more heavily
-than any individual cost indicator, which is precisely the information
-that a formulation based on costs alone cannot represent. Fifthly,
+operators, and these figures are robust to the stay-pair bias
+correction. Fourthly, route structure carries information about
+the choice that the cost indicators do not: the waypoint sequence is
+the largest single term in what moves the model's score, though the
+cost indicators together outweigh it and removing the sequence costs
+only 1.4 points of accuracy. Fifthly,
 trained on one year and watched over the following six months, the
 model's proposal precision never leaves the band from 77.2 to
 78.9\,\%, somewhat below the 80\,\% target it was tuned for, while its
 accuracy dips by at most three points before recovering with the
 season: it ages by proposing less, not by erring more.
 
-One practical note should be made before turning to the limits. The
-number that characterises this system is not 68.1\,\% but the curve of
-Fig.~\ref{fig:coverage}, because a channel chooses where on that curve
-to sit. Note that ranking a pair correctly and proposing correctly are
-different quantities, and that the second of them is the operational
-one: at the threshold used here, the channel proposes on about a fifth
+A route
+that burns less planned fuel emits less carbon dioxide, and the reason
+such routes go unflown is not that nobody can find them but that nobody
+knows which of them an airline would actually take. That is the gap
+this paper addresses, and the reason acceptance rather than fuel is the
+quantity modelled: a proposal an airline declines saves nothing, and a
+channel that makes many of them is switched off. Ranking candidate
+routes by likely acceptance is what allows the environmentally cheaper
+proposals to be aimed at the flights on which they are also cheap for
+the operator, which is the only version of this idea that both sides
+have a reason to run.
+
+The number that characterises this system is not 68.1\,\% but the curve
+of Fig.~\ref{fig:coverage}, because a channel chooses where on that
+curve to sit, and because ranking a pair correctly and proposing
+correctly are different quantities of which the second is the
+operational one: at the threshold used here, the channel proposes on about a fifth
 of the eligible flights, and 79.2\,\% of those proposals match what the
 airline went on to file. Accordingly, any first deployment would sit
 well to the left of that curve, and would move right only as acceptance
 is observed.
+
+The second use case of Section~\ref{sec:usecases}, choosing which
+flights to ask to reroute when a volume of airspace is overloaded, and
+in which order, remains enabled rather than demonstrated: it needs the same acceptance probability, and
+it needs it on a population this archive cannot speak for.
 
 Future work should be directed, in the first place, at assembling a
 balanced stay dataset in which regulation status is independent of the
@@ -1535,9 +2063,10 @@ Validation, Writing -- review \& editing. \textbf{Franck Ballerini:}
 Validation, Writing -- review \& editing. \textbf{Seddik Belkoura:}
 Methodology, Validation, Writing -- review \& editing.
 \textbf{Vincent Taverniers:} Resources, Data curation, Writing --
-review \& editing. \textbf{Robin Deransy:} Conceptualization, Project
+review \& editing. \textbf{Gratiel Marius Marin:} Resources,
+Validation, Writing -- review \& editing. \textbf{Robin Deransy:} Conceptualization, Project
 administration, Writing -- review \& editing. \textbf{Benjamin
-Cramet:} Supervision, Writing -- review \& editing. \textbf{Gregory
+Cramet:} Supervision, Writing -- review \& editing. \textbf{Grigori
 Gustin:} Supervision, Project administration, Writing -- review \&
 editing.
 
@@ -1550,7 +2079,8 @@ tables, and an OpenAI image-generation model, driven through the
 PaperBanana agent prompts, to produce the methodology schematic of
 Fig.~\ref{fig:method}. In view of the publisher's policy on the use of
 generative AI in figures, the authors state that this figure is a
-schematic illustration of the method and contains no data, measurement
+schematic illustration of the method whose only numbers are the dataset
+sizes and settings stated in the text, and contains no data, measurement
 or result; that it was generated under the authors' direction from a
 description they wrote; that every label was checked by the authors
 against the method as described in Section~\ref{sec:data} and

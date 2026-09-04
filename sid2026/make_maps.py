@@ -117,13 +117,15 @@ for name, (uid, adep, ades) in CASES.items():
         best = max(cand, key=lambda q: other.distance(q))
         pt = (best.x, best.y)
         px, py = style.project([pt[0]], [pt[1]])
-        # the two words go to opposite sides of their own track, by role
-        # rather than by map half: on a route pair that runs diagonally
-        # both labels landed in the upper half and stacked on each other
-        up = word == "abandoned"
-        ax.annotate(word, (px[0], py[0]), (0, 10 if up else -10),
-                    textcoords="offset points", ha="center",
-                    va="bottom" if up else "top", fontsize=style.FS_SMALL,
+        # A fixed vertical offset does nothing for a near-vertical track:
+        # in the escape case the red route ran straight through the word
+        # "abandoned". Push each word along the perpendicular that points
+        # away from the other route, which on a pair of neighbouring tracks
+        # is also away from its own.
+        dx, dy, ha, va = style.away_offset(line, pt, other, dist=10.0)
+        ax.annotate(word, (px[0], py[0]), (dx, dy),
+                    textcoords="offset points", ha=ha, va=va,
+                    fontsize=style.FS_SMALL,
                     color=colour, zorder=7,
                     path_effects=style.halo(2.2))
 
