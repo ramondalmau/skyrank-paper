@@ -163,7 +163,7 @@ for ax, feat, letter in zip(axes, DEP_FEATURES, "abcdef"):
     ax.plot(q.x_bin_centre, q.shap_median, color=colour, lw=style.LW,
             solid_capstyle="round", zorder=4)
     ax.set_xlabel(f"difference in {DEP_LABEL[feat]}")
-    ax.set_ylabel("SHAP difference\n[+ = toward the route kept]")
+    ax.set_ylabel("SHAP difference\n[+ = toward the route filed]")
     style.panel(ax, letter, PRETTY[feat])
     style.clean(ax, axis="none")
     # A written reading of the sign, taken from the table's own
