@@ -44,16 +44,17 @@ comment had swallowed (item 13), and five numbers that disagreed with
 themselves or with the journal paper (item 15). Each carries a dated
 `% CORRECTED` comment in the source.
 
-FIG. 2 (2026-09-06): regenerated with Gemini and accepted by the author; it
-is the same raster the journal paper uses. Five of the six defects that made
-it disagree with the text are gone and the caption's disclaimer with them.
-Three label errors remain, listed in
-`../trc-extension/SUBMISSION_NOTES.md`; none contradicts a claim in the text,
-the wrong test-set count having been corrected in a second round. At this paper's
-full-column-span include width the raster is 199 dpi, below IEEE's 300 dpi
-guidance for raster art and below the 287 the previous one gave, so the
-re-render that fixes the labels should also come back at roughly twice the
-linear size.
+FIG. 2 (2026-09-06): regenerated with Gemini over three rounds and accepted
+by the author; it is the same raster the journal paper uses. Every defect the
+original carried is gone and the caption carries no disclaimer. Two labels the
+image model would not correct were repaired by hand in the raster, a
+misspelling and a pair of legend labels set against the wrong tracks; the
+journal paper's generative-AI declaration records both.
+
+Print quality is the one open point: at this paper's full-width include the
+raster is 200 dpi, below IEEE's 300 dpi guidance for raster art and below the
+287 the previous one gave. The figure's type is large, and it is legible at
+printed size, but a larger render would settle it.
 
 CAMERA-READY STATUS (2026-09-02; supersedes 2026-08-21)
 - Build verified: exactly 8 pages, 0 overfull boxes, 0 undefined references,

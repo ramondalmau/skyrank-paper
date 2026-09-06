@@ -26,41 +26,36 @@ verified against the live page by a human before submission:
 - ORCID iDs at submission; suggested reviewers with affiliations
 - review model and any page limit: NOT verified
 
-## Fig. 2: regenerated 2026-09-06, three label errors left
+## Fig. 2: regenerated 2026-09-06, no label errors left
 
 The methodology schematic was regenerated with Google's Gemini image model
-from an editing prompt built out of the defects the previous rasters carried,
-in two rounds, and the author accepted the result. Every defect that made the
-figure disagree with the manuscripts is gone: the hinge-condition box (now an
-inset of penalty against gap, falling smoothly), the impossible fuel
-precondition and its AND gate, the missing fourth cost indicator, the grey
-routes in the proposal box, the training labels on the model's own outputs,
-the test-set size (now 281 720), the repeated waypoint token, and "Balanced
-weights", which now correctly reads "group weight w (10 here)". The captions
-carry no disclaimer and the generative-AI declaration names Gemini.
+over three editing rounds, each prompt built out of the defects the previous
+raster carried and each result checked panel by panel against the text. Every
+defect the original carried is gone: the hinge-condition box (now an inset of
+penalty against gap, falling smoothly), the impossible fuel precondition and
+its AND gate, the missing fourth cost indicator, the grey routes in the
+proposal box, the training labels on the model's own outputs, the test-set
+size (281 720), the repeated waypoint token, "Balanced weights" (now "group
+weight w (10 here)"), the incomplete gap equation (now $\Delta S = S^+ - S^-$)
+and a stray fragment in the stay-pair panel.
 
-Three label errors remain, none of them repairable outside the image model
-and none of them contradicting a claim in the text:
+Two labels the image model would not correct after two attempts were repaired
+by hand in the raster itself, both on flat backgrounds and neither involving
+new type: the penalty inset's vertical axis, which read "Penslty", was
+replaced with the word "Penalty" lifted from the inset's own caption, scaled
+and rotated; and the two route labels in stage 5, which sat level with the
+wrong tracks, were exchanged by moving the rendered text blocks. The
+generative-AI declaration records both. The patched raster is kept as
+`figures-src/fig_pipeline_gemini_2026-09-06c_patched.png` beside the three
+Gemini originals.
 
-1. Stage 4 reads `gap ΔS = S−`, which is not an equation. It should be
-   `ΔS = S+ − S−`. Two rounds of prompting have changed the sign rather than
-   supplying the missing term, because the column is too narrow for the
-   expression on one line; the next attempt should stack it.
-2. The inset's vertical axis is misspelled **Penslty** for Penalty.
-3. In stage 5 the two legend labels align with the wrong tracks: "Proposed
-   Route" sits level with the dashed red line and "Current Route" with the
-   solid green one. The colours themselves are right, and the text is
-   coloured to match, so a reader reading by colour is not misled.
-
-Also outstanding: the raster is 1425 × 725, which is 278 dpi at the TR-C
-include width but **200 dpi at the SID one**, against IEEE's 300 dpi guidance
-for raster art (the pre-regeneration raster gave 287). Both requests for a
-re-render at twice the linear size have come back at 1440 × 736, so the next
-one may need the size asking for on its own.
-
-`figures-src/fig_pipeline_paperbanana_chatgpt.md` holds the full record. The
-two Gemini sources are beside it as `fig_pipeline_gemini_2026-09-06.jpg` and
-`...-06b.jpg`, the second being the installed one.
+One thing is left, and it is a print-quality question rather than a defect:
+the raster is 1425 x 724, which is 278 dpi at the TR-C include width but
+**200 dpi at the SID one**, against IEEE's 300 dpi guidance for raster art
+(the pre-regeneration raster gave 287). All three rounds came back at
+1440 x 736 whatever size was asked for. Either ask for the size on its own,
+without other edits, or accept 200 dpi for the conference paper, where the
+figure's type is large and legible at printed size.
 
 ## Author decisions
 

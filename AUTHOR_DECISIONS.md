@@ -23,7 +23,7 @@ comment.
 | 2 | "Almost always a move with a strong non-cost reason" | **repaired**, both papers |
 | 3 | "Half a point of run-to-run variation" | **repaired**: measured at 0.17, four places |
 | 4 | The 2025 replication is not "the same recipe" | **repaired**, conference paper |
-| 5 | Fig. 2 states a loss and a gate the papers deny | **regenerated 2026-09-06**, two rounds: every substantive defect fixed, three label errors left |
+| 5 | Fig. 2 states a loss and a gate the papers deny | **closed 2026-09-06**: regenerated over three rounds, two labels repaired by hand |
 | 6 | Fig. 3's lower map: the redaction and its premise | **settled by the content rule**; caption and code repaired |
 | 7 | Data availability vs. the operator table | **repaired**: de-identified release set, statement amended |
 | 8 | The stay weight was selected on held-out data | **measured**: the sweep now reports the tuning month |
@@ -212,53 +212,43 @@ from the difference in training volume.
 
 ---
 
-## Fig. 2, regenerated (item 5)
+## Fig. 2, regenerated and closed (item 5)
 
 The schematic carried **nine defects**, each verified by opening the PNG and
 reading the panel. They were turned into an editing prompt, Gemini was given
-the old raster as a reference, and the author accepted what came back on
-2026-09-06. Five of the six that made the figure disagree with the
-manuscripts are gone: the hinge-condition box (now an inset of penalty
-against gap, falling smoothly and never reaching zero), the impossible fuel
-precondition and its AND gate, the fourth cost indicator that was named but
-not drawn, the grey routes in the proposal box, and the training labels
-carried on the model's own outputs.
+the raster as a reference, and three rounds followed, each one checked panel
+by panel before the next prompt was written. Everything is now fixed: the
+hinge-condition box became an inset of penalty against gap falling smoothly
+towards zero; the impossible fuel precondition and its AND gate are gone, so
+the calibrated threshold is the only condition; the fourth cost indicator is
+drawn; the proposal box uses the paper's dashed-red and solid-green
+convention; the score bars are labelled $S^+$ and $S^-$ rather than by the
+training labels; the test-set size reads 281 720; the repeated waypoint token
+is gone; "Balanced weights" reads "group weight w (10 here)"; and the gap
+equation reads $\Delta S = S^+ - S^-$.
 
-The sixth was resolved differently from the way the prompt asked. The
-encoding panel now shows a single illustrative pair in which the chosen route
-is the costlier on all four indicators. That is the commoner direction on
-this archive rather than a universal one, and both captions now say exactly
-that, which is more honest than the alternating pattern requested.
+The encoding panel resolved differently from the way the prompt asked, and
+better. It now shows one illustrative pair in which the chosen route is the
+costlier on all four indicators, and both captions say that this is the
+commoner direction on this archive rather than a universal one.
 
-A second round on the same day fixed the four label errors the first one
-left. The timeline now reads **281 720** pairs, the repeated waypoint token
-is gone, and "Balanced weights" has become "group weight w (10 here)", which
-is what the method does: the stay pairs are given an increased weight so that
-the smaller set is not swamped, the opposite of balancing.
+**Two labels were repaired by hand**, after two rounds of prompting failed to
+move them. The penalty inset's vertical axis read "Penslty"; the word
+"Penalty" was lifted from the inset's own caption, scaled, rotated and
+dropped in, so the type matches exactly. The two route labels in stage 5 sat
+level with the wrong tracks; the rendered text blocks were exchanged, which
+needed no new type at all since both sit on flat background. Both are
+recorded in the journal paper's generative-AI declaration.
 
-**Three label errors remain**, none of them repairable outside the image
-model and none contradicting a claim in the text:
+What is left is a print-quality question rather than a defect. The raster is
+1425 x 724, which is 278 dpi at the journal include width but 200 at the
+conference one, against a 300 dpi guidance; all three rounds returned the same
+pixel size whatever was asked for. The figure's type is large and legible at
+printed size in both papers.
 
-1. stage 4 reads `gap ΔS = S−`, which is not an equation and should be
-   `ΔS = S+ − S−`; two rounds have changed the sign rather than adding the
-   missing term, the column being too narrow for one line;
-2. the penalty inset's vertical axis is misspelled **Penslty**;
-3. in stage 5 the legend labels align with the wrong tracks, "Proposed Route"
-   sitting level with the dashed red line and "Current Route" with the solid
-   green one. The colours, and the colour of the label text, are right.
-
-One thing also survives that turned out not to be a defect: the "same flight
-· same day · same airline" sub-label still sits in the archive panel, and on
-inspection it is correct there, since that panel draws one flight with two
-filings and the brace groups exactly those.
-
-The raster is 1425 × 725, which is 278 dpi at the journal include width but
-200 at the conference one, against a 300 dpi guidance. Both requests for
-twice the linear size came back at the same size.
-
-Two blocks the old raster carried are absent from the new one, the leakage
-control and the "regulated flight" marker on the stay pair. Both are stated
-in the text, and the simplification was the author's choice.
+Two blocks the original carried are absent from the new figure, the leakage
+control and the "regulated flight" marker on the stay pair. Both are stated in
+the text, and the simplification was the author's choice.
 
 ## Verified sound — do not "fix" these
 

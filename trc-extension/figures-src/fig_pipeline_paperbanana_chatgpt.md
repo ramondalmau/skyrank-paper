@@ -47,7 +47,22 @@ token is gone (`WP1 . WP2 . WP5 . ...` against the other route's
 `Balanced weights` is now `group weight w (10 here)`. That raster,
 `fig_pipeline_gemini_2026-09-06b.jpg`, is the installed one.
 
-**Three errors remain**, none contradicting a claim in the text:
+**A third round** fixed the gap equation, which now reads `DS = S+ - S-`
+stacked over two lines, and removed the stray `check / Route saved is a
+choice` fragment from the stay-pair panel. That raster,
+`fig_pipeline_gemini_2026-09-06c.jpg`, is the installed one.
+
+**Two labels were then repaired by hand**, the image model having failed
+twice on both, and the result is
+`fig_pipeline_gemini_2026-09-06c_patched.png`, which is what
+`../figures/fig_pipeline.png` is a trimmed copy of. Neither repair needed new
+type: the axis label "Penslty" was replaced with the word "Penalty" lifted
+from the inset's own caption, scaled to 14x40 px and rotated 90 degrees; the
+two stage-5 route labels, which sat level with the wrong tracks, were
+exchanged by moving their rendered text blocks 30 px, both sitting on flat
+background. The journal paper's generative-AI declaration records both.
+
+For the record, these were the three errors that round three left:
 
   a. Stage 4 reads `gap DS = S-`, which is not an equation; it should be
      `DS = S+ - S-`. Two rounds have changed the sign rather than adding the
