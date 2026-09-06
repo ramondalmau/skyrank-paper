@@ -47,9 +47,9 @@ themselves or with the journal paper (item 15). Each carries a dated
 FIG. 2 (2026-09-06): regenerated with Gemini and accepted by the author; it
 is the same raster the journal paper uses. Five of the six defects that made
 it disagree with the text are gone and the caption's disclaimer with them.
-Four label errors remain, listed in
-`../trc-extension/SUBMISSION_NOTES.md`; the blocking one is the timeline,
-which reads 280 720 pairs where the test set is 281 720. At this paper's
+Three label errors remain, listed in
+`../trc-extension/SUBMISSION_NOTES.md`; none contradicts a claim in the text,
+the wrong test-set count having been corrected in a second round. At this paper's
 full-column-span include width the raster is 199 dpi, below IEEE's 300 dpi
 guidance for raster art and below the 287 the previous one gave, so the
 re-render that fixes the labels should also come back at roughly twice the

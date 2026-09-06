@@ -40,22 +40,29 @@ four. That is the commoner direction on this archive rather than a universal
 one, and both captions now say so, which is honest and reads better than the
 alternating pattern the prompt requested.
 
-**Four errors remain in the accepted raster** (verified by opening it at 3x on
-2026-09-06):
+**A second Gemini round on 2026-09-06** fixed three of the four errors the
+first one left: the timeline now reads `281 720 pairs`, the repeated waypoint
+token is gone (`WP1 . WP2 . WP5 . ...` against the other route's
+`WP1 . WP2 . WP3 . ...`, so the two visibly share a prefix and diverge), and
+`Balanced weights` is now `group weight w (10 here)`. That raster,
+`fig_pipeline_gemini_2026-09-06b.jpg`, is the installed one.
 
-  a. The timeline reads `Test - Apr-Jun 2026 - 280 720 pairs`. The test set is
-     **281 720** pairs, a number both manuscripts quote throughout.
-  b. Stage 4 reads `gap DS = S+`, a broken equation. It should be
-     `DS = S+ - S-`.
-  c. Stage 3's upper token row reads `WP1 . WP2 . WP2 . ...`; the second token
-     is repeated.
-  d. Stage 2 reads `Balanced weights` where the stay pairs enter at an
-     *increased* group weight of 10, precisely so that the smaller set is not
-     balanced away. It should read `group weight w (10 here)`.
+**Three errors remain**, none contradicting a claim in the text:
 
-Items 8 and 9 of the list below were not applied either: the `same flight -
-same day - same airline` sub-label still sits in the archive panel, where it
-is true of revision pairs only.
+  a. Stage 4 reads `gap DS = S-`, which is not an equation; it should be
+     `DS = S+ - S-`. Two rounds have changed the sign rather than adding the
+     missing term, because the column is too narrow for one line. Ask for it
+     stacked: `DS =` on one line, `S+ - S-` below.
+  b. The penalty inset's vertical axis is misspelled `Penslty`.
+  c. In stage 5 the legend labels align with the wrong tracks: `Proposed
+     Route` sits level with the dashed red line and `Current Route` with the
+     solid green one. The colours and the coloured label text are right.
+
+Item 8 of the list below was not applied: the `same flight - same day - same
+airline` sub-label still sits in the archive panel. On inspection that is
+acceptable as drawn, since the panel shows one flight with two filings and
+the brace groups exactly those; stay pairs are introduced in panel 2.
+Item 9 is now applied.
 
 Two content blocks present in the old raster are absent from the new one: the
 leakage control (`time-varying feature -> pair minimum`) and the `regulated

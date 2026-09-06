@@ -26,39 +26,41 @@ verified against the live page by a human before submission:
 - ORCID iDs at submission; suggested reviewers with affiliations
 - review model and any page limit: NOT verified
 
-## Fig. 2: regenerated 2026-09-06, four label errors left
+## Fig. 2: regenerated 2026-09-06, three label errors left
 
 The methodology schematic was regenerated with Google's Gemini image model
-from an editing prompt built out of the nine defects the previous raster
-carried; the author accepted the result and it is installed in both papers.
-Five of the six defects that made the figure disagree with the manuscripts
-are gone: the hinge-condition box, the impossible fuel precondition and its
-AND gate, the missing fourth indicator, the grey routes in the proposal box,
-and the training labels on the model's own outputs. The captions no longer
-carry a disclaimer, and the generative-AI declaration names Gemini.
+from an editing prompt built out of the defects the previous rasters carried,
+in two rounds, and the author accepted the result. Every defect that made the
+figure disagree with the manuscripts is gone: the hinge-condition box (now an
+inset of penalty against gap, falling smoothly), the impossible fuel
+precondition and its AND gate, the missing fourth cost indicator, the grey
+routes in the proposal box, the training labels on the model's own outputs,
+the test-set size (now 281 720), the repeated waypoint token, and "Balanced
+weights", which now correctly reads "group weight w (10 here)". The captions
+carry no disclaimer and the generative-AI declaration names Gemini.
 
-Four errors remain in the accepted raster, all of them label text, none of
-them fixable outside the image model:
+Three label errors remain, none of them repairable outside the image model
+and none of them contradicting a claim in the text:
 
-1. The timeline reads **280 720 pairs**; the test set is **281 720**, a
-   number quoted throughout both papers. This one is a hard blocker.
-2. Stage 4 reads `gap ΔS = S+`, which is not an equation; it should be
-   `ΔS = S+ − S−`.
-3. Stage 3's upper token row repeats a token: `WP₁ · WP₂ · WP₂ · …`.
-4. Stage 2 reads "Balanced weights" where the stay pairs enter at an
-   *increased* group weight of 10, so that the smaller set is not balanced
-   away. It should read "group weight w (10 here)".
+1. Stage 4 reads `gap ΔS = S−`, which is not an equation. It should be
+   `ΔS = S+ − S−`. Two rounds of prompting have changed the sign rather than
+   supplying the missing term, because the column is too narrow for the
+   expression on one line; the next attempt should stack it.
+2. The inset's vertical axis is misspelled **Penslty** for Penalty.
+3. In stage 5 the two legend labels align with the wrong tracks: "Proposed
+   Route" sits level with the dashed red line and "Current Route" with the
+   solid green one. The colours themselves are right, and the text is
+   coloured to match, so a reader reading by colour is not misled.
 
-Also outstanding, and smaller: the "same flight · same day · same airline"
-sub-label still sits in the archive panel, where it is true of revision pairs
-only; and the raster is 1424 × 726, which is 278 dpi at the TR-C include
-width but only **199 dpi at the SID one**, against IEEE's 300 dpi guidance for
-raster art (the previous raster gave 287). A re-render at roughly twice the
-linear size would settle both papers.
+Also outstanding: the raster is 1425 × 725, which is 278 dpi at the TR-C
+include width but **200 dpi at the SID one**, against IEEE's 300 dpi guidance
+for raster art (the pre-regeneration raster gave 287). Both requests for a
+re-render at twice the linear size have come back at 1440 × 736, so the next
+one may need the size asking for on its own.
 
-`figures-src/fig_pipeline_paperbanana_chatgpt.md` holds the full record: the
-nine original defects, which the regeneration fixed, and these four. The
-Gemini source is beside it as `fig_pipeline_gemini_2026-09-06.jpg`.
+`figures-src/fig_pipeline_paperbanana_chatgpt.md` holds the full record. The
+two Gemini sources are beside it as `fig_pipeline_gemini_2026-09-06.jpg` and
+`...-06b.jpg`, the second being the installed one.
 
 ## Author decisions
 

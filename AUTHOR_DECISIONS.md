@@ -23,7 +23,7 @@ comment.
 | 2 | "Almost always a move with a strong non-cost reason" | **repaired**, both papers |
 | 3 | "Half a point of run-to-run variation" | **repaired**: measured at 0.17, four places |
 | 4 | The 2025 replication is not "the same recipe" | **repaired**, conference paper |
-| 5 | Fig. 2 states a loss and a gate the papers deny | **regenerated 2026-09-06**: five of six fixed, four label errors left |
+| 5 | Fig. 2 states a loss and a gate the papers deny | **regenerated 2026-09-06**, two rounds: every substantive defect fixed, three label errors left |
 | 6 | Fig. 3's lower map: the redaction and its premise | **settled by the content rule**; caption and code repaired |
 | 7 | Data availability vs. the operator table | **repaired**: de-identified release set, statement amended |
 | 8 | The stay weight was selected on held-out data | **measured**: the sweep now reports the tuning month |
@@ -230,22 +230,31 @@ is the costlier on all four indicators. That is the commoner direction on
 this archive rather than a universal one, and both captions now say exactly
 that, which is more honest than the alternating pattern requested.
 
-**Four label errors remain**, none of them repairable outside the image
-model, and the first is a hard blocker because the number is quoted
-throughout both papers:
+A second round on the same day fixed the four label errors the first one
+left. The timeline now reads **281 720** pairs, the repeated waypoint token
+is gone, and "Balanced weights" has become "group weight w (10 here)", which
+is what the method does: the stay pairs are given an increased weight so that
+the smaller set is not swamped, the opposite of balancing.
 
-1. the timeline reads **280 720** pairs where the test set is **281 720**;
-2. stage 4 reads `gap ΔS = S+`, which is not an equation;
-3. stage 3's upper token row repeats a token, `WP₁ · WP₂ · WP₂ · …`;
-4. stage 2 reads "Balanced weights" where the stay pairs enter at an
-   *increased* group weight of 10, so that the smaller set is not balanced
-   away.
+**Three label errors remain**, none of them repairable outside the image
+model and none contradicting a claim in the text:
 
-Two smaller things also survive: the "same flight · same day · same airline"
-sub-label still sits in the archive panel, where it holds for revision pairs
-only; and the raster is 1424 × 726, which is 278 dpi at the journal include
-width but 199 at the conference one, against a 300 dpi guidance. A re-render
-at twice the linear size settles that with the labels.
+1. stage 4 reads `gap ΔS = S−`, which is not an equation and should be
+   `ΔS = S+ − S−`; two rounds have changed the sign rather than adding the
+   missing term, the column being too narrow for one line;
+2. the penalty inset's vertical axis is misspelled **Penslty**;
+3. in stage 5 the legend labels align with the wrong tracks, "Proposed Route"
+   sitting level with the dashed red line and "Current Route" with the solid
+   green one. The colours, and the colour of the label text, are right.
+
+One thing also survives that turned out not to be a defect: the "same flight
+· same day · same airline" sub-label still sits in the archive panel, and on
+inspection it is correct there, since that panel draws one flight with two
+filings and the brace groups exactly those.
+
+The raster is 1425 × 725, which is 278 dpi at the journal include width but
+200 at the conference one, against a 300 dpi guidance. Both requests for
+twice the linear size came back at the same size.
 
 Two blocks the old raster carried are absent from the new one, the leakage
 control and the "regulated flight" marker on the stay pair. Both are stated
