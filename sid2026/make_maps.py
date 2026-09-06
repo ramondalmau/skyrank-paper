@@ -129,9 +129,20 @@ for name, (uid, adep, ades) in CASES.items():
                     color=colour, zorder=7,
                     path_effects=style.halo(2.2))
 
-    # The saver case sits on a thin seasonal sector, where naming both ends
-    # plus the geometry would point at a single operator. Its endpoints stay
-    # unlabelled; the caption says so.
+    # The escape case is the running example of the introduction, the one
+    # city pair the papers identify. The saver case is not, so its endpoints
+    # stay unlabelled and the caption says which map is unlabelled and why.
+    #
+    # Corrected 2026-09-06: this comment used to justify the omission by the
+    # sector being thin enough that "naming both ends plus the geometry would
+    # point at a single operator". The archive does not support that: four
+    # operators fly the saver's city pair in each direction over the held-out
+    # quarter, the same number as the labelled escape case, in a quarter where
+    # 70% of city pairs are served by one operator. The reason to withhold the
+    # names is the neutrality rule itself, not a re-identification argument,
+    # and it should not be defended by one that the data refutes. Note also
+    # what withholding does NOT achieve: the 10 m coastlines place both routes
+    # unambiguously, so the omission removes the names, not the geography.
     label_ends = name != "map_saver"
     for (lon, lat), icao in ((l1.coords[0], adep), (l1.coords[-1], ades)):
         px, py = style.project([lon], [lat])

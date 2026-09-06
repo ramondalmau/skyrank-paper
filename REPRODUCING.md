@@ -44,6 +44,9 @@ rather than the raw parquet:
 | `run_20_decision_context_accuracy.py` | `tables/context_accuracy_test.csv`, `results/context_accuracy.json` (what each revision did to the attributed delay, with accuracy) | `data/cache/study2026/scores_model_main_sw10_seed42_test.parquet` |
 | `run_21_shap_direction.py` | `tables/shap_dependence.csv` (which way each feature pushes; drives `fig_shap_direction`) | the cached SHAP matrix, `data/cache/study2026/shap_matrix.npz` |
 | `run_22_calibration_bands.py` | `tables/calibration_bands.csv`, `results/calibration_bands.json` (score gap to acceptance probability) | `data/cache/study2026/calibrated_test.parquet` |
+| `run_23_referee_checks.py` | `results/referee_checks.json` and five tables (`seed_spread`, `sign_vote_baselines`, `kpi_agreement_context`, `composition_reweighted`, `referee_checks_summary`): the arithmetic behind `AUTHOR_DECISIONS.md` | the scored and calibrated parquets, plus the committed tables it cross-checks |
+| `run_16_stay_weight_sweep.py` | `results/weight_decision_rerun.json` and `tables/stay_weight_selection.csv` (each stay weight scored on the tuning month as well as the held-out quarter) | the cached splits; trains three models, so GPU only in practice |
+| `run_24_release_tables.py` | `tables/release/` — the de-identified copies of the five tables that name an operator, a city pair or a waypoint, which are what the data-availability statement offers | the committed tables |
 
 A second trap, in `run_22` and worth stating because it produced a wrong table
 column in a draft: the pipeline's `p_pref` is the calibrated probability for
@@ -57,7 +60,17 @@ strata table call a route *regulated* when a regulation was attributed to it,
 which leaves the delay free to be zero; stage 20 keys on the delay itself.
 The two disagree by about six points on the share of the held-out quarter
 that is untouched (63.3 % against 71.0 %), and the manuscripts say so where
-both are used. Never quote one under the other's name.
+both are used. Never quote one under the other's name. A third figure, 70.6 %,
+is the archive-wide share by regulation status, and it lands within 0.4 points
+of the quarter's delay-keyed 71.0 % by coincidence; `run_23_referee_checks.py`
+records all three with their populations for that reason.
+
+**A second convention trap, in the strata table itself.** Its KPI-agreement
+block tests `delta < 0`, so an indicator on which the two routes are exactly
+*equal* is counted against the newly filed route. Ties are common — route
+charges are identical on 46.4 % of held-out pairs — so the "0 of 3" stratum is
+not the set of revisions that moved to a worse route on every indicator; only
+42.9 % of it is. `tables/kpi_agreement_context.csv` carries both readings.
 
 Both studies are heavy (hundreds of thousands of pairs, gradient-boosted
 training). Observe the memory discipline in `AGENTS.md`: probe, then cap.
@@ -149,7 +162,7 @@ mkdir -p "$TMPDIR/sid" "$TMPDIR/trc"
 (cd paper/trc-extension  && ~/.local/bin/tectonic -X compile trc2026.tex --outdir "$TMPDIR/trc")
 ```
 
-Acceptance after every build: SID exactly 8 pages, TRC 36; no `Overfull`
+Acceptance after every build: SID exactly 8 pages, TRC 49; no `Overfull`
 lines in the log; no `??` in the PDF text; abstract of the TRC at or under
 250 words with LaTeX markup stripped. The committed `sid2026.pdf` and
 `trc2026.pdf` are the builds of the committed sources.
@@ -158,7 +171,14 @@ lines in the log; no `??` in the PDF text; abstract of the TRC at or under
 
 - EUROCONTROL neutrality: no operator, waypoint, airspace volume or city pair
   is identified (the Amsterdam–Barcelona introduction anecdote is the sole
-  authorised exception); the Disclaimer stays verbatim.
+  authorised exception); the Disclaimer stays verbatim. The rule binds what
+  leaves the project as well as what the manuscripts print: five tables under
+  `studies/2026-07-fuel-study/tables/` do name operators, city pairs and
+  waypoints, and it is their `release/` copies, written by
+  `run_24_release_tables.py` with every identity replaced by its rank, that
+  answer the data-availability statement. Two row-level tables carrying
+  `ifplid` are outside that offer altogether.
 - Numbers come from `macros.tex` and the results JSONs, never from memory.
-- Clarity is judged by zero-context readers, not by the writer (`/coldread`).
+- Clarity is judged by zero-context readers, not by the writer
+  (`/narrative-edit`, which absorbed `/coldread`).
 - Text removed for the SID page limit is kept in `% Cut for space:` comments.

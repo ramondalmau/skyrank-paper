@@ -75,11 +75,15 @@ ax.set_yticks(range(len(d)))
 ax.set_yticklabels([PRETTY[f] for f in d.feature],
                    fontsize=style.FS_TICK)
 # "mean effect on the score" left a reader asking what the numbers are in.
-# They are mean absolute SHAP values, and SHAP is additive in the units of
+# They are mean absolute WITHIN-PAIR DIFFERENCES of SHAP values, computed by
+# run_12's differential_importance; the caption says so and the axis used to
+# say "mean |SHAP| value", which is a different quantity (2026-09-06: two
+# zero-context readers caught the mismatch).
+# SHAP is additive in the units of
 # the quantity explained, so they are increments of the ranking score
 # itself. Printing each bar's value as well gives the scale an anchor that
 # does not depend on reading a gridline back to the axis.
-ax.set_xlabel("mean |SHAP| value [score units]")
+ax.set_xlabel(r"mean within-pair $|\Delta\mathrm{SHAP}|$ [score units]")
 XMAX = d.mean_abs_shap.max() * 1.20
 ax.set_xlim(0, XMAX)
 ax.spines[["top", "right", "left"]].set_visible(False)

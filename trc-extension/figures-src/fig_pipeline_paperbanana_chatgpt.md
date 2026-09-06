@@ -14,6 +14,95 @@ send message 3 again with that description in place of the Stylist output;
 then message 4 again. Stop at an empty `critic_suggestions` or after three
 rounds. Keep the final description: it is the reproducible artefact.
 
+## Correction of 2026-09-06 — the bundle is ahead of the rendered figure
+
+The accepted raster (`../figures/fig_pipeline.png`, used in both
+manuscripts) carries nine defects, listed below. Two of them the bundle
+itself caused, by describing the method wrongly in the Methodology section;
+the other seven the image model introduced and the label check did not
+catch. All nine are corrected or constrained here. **The raster is not, and
+cannot be regenerated on this machine: image generation is unavailable
+(OpenRouter returns 402, the Gemini image models 429), and the project's
+standing rule is that this figure is a raster produced by running these four
+messages by hand, never a vector redraw.** Every defect below was verified
+by opening the PNG at 3x and reading the panel, and the numbers come from
+`studies/2026-07-fuel-study/tables/referee_checks_summary.csv`.
+
+Items 1, 3, 4, 5 and 6 make the figure disagree with the papers; the rest
+are consistency defects. The captions of both manuscripts now state items 1
+and 6 in prose, because those two are the ones a referee will see.
+
+1. *Stage 4, the training objective.* The old text said training "penalises
+   every pair in which the rejected route scores at least as high as the
+   chosen one", and panel 4 of the raster therefore carries a red box reading
+   `penalise if s(rejected) ≥ s(chosen)`. That is a hinge loss with a
+   threshold. The model is trained under PairLogit, a smooth pairwise
+   logistic loss with no threshold at all, which is what both manuscripts now
+   state in prose ("penalised according to how far the abandoned route's
+   score sits above the chosen one's, and the penalty shrinks as the gap
+   between them grows without ever reaching zero").
+
+2. *Stage 5, the proposal gate.* The old text said the channel acts "for a
+   flight whose alternative route burns less planned fuel", and panel 5 of
+   the raster therefore draws an AND of two preconditions, one of them
+   `alternative planned fuel < current planned fuel`. A deployed channel
+   could indeed apply that gate, since it knows which route is on file. The
+   simulation cannot, because the model is deliberately blind to which of a
+   pair's two routes was filed first: in this archive the filing order is
+   very nearly the label. The consequence is measurable. On the held-out
+   quarter the route already filed is the cheaper of the two in 55.1 % of
+   eligible pairs, and 20.8 % of the proposals the channel issues at
+   τ = 0.600 name the route the flight was already on (the
+   `channel_direction` rows). Applying the drawn gate would remove exactly
+   those, and every proposal it removed is one the simulation scores as
+   wrong, so a channel able to test the condition would score a precision of
+   one by construction against the 79.2 % actually measured. In the figure,
+   the calibrated threshold must be the only gate.
+
+3. *Stage 3, one indicator missing.* The panel lists four cost indicators
+   (flight time, distance, planned fuel, route charges) and then draws only
+   three bar pairs. Draw four, or draw one and say it stands for each.
+
+4. *Stage 3, the transform contradicts its own bars.* The panel is headed
+   `x → x − min(pair)` over a zero baseline, under which exactly one of the
+   two routes must sit at zero on each indicator. Both bars are drawn clear
+   of the baseline. One bar per indicator must be flat at zero.
+
+5. *Stage 3, the bars run against the paper's central finding.* Green is the
+   chosen route throughout the figure, and the green bar is drawn shorter
+   than the red on all three indicators, so the panel shows an airline
+   choosing the cheaper route on every count. Both papers report the
+   opposite: preferring the route with less planned fuel identifies the
+   choice in 45.0 % of pairs, and the chosen route is the costlier one more
+   often than not. Draw the chosen route cheaper on some indicators and
+   costlier on others, never uniformly cheaper.
+
+6. *Stage 5, the route styles break the paper's own convention.* Both papers
+   declare, in the map figure, that an abandoned route is dashed red and its
+   replacement solid green. The proposal box draws the current route in grey
+   solid and the proposed route in grey dashed. Use the declared colours.
+
+7. *Stage 4, prediction labelled as ground truth.* The two score bars are
+   annotated `s(chosen)` and `s(rejected)`, which name the labels, while the
+   captions describe the same bars as the route the model prefers and the
+   one it does not. The panel covers training, where the labels are known,
+   so the annotation is defensible; a redraw should nevertheless separate
+   the training view from the scoring view, or the caption should stop
+   describing these bars as a preference.
+
+8. *Stage 1, the sub-label excludes half the data.* The archive box carries
+   `same flight · same day · same airline`, which is true of revision pairs
+   and false of stay pairs, whose two routes belong to two different
+   flights. Move the sub-label into the revision-pair branch of stage 2.
+
+9. *Stage 2, a swept choice drawn as a settled one.* The panel prints
+   `group weight ×10` as a fact. The weight was swept over 10, 30 and 100
+   and 10 was adopted; either say `group weight w (=10 here)` or leave the
+   number to the caption.
+
+Items 1, 6, 7, 8 and 9 change labels only. Items 3, 4 and 5 change the
+stage-3 bar chart, so a full four-message re-run is the safer route.
+
 ---------------------------------------------------------------------------
 ## MESSAGE 1 — PLANNER
 ---------------------------------------------------------------------------
@@ -41,15 +130,15 @@ Stage 1, archive. Eighteen months of European flight plans (January 2025 to June
 
 Stage 2, preference pairs. Each such revision becomes one labelled pair: the newly filed route is the one the airline chose, the abandoned route the one it rejected. There are 1.48 million revision pairs. A second, much smaller dataset of "stay pairs" (6 672, entered in training at group weight 10) inverts the construction: a flight that was hit by an air traffic flow management regulation yet kept its route is paired with a twin flight (same day, origin, destination and aircraft type) that flew a different route; the kept route is labelled preferred. Stay pairs teach the model that keeping a route is also a choice.
 
-Stage 3, within-pair encoding. Four cost indicators of each route (flight time, distance, planned fuel, route charges) enter the model as differences within the pair, obtained by subtracting the pair minimum, never as absolute values. The ordered waypoint sequence of each route enters as text (a bag of waypoint tokens). Flight-level attributes (airline, aircraft type, city pair, hour, connections) are identical on both routes of a pair and act as context. Any feature that drifts with time, such as time to departure, is collapsed to the pair minimum so that the model cannot identify the later-filed message.
+Stage 3, within-pair encoding. Four cost indicators of each route (flight time, distance, planned fuel, route charges) enter the model as differences within the pair, obtained by subtracting the pair minimum, never as absolute values. Subtracting the pair minimum leaves one of the two routes at exactly zero on each indicator, and which route that is varies from indicator to indicator: the route the airline chose is the cheaper one on some indicators and the costlier one on others, and on this archive it is more often the costlier. Any bar chart illustrating this transform must show all four indicators, must place one bar of each pair flat on the zero line, and must not show the chosen route cheaper on every indicator. The ordered waypoint sequence of each route enters as text (a bag of waypoint tokens). Flight-level attributes (airline, aircraft type, city pair, hour, connections) are identical on both routes of a pair and act as context. Any feature that drifts with time, such as time to departure, is collapsed to the pair minimum so that the model cannot identify the later-filed message.
 
-Stage 4, ranking model. A gradient-boosted tree ranker gives each route one unitless score. Training penalises every pair in which the rejected route scores at least as high as the chosen one; only the score gap between the two routes of a pair carries meaning.
+Stage 4, ranking model. A gradient-boosted tree ranker gives each route one unitless score. Training penalises every pair according to how far the rejected route's score sits above the chosen route's; the penalty shrinks as the gap widens in the chosen route's favour, but never reaches zero, so there is no threshold at which a pair stops contributing. Only the score gap between the two routes of a pair carries meaning. Do not draw the objective as a condition or an inequality: a box reading "penalise if the rejected route scores at least as high as the chosen one" states a different loss from the one used.
 
-Stage 5, proposal and confirmation. A calibrator fitted on the tuning month maps the score gap to an acceptance probability. For a flight whose alternative route burns less planned fuel, the channel proposes that route when its calibrated acceptance probability exceeds a threshold of 0.600 fixed in advance; otherwise it stays silent. A proposal is counted as confirmed only when the airline's own later filing chose that route.
+Stage 5, proposal and confirmation. A calibrator fitted on the tuning month maps the score gap to an acceptance probability. Of the two routes it is comparing, the channel proposes whichever burns less planned fuel, and it proposes that route only when the calibrated probability that the airline would prefer it reaches a threshold of 0.600 fixed in advance; otherwise it stays silent. The threshold is the only gate. Whether the cheaper route is the one the flight is already on is not a condition the channel can test, because that is precisely what the probability is predicting. A proposal is counted as confirmed only when the airline's own later filing chose that route.
 
 Time split: the model is fitted on January 2025 to February 2026, tuned (early stopping, calibration, threshold) on March 2026, and tested once on April to June 2026 (281 720 pairs).
 
-Colour semantics used throughout the paper: green is the route the airline chose or kept, red the route it abandoned, one blue accent for thresholds, grey for context. Constraints: no airline, airport, country or airspace names; no maps; no logos; no aircraft drawings.
+Colour semantics used throughout the paper: green is the route the airline chose or kept, red the route it abandoned, one blue accent for thresholds, grey for context. Constraints: no airline, airport, country or airspace names; no maps; no logos; no aircraft drawings. Two further constraints on the last two stages, because an earlier rendering of this figure broke both: the training objective carries no inequality, condition or threshold box, and the proposal stage has exactly one gate, the probability threshold, with no second precondition comparing the alternative's planned fuel against the current route's.
 
 ## Figure Caption
 How a filing archive becomes a proposal. Each flight-plan revision yields two routes for the same flight, exactly one of which the airline chose; stay pairs invert that construction and enter at a group weight of 10. Cost indicators reach the model as differences within the pair and the waypoint sequence as text; a gradient-boosted ranker scores each route, the score gap becomes a calibrated acceptance probability, and the fuel-cheaper route is proposed when that probability exceeds a threshold fixed in advance on the tuning month. A proposal counts only when the airline's later filing confirms it. The model is fitted on the earliest stretch, tuned on the next month and tested on the latest, so no pair is ever scored by a model that saw it.
