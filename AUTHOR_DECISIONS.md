@@ -23,7 +23,7 @@ comment.
 | 2 | "Almost always a move with a strong non-cost reason" | **repaired**, both papers |
 | 3 | "Half a point of run-to-run variation" | **repaired**: measured at 0.17, four places |
 | 4 | The 2025 replication is not "the same recipe" | **repaired**, conference paper |
-| 5 | Fig. 2 states a loss and a gate the papers deny | **blocked**: nine defects, raster not regenerable here |
+| 5 | Fig. 2 states a loss and a gate the papers deny | **regenerated 2026-09-06**: five of six fixed, four label errors left |
 | 6 | Fig. 3's lower map: the redaction and its premise | **settled by the content rule**; caption and code repaired |
 | 7 | Data availability vs. the operator table | **repaired**: de-identified release set, statement amended |
 | 8 | The stay weight was selected on held-out data | **measured**: the sweep now reports the tuning month |
@@ -212,43 +212,44 @@ from the difference in training volume.
 
 ---
 
-## Blocked: Fig. 2 (item 5)
+## Fig. 2, regenerated (item 5)
 
-The methodology schematic carries **nine defects**, each verified by opening
-the PNG and reading the panel. Two were caused by wrong sentences in the
-generation bundle; seven the image model introduced and the label check did
-not catch. They are listed with their repairs in
-`trc-extension/figures-src/fig_pipeline_paperbanana_chatgpt.md`, and the
-bundle's Methodology section is corrected so that a re-run does not reproduce
-them. The five that make the figure disagree with the manuscripts:
+The schematic carried **nine defects**, each verified by opening the PNG and
+reading the panel. They were turned into an editing prompt, Gemini was given
+the old raster as a reference, and the author accepted what came back on
+2026-09-06. Five of the six that made the figure disagree with the
+manuscripts are gone: the hinge-condition box (now an inset of penalty
+against gap, falling smoothly and never reaching zero), the impossible fuel
+precondition and its AND gate, the fourth cost indicator that was named but
+not drawn, the grey routes in the proposal box, and the training labels
+carried on the model's own outputs.
 
-1. The training objective is drawn as a hinge condition, `penalise if
-   s(rejected) ≥ s(chosen)`, where the model is trained under a smooth
-   pairwise logistic loss.
-2. The proposal gate ANDs the calibrated threshold with `alternative planned
-   fuel < current planned fuel`. A deployed channel could apply that; this
-   simulation cannot, because the model is deliberately blind to which route
-   was filed first. On the held-out quarter the already-filed route is the
-   cheaper one in 55.1 % of eligible pairs, and 20.8 % of the 56,162
-   proposals at τ = 0.600 name the route the flight was already on, all of
-   them scored as wrong, so a channel able to test the drawn condition would
-   score a precision of one by construction against the 79.2 % measured.
-3. The encoding panel lists four cost indicators and draws three.
-4. Under `x → x − min(pair)` one bar of each pair must sit at zero; both are
-   drawn clear of the baseline.
-5. **The bars show the chosen route cheaper on every indicator**, which is
-   the opposite of the paper's central finding that preferring the route with
-   less planned fuel identifies the choice in 45.0 % of pairs.
+The sixth was resolved differently from the way the prompt asked. The
+encoding panel now shows a single illustrative pair in which the chosen route
+is the costlier on all four indicators. That is the commoner direction on
+this archive rather than a universal one, and both captions now say exactly
+that, which is more honest than the alternating pattern requested.
 
-The captions of both papers now state 1, 2 and 5, which is a stopgap rather
-than a repair. The raster cannot be regenerated here: image generation is
-unreachable (OpenRouter HTTP 402, the Gemini image models HTTP 429, both
-checked on 2026-09-06), and the standing rule for this figure is a raster
-produced by running the bundle's four messages by hand, never a vector
-redraw. **Neither paper should be submitted, and the figure must not be
-offered as the graphical abstract, until it has been regenerated.**
+**Four label errors remain**, none of them repairable outside the image
+model, and the first is a hard blocker because the number is quoted
+throughout both papers:
 
----
+1. the timeline reads **280 720** pairs where the test set is **281 720**;
+2. stage 4 reads `gap ΔS = S+`, which is not an equation;
+3. stage 3's upper token row repeats a token, `WP₁ · WP₂ · WP₂ · …`;
+4. stage 2 reads "Balanced weights" where the stay pairs enter at an
+   *increased* group weight of 10, so that the smaller set is not balanced
+   away.
+
+Two smaller things also survive: the "same flight · same day · same airline"
+sub-label still sits in the archive panel, where it holds for revision pairs
+only; and the raster is 1424 × 726, which is 278 dpi at the journal include
+width but 199 at the conference one, against a 300 dpi guidance. A re-render
+at twice the linear size settles that with the labels.
+
+Two blocks the old raster carried are absent from the new one, the leakage
+control and the "regulated flight" marker on the stay pair. Both are stated
+in the text, and the simplification was the author's choice.
 
 ## Verified sound — do not "fix" these
 

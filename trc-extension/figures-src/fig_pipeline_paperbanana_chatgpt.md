@@ -14,6 +14,56 @@ send message 3 again with that description in place of the Stylist output;
 then message 4 again. Stop at an empty `critic_suggestions` or after three
 rounds. Keep the final description: it is the reproducible artefact.
 
+## Superseded on 2026-09-06 — the figure was regenerated with Gemini
+
+`../figures/fig_pipeline.png` is no longer the PaperBanana raster this bundle
+describes. The nine defects listed below were turned into an editing prompt,
+Google's Gemini image model was given the old PNG as a reference, and the
+author accepted the result; the source it returned is kept beside this file as
+`fig_pipeline_gemini_2026-09-06.jpg` and the installed PNG is a lossless
+re-encode of it, trimmed of its 8 px border (1424 x 726, so 278 dpi at the
+TR-C include width and 199 dpi at the SID one).
+
+**What the regeneration fixed** — items 1, 2, 3, 6 and, in effect, 7 below.
+The hinge-condition box is gone, replaced by an inset of penalty against gap
+falling smoothly towards zero. The AND gate and the impossible fuel
+precondition are gone; the calibrated threshold is the only condition. The
+encoding panel now draws four indicators for its four names. The proposal box
+uses the paper's own dashed-red and solid-green convention. The score bars are
+labelled $S^+$ and $S^-$ rather than by the training labels, which removes the
+conflation of prediction with ground truth.
+
+**Item 5 is resolved differently than asked.** The panel now draws a single
+route above the pair minimum on each of the four indicators, in green, so it
+shows one illustrative pair in which the chosen route is the costlier on all
+four. That is the commoner direction on this archive rather than a universal
+one, and both captions now say so, which is honest and reads better than the
+alternating pattern the prompt requested.
+
+**Four errors remain in the accepted raster** (verified by opening it at 3x on
+2026-09-06):
+
+  a. The timeline reads `Test - Apr-Jun 2026 - 280 720 pairs`. The test set is
+     **281 720** pairs, a number both manuscripts quote throughout.
+  b. Stage 4 reads `gap DS = S+`, a broken equation. It should be
+     `DS = S+ - S-`.
+  c. Stage 3's upper token row reads `WP1 . WP2 . WP2 . ...`; the second token
+     is repeated.
+  d. Stage 2 reads `Balanced weights` where the stay pairs enter at an
+     *increased* group weight of 10, precisely so that the smaller set is not
+     balanced away. It should read `group weight w (10 here)`.
+
+Items 8 and 9 of the list below were not applied either: the `same flight -
+same day - same airline` sub-label still sits in the archive panel, where it
+is true of revision pairs only.
+
+Two content blocks present in the old raster are absent from the new one: the
+leakage control (`time-varying feature -> pair minimum`) and the `regulated
+flight` marker on the stay pair. Both are carried by the text, and the author
+accepted the simplification.
+
+---------------------------------------------------------------------------
+
 ## Correction of 2026-09-06 — the bundle is ahead of the rendered figure
 
 The accepted raster (`../figures/fig_pipeline.png`, used in both

@@ -532,24 +532,18 @@ is not swamped by the larger one, 280 fall in the tuning month and
 1\,093 in the test months; the value is chosen by the
 sweep of Section~\ref{sec:changebias}. Encoding takes
 differences within the pair rather than absolute values. The ranking
-model returns one score per route, drawn as the two bars in that box:
-the green bar, filled further along its outline, is the route it prefers
-and the red bar the one it does not. The gap between those scores becomes an acceptance
-probability, compared with a threshold fixed in advance at 0.600. The
-bar along the foot of the figure is the temporal split of the archive:
-the model is fitted on the earliest stretch, tuned on the next month
-and tested on the latest, so no pair is ever scored by a model that saw
-it. Three of the labels do not match the method as described here. The
-training objective is drawn in the fourth stage as a condition on the two
-scores, where it is in fact smooth, the penalty falling as the gap widens
-in the chosen route's favour and never reaching zero. The fifth stage
-draws the fuel comparison against the route currently on file, which is
-the comparison a deployed channel would make and this simulation cannot,
-since it is given no way of telling which of a pair's two routes was filed
-first (Section~\ref{sec:leakage}) and so proposes the cheaper of the two.
-The bars of the third stage, finally, show the chosen route cheaper on
-every indicator, where Section~\ref{sec:heuristics} measures the
-opposite.}
+model returns one score per route, drawn as the two bars in that box,
+$S^+$ for the higher and $S^-$ for the lower; the inset below them is the
+training objective, whose penalty falls as the gap between the two widens
+and never reaches zero. That gap becomes an acceptance probability,
+compared with a threshold fixed in advance at 0.600, which is the only
+condition on a proposal. The bar along the foot of the figure is the
+temporal split of the archive: the model is fitted on the earliest
+stretch, tuned on the next month and tested on the latest, so no pair is
+ever scored by a model that saw it. The bars of the third stage are one
+illustrative pair, in which the route the airline chose is the costlier on
+each indicator; that is the commoner direction on this archive
+(Section~\ref{sec:heuristics}) rather than the invariable one.}
 \label{fig:method}
 \end{figure*}
 
@@ -2153,17 +2147,15 @@ the writing process}
 During the preparation of this work the authors used Claude
 (Anthropic) to assist with drafting and editing the manuscript text
 and with producing the analysis figures from the study's result
-tables, and an OpenAI image-generation model, driven through the
-PaperBanana agent prompts, to produce the methodology schematic of
-Fig.~\ref{fig:method}. In view of the publisher's policy on the use of
+tables, and Google's Gemini image model to produce the methodology
+schematic of Fig.~\ref{fig:method}. In view of the publisher's policy on the use of
 generative AI in figures, the authors state that this figure is a
 schematic illustration of the method whose only numbers are the dataset
 sizes and settings stated in the text, and contains no data, measurement
 or result; that it was generated under the authors' direction from a
 description they wrote; that every label was checked by the authors
 against the method as described in Section~\ref{sec:data} and
-Section~\ref{sec:model}, and that the three which do not match it are
-named in the caption; and that the authors defer to the editor on
+Section~\ref{sec:model}; and that the authors defer to the editor on
 whether a manually drawn equivalent is required. No other figure was
 created or altered with generative AI: every analysis figure is drawn
 by the authors' own code from the study's result tables. After using

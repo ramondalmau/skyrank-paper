@@ -345,13 +345,12 @@ indicators, the archive contains 1.48 million labelled pairs.
 \caption{How a filing archive becomes a proposal, above the fit, tune
 and test periods. The pair box shows both constructions: a revision,
 which is one flight and two routes, and a stay pair, which is two
-flights. Three of the figure's labels do not match the method described
-here. The training objective is smooth, not the condition drawn in the
-fourth stage. The fifth stage draws the fuel comparison against the route
-currently on file, which a deployed channel would know and this
-simulation does not, so it proposes the cheaper of a pair's two routes.
-And the bars of the third stage show the chosen route cheaper on every
-indicator, where Section~\ref{sec:results} measures the opposite.}
+flights. The inset in the fourth stage is the training objective, whose
+penalty falls as the gap between the two scores widens and never reaches
+zero; the calibrated probability against its threshold is the only
+condition on a proposal. The bars of the third stage are one illustrative
+pair, in which the chosen route is the costlier on each indicator, the
+commoner direction on this archive rather than the invariable one.}
 \label{fig:method}
 \end{figure*}
 
