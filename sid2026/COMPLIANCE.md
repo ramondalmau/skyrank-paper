@@ -41,8 +41,8 @@ including what had to be cut to hold 8 pages and the one choice left open, is
 `../AUTHOR_REVIEW_2026-09-07.md`.
 
 Changed here: the abstract is now an overview of the paper rather than a
-summary of its results (224 words, down from 249, and two result figures
-instead of eleven); the introduction gives the en-route charge the opening
+summary of its results (249 words against the 249 of the
+results summary it replaced, and two result figures instead of eleven); the introduction gives the en-route charge the opening
 flight also paid and four reasons a plan gets revised rather than one; the
 extra-distance paragraph no longer reads as attributing that distance to
 airlines; Section II-A says before the regulation material that most revisions

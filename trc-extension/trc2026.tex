@@ -101,25 +101,25 @@
 %   "on the two extrapolation bases available"
 \begin{abstract}
 Every flight-plan revision records a choice an airline actually made:
-the route it dropped and the route it filed instead. Eighteen months of European traffic contain 1.48 million such pairs.
-The aim is to cut carbon dioxide by offering cheaper routes only where
-they would be taken. This paper fits
-a pairwise ranking model on 1\,134\,000 pairs, expressing each route's
-indicators relative to the other's, and identifies the chosen route in
-68.1\,\% of held-out decisions. Planning cost points the wrong way:
+the route it dropped and the route it filed instead. The aim is to cut
+carbon dioxide by offering cheaper routes only where they would be taken.
+Eighteen months of European traffic contain 1.48 million such pairs. A
+pairwise ranking model fitted on 1\,134\,000 of them identifies the chosen
+route in 68.1\,\% of held-out decisions. Planning cost points the wrong way:
 preferring the route with less planned fuel scores 45.0\,\%, below
-chance, so the strongest simple rule is its inverse, at 55.0\,\%. What a channel needs is a
-way of telling the flights that would take the cheaper route from those
-that would not, and the model supplies one, being right 94.9\,\% of the
-time on the fifth of cases it is most confident about. Aimed at
+chance, so the strongest simple rule is its inverse, at 55.0\,\%. A channel must tell the
+flights that would take the cheaper route from those that would not, and
+the model does: it is right 94.9\,\% of the time on the fifth of cases it
+is surest about. Aimed at
 80\,\% precision and measured on a held-out quarter, such a channel
 reached
 79.2\,\%, its proposals carrying a planned-fuel saving of 20.1
-kilotonnes per quarter on routes the airlines went on to file, or 222 to
+kilotonnes a quarter on routes the airlines went on to file, or 222 to
 254 kilotonnes of CO$_2$ a year on two annualisation bases. Refitted on earlier data and watched for six months, the model ages by
-proposing less rather than by erring more. The clearest gap is the flights that never revise, on which this
-archive is silent; even so, airline route acceptance is learnable
-from operational records alone.
+proposing less, not erring more. The clearest gap is the flights that never revise, though a much scarcer
+set of pairs, each matching a kept route against one a similar flight
+flew, corrects nearly all of the model's bias towards change. Even so, airline route acceptance is
+learnable from operational records alone.
 \end{abstract}
 
 \begin{keyword}
@@ -164,31 +164,42 @@ route that replaced it, and therefore a preference that the airline
 expressed with its own filing system rather than in answer to a
 survey.
 
-The operational interest is concrete, because the extra distance that
-European traffic flies is measured and published every year. Air
-traffic in Europe is planned across national borders by a single
-network function, and an independent commission reviews that
-function's performance annually, reporting how much further than the
-shortest available track the traffic actually flies \citep{prc2026}. The
-archive used here holds one of the mechanisms behind that figure. A
-regulation protects a volume whose capacity is limited, and a flight that
-routes around such a volume flies further, so that part of the extra
-distance is the cost of keeping traffic within a capacity that has to be
-respected rather than a preference for flying further. Which way that
-trade is worth making is the airline's judgement, and the archive shows
-it being made in both directions. This work assumes, rather than shows, that
-some fuel-cheaper alternatives go unfiled because nobody had reason to
-look for them in time; others go unfiled because they could not have been
-filed at all, a restriction or an unavailable conditional route having
-closed them. Section~\ref{sec:validity} returns to the assumption.
-Candidate routes are readily available; what is hard is knowing which
-candidate is acceptable to this particular airline, on this day, with
-this rotation to protect, and knowing it inside the planning window
-rather than under tactical time pressure. What the network lacks is
-therefore a proposal channel, that is, a service that would offer an
-airline an alternative route that burns less fuel and that the model
-judges the airline would accept, inside the planning window and before
-the flight departs. The timing is not free: two of the model's
+% Cut for space 2026-09-07 (round four), mirroring the SID: "Which way
+% that trade is worth making is the airline's judgement, and the archive
+% shows it being made in both directions." Removed because "that trade"
+% pointed back past the capacity sentence to the delay-against-detour
+% trade of the opening paragraph, and the referent did not survive the
+% distance.
+% CORRECTED 2026-09-07 (round four): the paragraph reported the
+% commission's figure as an excess over "the shortest available track".
+% The reported horizontal flight-efficiency indicators are measured
+% against a direct reference between the points at which traffic enters
+% and leaves the airspace, not against a shortest filable route; under
+% the old wording the routes this paragraph calls unavailable would
+% already be netted out of the reference. AUTHOR: please confirm the
+% indicator's own wording.
+One consequence of all this rerouting is measured every year. Air traffic
+in Europe is planned across national borders by a single network
+function, and an independent commission reviews that function's
+performance annually, reporting how much further the traffic flies than a
+direct reference between the points at which it enters and leaves the
+airspace \citep{prc2026}. Many things contribute to that figure, and the
+archive used here speaks to one of them: a regulation protects a volume
+whose capacity is limited, and a flight that routes around such a volume
+flies further, so part of the distance is what respecting that capacity
+costs. Not every cheaper alternative is reachable, since some are closed
+before anyone can file them, a restriction or an unavailable conditional
+route having ruled them out. Of those that stay open, this work assumes
+rather than shows that some go unfiled, and
+Section~\ref{sec:validity} returns to the assumption. Even so, candidate
+routes are not the scarce thing. What is scarce is knowing which
+candidate this particular airline would accept, on this day, with this
+rotation to protect, and knowing it while there is still time to file.
+
+What the network lacks is therefore a proposal channel, that is, a
+service that would offer an airline an alternative route that burns less
+fuel and that the model judges the airline would accept, inside the
+planning window and before the flight departs. The timing is not free: two of the model's
 strongest inputs, the attributed delay and the regulation picture,
 exist only once a plan has been filed, so the channel would speak after
 a first filing rather than before one, and
@@ -801,7 +812,18 @@ asymmetry as the training ones. To remove the shortcut, all
 flight-level attributes were harmonised across the pair so that only
 route-level quantities differ, and the filing-time feature was
 collapsed to the pair minimum, which gives it an identical value on
-both routes.
+both routes. The stay pairs of Section~\ref{sec:stay} pass through the
+same step, the values of the flight that stayed being copied to the
+other row, so that in both populations only route-level quantities
+separate the two candidates.
+% ADDED 2026-09-07 (round four): a reader asked whether the harmonisation
+% rule, which is stated in terms of "the later message", applies to stay
+% pairs at all, and proposed that unharmonised flight-level features would
+% let a model recognise the population and then read regulation status.
+% build_stay_features() calls build_features(), which calls
+% _harmonize_pair_features() (src/skyrank/data/features.py:295, 346-362),
+% so the copy is made from the label=1 row, i.e. the flight that stayed.
+
 
 A subtler shortcut hides in the absolute indicator values. Let us
 consider a 400\,km flight on which the two routes burn 2\,000 and

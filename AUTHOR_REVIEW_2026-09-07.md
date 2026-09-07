@@ -287,8 +287,161 @@ other trims below are also made, which they are.
    that acceptance is never observed and every figure rests on what the airline
    filed next. Two readers noticed and respected the admission; one thought the
    title then promises what the paper declines to deliver.
-4. **The journal abstract was left alone.** The sentence the author objected to
-   is not in it, and a 50-page paper's abstract carries more result detail by
-   convention than a conference paper's. Say the word and it gets the same
-   treatment.
+4. **The journal abstract kept its results.** The sentence the author objected
+   to is not in it, and a 50-page paper's abstract carries more result detail by
+   convention than a conference paper's, so it was not turned into an overview.
+   It has since been corrected on the two points of the fourth round below, and
+   it remains an open offer to give it the conference paper's treatment.
 5. **The journal is now 50 pages, up from 49**, from the additions above.
+
+## A fourth round: the abstract's limitation, and the third paragraph
+
+The author read the revised conference paper and made two points. First, that
+the abstract's closing limitation is one the paper itself refutes: *"but we
+prove that this is not a problem"*. Second, that the third paragraph of the
+introduction is still confusing. Both are upheld, and both applied to the
+journal as well.
+
+### The abstract described a model the paper does not use
+
+What it said:
+
+> The archive is built from flights that changed route, however, so the model
+> is largely untested on the majority that stay, and it may propose change more
+> readily than airlines would accept it.
+
+What the body reports, in Section V-B: a model trained on revisions alone is
+right on **34.8 %** of the held-out stay pairs, so it prefers the alternative in
+65.2 % of the cases where the flight demonstrably kept its own route. Adding
+stay pairs at group weight 10 raises that to **90.0 %**, at a cost of 0.8 points
+on the revision metric (68.1 against 68.9). The same model scores **88.0 %** on
+the 30 953 escapes, which no rule keyed on regulation status can do, since such
+a rule is right on every stay pair and wrong on every escape by construction.
+
+So "largely untested" was false — the model is tested on that population, and
+the correction is the largest any design choice in the paper makes. A
+zero-context sceptic asked to compare abstract against body reached the same
+verdict independently: *"It understates, and the wrong word is 'most'... the
+corrected model is more accurate on staying traffic (90.0 %) than on its own
+headline population (68.1 %)."*
+
+Two further defects in the same three sentences, both found by readers:
+
+- **"recommends change too readily" understates the defect.** The revisions-only
+  model is not over-eager, it is inverted: 34.8 % is fifteen points worse than a
+  coin toss. The abstract now says the model *"urges change on flights that in
+  fact kept their route, and does so more often than not."*
+- **Neither abstract let a reader build the object.** Two readers, one of them
+  the ATM practitioner, stopped at the same place: *"A pair means two routes; if
+  the airline kept its route, where does the second route come from?"* — and the
+  practitioner added that if the answer were a generated route, it would
+  reintroduce the label problem Section II-A spends a page rejecting. Both
+  abstracts now say the pair matches *a kept route against one a similar flight
+  flew that day*.
+
+The conference abstract is 249 words, the journal's 250; the journal paid for
+the addition with four wording trims, listed in the edit scripts.
+
+### Paragraph three, and why it was worse than unclear
+
+A zero-context ATM reader rated it **the weakest passage in the two pages** and
+gave four reasons, three of which are about correctness rather than style.
+
+1. **The PRC indicator was mislabelled.** The paragraph reported the figure as
+   an excess over *"the shortest available track"*. The reported horizontal
+   flight-efficiency indicators are measured against a direct reference between
+   the points at which traffic enters and leaves the airspace. The reader also
+   showed the paragraph fails either way: if the reference genuinely were a
+   shortest *available* route, then routes closed by a restriction or an
+   unavailable conditional route are netted out of the reference already, and
+   the paragraph's own clause about them describes something the figure excludes
+   by construction. **Corrected in both papers, and flagged in the source for
+   the author to confirm against the report's own wording.**
+2. **It split the published figure into two bins**, unavoidable capacity
+   protection and recoverable opportunity, which omits airspace structure,
+   reserved airspace, wind-optimal routing that flies further on purpose and
+   charging-zone avoidance. The paragraph now says only that many things
+   contribute to the figure and that this archive speaks to one of them.
+3. **The attribution was one-sided, which is the author's own comment
+   recurring.** The unavoidable share was described neutrally, "what respecting
+   that capacity costs", while the residual was attributed to the operator:
+   *"nobody had reason to look for them in time"*. The reader's objection is
+   that European flight-planning systems already optimise against the full route
+   network, RAD and CRAM, repeatedly, up to dispatch. The sentence now states
+   the assumption without naming a party at fault.
+4. **"Candidate routes, in short, are not the scarce thing"** claimed to
+   summarise a sentence that had just said some candidates were closed and
+   unavailable. Both readers lost the thread there. The summary marker is gone
+   and the two ideas are in the order that makes them agree.
+
+The paragraph is seven words shorter than before and one line shorter in print.
+
+### One reader's artefact hypothesis, checked against the code
+
+The sceptic proposed a specific way the 90.0 / 88.0 argument could fail: if
+flight-level features are harmonised only within revision pairs — the rule is
+stated in terms of "the later message", which a stay pair does not have — then a
+stay pair's two rows would differ in operator, hour and connection state, giving
+the model a population flag, after which regulation status settles the label.
+
+**The mechanism does not exist.** `build_stay_features()` calls
+`build_features()`, which calls `_harmonize_pair_features()`
+(`src/skyrank/data/features.py:295, 346-362`), so a stay pair's alternative row
+takes the values of the flight that stayed, exactly as a revision pair's takes
+the values of the later message. The journal now says so in the leakage
+subsection, with the reason in a source comment. What the reader could not have
+known from the paper is now on the page; what remains — that a model might
+recognise the construction by some other cue — the paper already concedes in its
+conclusions, and that concession stands unchanged.
+
+### Routed to the authors from this round
+
+These are domain judgements or changes to what the papers claim, so none was
+applied.
+
+1. **"The difference between a flight's calculated and requested take-off times
+   is its attributed ATFM delay."** The ATM reader says there is no *requested*
+   take-off time: ATFM delay is CTOT minus ETOT, the estimated take-off time.
+   Both papers use the "requested" framing deliberately and consistently, so it
+   was left alone; if it is a gloss rather than a term, saying "estimated
+   take-off time" once would remove the objection.
+2. **Re-filing re-triggers slot allocation.** A proposal accepted late can leave
+   a regulated flight with a worse CTOT than the one it holds, so a proposal
+   channel can create delay. The journal mentions "the departure slot it already
+   holds" in the trade-off; neither paper states the mechanism. The reader calls
+   this "a live operational objection left unaddressed".
+3. **"File a route that avoids the constrained volume at the cost of distance,
+   fuel and en-route charges"** is false as a general rule: charges depend on
+   distance per charging zone at that zone's unit rate, so a longer detour that
+   skirts an expensive zone can reduce the bill, and a longer track can burn
+   less fuel on the day's winds. The reader notes this is consistent with the
+   paper's own finding that the cheaper-fuel rule scores below chance.
+4. **"The same delay on the last leg of the day may well be cheaper than the
+   detour."** The reader argues the last rotation is where crew duty limits,
+   curfews and out-of-base positioning bite, so it may be the expensive case
+   rather than the cheap one.
+5. **"Planning cost points the wrong way"**, standing alone in the journal
+   abstract, reads as a claim that European airlines systematically choose to
+   burn more fuel. The composition caveat that explains it is on page 2.
+6. **"The network" is used for two different things** — the Network Manager as
+   an actor and the airspace network as a system — three lines apart on page 2.
+   Saying "Network Manager" once would settle it.
+7. **90.0 % and 34.8 % are reported without confidence intervals**, where
+   Table III gives Wilson intervals on everything else. On 1 093 pairs the
+   interval is not negligible.
+8. **"Precision", "calibrated", "operating point" and "the published points it
+   uses"** were all flagged as load-bearing terms an ATM reader cannot cash. The
+   first three carry whole contributions.
+
+### Verdicts, quoted
+
+- Outsider, full read of pages 1-2: abstract **mostly clear**; introduction ¶1
+  **understood**, ¶2, ¶3 and ¶4 **mostly clear**. On flow: *"Mostly yes, and
+  noticeably better than most technical prose... But there are three places
+  where it is a list wearing a coat"* — the four revision prompts, the
+  First/Secondly/Thirdly contributions, and the abstract, *"ten findings
+  compressed into ten sentences at uniform pressure"*.
+- ATM practitioner: both abstracts **mostly clear**, conference introduction
+  **mostly clear**, paragraph three on its own **confusing / contestable**.
+- The fixes above answer every load-bearing flag those verdicts rest on except
+  the three list-shaped passages, which are structure rather than sentences.

@@ -75,8 +75,8 @@
 \begin{abstract}
 Every revision of a flight plan records a choice that an airline
 actually made, namely the route it dropped and the route it filed
-instead. This paper learns from 1.48 million such pairs, drawn from
-eighteen months of European traffic, which of two routes an airline
+instead. Drawing on 1.48 million such pairs from eighteen months of
+European traffic, this paper learns which of two routes an airline
 prefers. Each route is described by how much more it costs than the other
 route of its pair and by the published points it uses; a ranking model is
 fitted on the first fourteen months, tuned on the fifteenth and evaluated
@@ -87,11 +87,12 @@ cheaper routes can be aimed at a precision fixed in advance, and one is
 simulated here against the airlines' own later filings. The paper reports
 what the model has learned as well as how well it scores, namely that
 route structure moves its decisions more than any single cost indicator
-does. The archive is built
-from flights that changed route, however, so the model is largely untested
-on the majority that stay, and it may propose change more readily than
-airlines would accept it. Even so, what an airline will accept can be read
-from what it has already filed.
+does. An archive of revisions carries a bias of its own: fitted on
+revisions alone, the model urges change on flights that in fact kept their
+route, and does so more often than not. A much scarcer second set,
+pairing a kept route against one a similar flight flew that day, removes
+nearly all of it. What an airline will accept can be read from what it has already
+filed.
 % Cut for space and for the author's 2026-09-07 instruction that the
 % abstract be an overview of the paper rather than a summary of its
 % results: the detail below is reported in Sections IV-B and V.
@@ -134,8 +135,8 @@ detour did.
 That judgement is the quantity this paper models. A flight plan is not
 filed once and left alone, in that an airline may revise it at any time
 until the aircraft leaves, and the response of the network is only one of
-the reasons for doing so. A regulation and the delay attributed under
-it is the most visible prompt, though not the commonest. An aircraft
+the reasons for doing so. A regulation, and the delay attributed under
+it, is the most visible prompt, though not the commonest. An aircraft
 arriving late from its previous leg is another, since the delay it brings consumes the slack the rotation
 was holding, and an updated forecast is a third, since changed winds
 change the time and fuel every candidate route would need. The archive
@@ -143,24 +144,32 @@ records what changed rather than why, and every revision leaves the same
 trace: the route replaced and the route that replaced it.
 
 
-The operational interest is concrete, because the extra distance that
-European traffic flies is measured and published every year. The
-Performance Review Commission reports how much further than the
-shortest available track the traffic actually flies~\cite{prc2026},
-and this archive holds one of the mechanisms behind that figure. A
-regulation protects a volume whose capacity is limited, and a flight that
-routes around such a volume flies further, so that part of the extra
-distance is the cost of keeping traffic within a capacity that has to be
-respected rather than a preference for flying further. Which way that
-trade is worth making is the operator's judgement, and the archive shows
-it being made in both directions. This work assumes, rather than
-shows, that some fuel-cheaper alternatives go unfiled because nobody had
-reason to look for them in time; others go unfiled because they could not have
-been filed at all, a restriction or an unavailable conditional route
-having closed them. Candidate routes are not hard to come by; what is hard is knowing which
-candidate is acceptable to this particular operator, on this day, with this
-rotation to protect, and knowing it inside the planning window rather than
-under tactical time pressure.
+% Cut for space 2026-09-07 (round four): "Which way that trade is worth
+% making is the operator's judgement, and the archive shows it being made
+% in both directions." Removed because "that trade" pointed back past the
+% capacity sentence to the delay-against-detour trade of the opening
+% paragraph, and the referent did not survive the distance.
+% CORRECTED 2026-09-07 (round four): the paragraph reported the PRC
+% figure as an excess over "the shortest available track". The reported
+% horizontal flight-efficiency indicators are measured against a direct
+% reference between the points at which traffic enters and leaves the
+% airspace, not against a shortest filable route; under the old wording
+% the routes this paragraph calls unavailable would already be netted out
+% of the reference. AUTHOR: please confirm the indicator's own wording.
+One consequence of all this rerouting is measured every year. The
+Performance Review Commission reports how much further European traffic
+flies than a direct reference between the points at which it enters and
+leaves the airspace~\cite{prc2026}. Many things contribute to that
+figure, and this archive speaks to one of them: a regulation protects a
+volume whose capacity is limited, and a flight that routes around such a
+volume flies further, so part of the distance is what respecting that
+capacity costs. This work assumes rather
+than shows that some cheaper routes stay open and go unfiled, others
+having been closed by a restriction or an unavailable conditional
+route. Even so, candidate
+routes are not the scarce thing. What is scarce is knowing which
+candidate this particular operator would accept, on this day, with this
+rotation to protect, and knowing it while there is still time to file.
 % Cut for space (the same point is made where deployment is discussed):
 % needless to say, proposing routes that airlines reject is worse than
 % proposing nothing at all, because a channel that is ignored is a channel
@@ -216,9 +225,9 @@ median of one kilogramme of planned fuel. A revision made for any of the
 reasons above leaves the same trace as one escaping a delay, and the
 regulated minority is where the choice is sharpest.
 
-When the traffic expected in a volume of airspace exceeds what the
-controllers there can safely handle, a \emph{regulation} is placed on
-it and the flights crossing it are given calculated take-off times at
+When the traffic expected in a volume of airspace exceeds what can
+safely be handled there, whether because of demand, staffing, weather or
+equipment, a \emph{regulation} is placed on it and the flights crossing it are given calculated take-off times at
 the rate it can absorb; the difference between a flight's calculated
 and requested take-off times is its attributed ATFM delay. A lightly binding regulation leaves most of its traffic undelayed,
 which is why a route can carry a regulation and no delay at all. An
