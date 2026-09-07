@@ -151,8 +151,8 @@ more than the detour did.
 That judgement is the quantity this paper models. A flight plan is not
 filed once and left alone: an airline may revise it at any time until the
 aircraft leaves, and the response of the network is only one of the
-reasons for doing so. A regulation, and the delay attributed under it, is
-the most visible prompt. An aircraft arriving late from its previous leg
+reasons for doing so. Attributed delay of the kind the opening flight
+was carrying is the most visible prompt. An aircraft arriving late from its previous leg
 is another, since the delay it brings with it consumes the slack the
 rotation was holding; and an updated forecast is a third, since changed
 winds change the time and the fuel that every candidate route would need.
@@ -178,30 +178,30 @@ survey.
 % the old wording the routes this paragraph calls unavailable would
 % already be netted out of the reference. AUTHOR: please confirm the
 % indicator's own wording.
-One consequence of all this rerouting is measured every year. Air traffic
-in Europe is planned across national borders by a single network
-function, and an independent commission reviews that function's
-performance annually, reporting how much further the traffic flies than a
-direct reference between the points at which it enters and leaves the
-airspace \citep{prc2026}. Many things contribute to that figure, and the
-archive used here speaks to one of them: a regulation protects a volume
-whose capacity is limited, and a flight that routes around such a volume
-flies further, so part of the distance is what respecting that capacity
-costs. Not every cheaper alternative is reachable, since some are closed
-before anyone can file them, a restriction or an unavailable conditional
-route having ruled them out. Of those that stay open, this work assumes
-rather than shows that some go unfiled, and
-Section~\ref{sec:validity} returns to the assumption. Even so, candidate
-routes are not the scarce thing. What is scarce is knowing which
-candidate this particular airline would accept, on this day, with this
+The scale of what is at stake is published every year. Air traffic in
+Europe is planned across national borders by a single network function,
+and an independent commission reviews that function's performance
+annually, reporting how much further the traffic flies than a direct
+reference between the points at which it enters and leaves the airspace
+\citep{prc2026}. Not all of that distance is avoidable:
+airspace that cannot take all the traffic that wants it has to be
+protected, and a flight routed around it flies further, so part of the
+figure is what respecting a limited capacity costs. What this paper takes up is whether any
+of the rest is a cheaper route that the airline would have been willing
+to fly and did not file. That such routes exist is assumed here rather
+than shown, and Section~\ref{sec:validity} returns to the assumption; a
+route closed by a restriction or an unavailable conditional route is not
+one of them, since it could never have been filed. Candidate routes are
+not hard to come by. What is hard is knowing which candidate this
+particular airline would accept, on this day, with this
 rotation to protect, and knowing it while there is still time to file.
 
 What the network lacks is therefore a proposal channel, that is, a
 service that would offer an airline an alternative route that burns less
 fuel and that the model judges the airline would accept, inside the
 planning window and before the flight departs. The timing is not free: two of the model's
-strongest inputs, the attributed delay and the regulation picture,
-exist only once a plan has been filed, so the channel would speak after
+strongest inputs, the attributed delay and the airspace constraints
+behind it, exist only once a plan has been filed, so the channel would speak after
 a first filing rather than before one, and
 Section~\ref{sec:validity} returns to what that costs.
 
@@ -290,13 +290,13 @@ is assembled from two messages sent at different times is not a
 detail of bookkeeping: it shapes the encoding, and
 Section~\ref{sec:leakage} returns to it.
 
-Most revisions are not a response to flow management at all: seven pairs
-in ten in this archive carry no regulation on either route, and
+Most revisions are not a response to flow management at all: in seven pairs
+in ten neither route was caught by it, and
 Section~\ref{sec:data} reports what that majority looks like. A
 dispatcher re-planning after a forecast update, or after the aircraft's
 earlier legs have moved, leaves the same kind of trace as one escaping a
-delay, and the archive records what changed rather than why. The regulated
-minority is nonetheless where the choice is sharpest and where the terms
+delay, and the archive records what changed rather than why. The minority
+that was caught is nonetheless where the choice is sharpest and where the terms
 of the trade are clearest, and the term this paper uses for it needs
 stating plainly. When the traffic expected in a
 volume of airspace exceeds what the controllers there can safely handle,

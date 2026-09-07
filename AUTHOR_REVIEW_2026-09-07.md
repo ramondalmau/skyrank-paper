@@ -445,3 +445,43 @@ applied.
   **mostly clear**, paragraph three on its own **confusing / contestable**.
 - The fixes above answer every load-bearing flag those verdicts rest on except
   the three list-shaped passages, which are structure rather than sentences.
+
+### Paragraph three again, and a term used before it is defined
+
+The author read the fourth-round paragraph and said it was still not clear. It
+was: the paragraph announced that many things contribute to the published
+figure and that the archive speaks to one of them, then spent its middle on an
+assumption and an aside about closed routes, and only in its last sentence
+arrived at a question no earlier sentence had asked. The reader was never told
+that anyone wanted to *offer* a route, so the punchline landed on a question
+that had not been raised.
+
+It now runs as a chain in which each sentence answers the one before: the scale
+is published every year; here is what the commission reports; not all of that
+distance is avoidable, and here is why; what this paper takes up is whether any
+of the rest is a cheaper route the operator would have flown and did not file;
+that such routes exist is assumed rather than shown; candidate routes are not
+hard to come by; what is hard is knowing which candidate this operator would
+accept, in time to file it. The claim that the archive is "one of the
+mechanisms behind that figure" is gone, which also settles a reader's objection
+that seven pairs in ten carry nothing that could inflate the figure at all.
+
+The author then caught what four reader panels had not: **the introduction used
+"regulation" twice, and Section II-A explained the same mechanism a second time
+two pages later.** Section II-A used it twice more before its own definition. So
+the paper explained the idea before naming it, then named it, then explained it
+again.
+
+Every use before the definition is gone from both manuscripts. The introduction
+now says "attributed delay of the kind above" and, in the paragraph above,
+"airspace that cannot take all the traffic that wants it has to be protected";
+Section II-A's opening now says "in seven pairs in ten neither route was caught
+by it" and "the minority that was caught". The first appearance of the word in
+either paper is now its own definition, checked in the rendered text and not
+only in the source. The journal's third use, "the regulation picture" in the
+channel paragraph, became "the airspace constraints behind it".
+
+Holding eight pages cost the SID one qualifier, restored from a
+`% Cut for space` comment: that a route closed by a restriction or an
+unavailable conditional route is not one of the cheaper routes the paper
+assumes exist. The journal keeps it.
