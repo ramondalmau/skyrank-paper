@@ -170,7 +170,8 @@ than shown.
 % Section IV-A of that version returns to the assumption):
 % ... and a route closed by a restriction or an unavailable conditional
 % route is not one of them.
- Candidate routes are not hard to come by. What is hard is knowing
+
+Candidate routes are not hard to come by. What is hard is knowing
 which candidate this particular operator would accept, on this day, with
 this rotation to protect, and knowing it while there is still time to
 file.
@@ -228,7 +229,9 @@ safely be handled there, whether because of demand, staffing, weather or
 equipment, a \emph{regulation} is placed on it and the flights crossing it are given calculated take-off times at
 the rate it can absorb; the difference between a flight's calculated
 and requested take-off times is its attributed ATFM delay. A lightly binding regulation leaves most of its traffic undelayed,
-which is why a route can carry a regulation and no delay at all. An
+which is why a route can carry a regulation and no delay at all.
+
+An
 operator facing an attributed delay has a choice that is genuinely
 economic: accept it, or file a route that avoids the constrained
 volume at the cost of distance, fuel and en-route charges, and neither
@@ -260,7 +263,8 @@ scale but it can be observed, and the labels used herein follow the
 logic of revealed preference (i.e., inferring what an actor values
 from the choice it made when a concrete alternative was
 available)~\cite{samuelson1938}.
-The alternative construction, adopted by the authors' own earlier work,
+
+The alternative label construction, adopted by the authors' own earlier work,
 ranks the filed plan above candidates supplied by a route
 generator~\cite{dalmau2024}. Its weakness is not that such routes are
 unrealistic. It is that nobody knows whether any of them ever reached the
@@ -285,7 +289,9 @@ much easier skill than knowing which route an operator would prefer, and
 accuracy alone cannot distinguish the two. For instance, a generated candidate
 may join published segments in a way no dispatcher would ever file, so
 that telling it from a filed plan can be done on the shape of the route
-alone, without knowing anything about the operator that would fly it. No dataset offers both label sources for the same
+alone, without knowing anything about the operator that would fly it.
+
+No dataset offers both label sources for the same
 flights, so the argument is about how the labels are built, not a measured
 comparison. The question also narrows: the model is not asked what an
 airline will file, but which of two specific routes it prefers, which is a
@@ -422,7 +428,9 @@ context in which each revision was made.
 The unregulated majority differs by a median of one kilogramme of planned
 fuel, and the pairs that cost fuel are elsewhere: the revisions that
 escape a delay outright, or reduce one, together account for 18.4\,\% of
-the archive. A revision that escapes a delay moves to a route burning a
+the archive.
+
+A revision that escapes a delay moves to a route burning a
 median 101\,kg more than the one it replaced, and that route is the
 cheaper of the two in only 28.1\,\% of cases; a revision that merely
 reduces the delay costs a median 65\,kg and is cheaper in 31.6\,\%. A proposal channel is accordingly not looking for the common case, but
@@ -464,7 +472,9 @@ route. The time remaining to departure is the clearest case: it is
 necessarily smaller for the route that replaced the other, so a model given
 it in raw form could answer ``the one filed later'', be right on essentially
 every pair, and know nothing whatever about routes. This is leakage rather
-than learning, and it would be invisible in the accuracy figure. To ensure a
+than learning, and it would be invisible in the accuracy figure.
+
+To ensure a
 fair comparison between the two routes, every flight-level attribute was
 therefore harmonised across the pair, both routes taking the value carried
 by the later message, so that no such attribute can separate them and only
@@ -512,7 +522,9 @@ The regulated flight had a reason to move and an alternative that was
 demonstrably flyable that day, namely the route its twin was flying, and
 yet it stayed, though the twin does not establish that the same routing
 was open at the stayed flight's own departure hour. Its route is accordingly labelled as preferred, and that of
-its twin as the alternative it declined. The construction carries a confound that has to be stated with it: the
+its twin as the alternative it declined.
+
+The construction carries a confound that has to be stated with it: the
 regulated flight is always the one whose route was kept, so regulation
 status identifies the labelled answer. The conditions are restrictive and the yield is correspondingly
 low: 6\,672 such \emph{stay pairs}, of which 1\,093 fall in the test months,
@@ -569,7 +581,9 @@ fitted on January 2025 through February 2026 (1\,134\,064 pairs), tuned on
 March 2026 (67\,349), and evaluated once on April to June 2026
 (281\,720). Every threshold, calibrator and stopping decision is taken on
 the tuning month alone, and flights appearing in the tuning or evaluation
-months are removed from the fitting set. All the data used is held by the
+months are removed from the fitting set.
+
+All the data used is held by the
 network for operational purposes and was processed under existing
 data-handling arrangements. Operator identity enters the model as a
 categorical feature only, and no operator or airspace volume is named
@@ -641,7 +655,9 @@ held-out pairs, and the cheaper of the two is the candidate. That
 candidate is proposed when its calibrated acceptance probability exceeds a
 threshold $\tau$, selected on the tuning month for a target precision and
 reported unchanged on the evaluation months; $\tau = 0.600$ throughout
-what follows. The calibrator always scores the route
+what follows.
+
+The calibrator always scores the route
 the model prefers, so the probability it returns is by construction at
 least a half. Where the cheaper route is the one the model ranks lower,
 the channel must therefore use one minus that probability, which is below
@@ -1124,7 +1140,7 @@ of CO$_2$ at 3.16\,kg per kilogramme of fuel, and between 222 and
 254\,kt of CO$_2$ a year: the lower end applies the per-eligible-flight
 rate to a year's eligible traffic, and the upper multiplies the quarter by
 four.
-These figures are computed on
+The channel figures are computed on
 flights that revised their plans, and planned fuel is not burned fuel, so
 they should be read as what a channel could have surfaced earlier rather
 than as a traffic-wide counterfactual. The full channel analysis is the subject of a journal extension of
@@ -1172,6 +1188,7 @@ structure is a vocabulary rather than a geometry. Those identifiers are
 European, so little of the 1.4 points the waypoint text is worth would
 survive a move to another region, and they are revised from time to time,
 so a piece of airspace can return under a name the model has never met.
+
 The obvious remedy was tried and did not work. Recast as a sequence of
 descriptors that depend on its shape alone and passed through a neural
 encoder, a route scored worse than it did by its tokens, and a linear
@@ -1192,10 +1209,10 @@ portable, and remains worth pursuing.
 % this paper; only their ordering is claimed, exactly as in the journal
 % version.
 
-Future work should therefore be directed, in the first
-place, at assembling a balanced stay dataset in which regulation status is
+Future work should therefore begin with a
+balanced stay dataset in which regulation status is
 independent of the label, which requires data that is not currently
-assembled rather than data that does not exist. Last but not least, a
+assembled rather than data that does not exist. A
 shadow-mode trial logging the real responses of operators would close the
 remaining gap.
 

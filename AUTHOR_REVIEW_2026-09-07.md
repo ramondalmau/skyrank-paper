@@ -512,3 +512,53 @@ room on page two to name them, the page being full to its last line. And the
 sentence "the regulated minority is where the choice is sharpest" is gone from
 the conference paper, because after the reorder it restates the sentence that
 now opens the flow-management paragraph.
+
+### Paragraph length, measured and cut down
+
+The author: the paragraphs are too long everywhere. They were. Before this
+pass the journal's median paragraph ran to 114 words, with 64 paragraphs over
+120 and a longest of 405; the conference paper's median was 85, with 19 over
+120.
+
+Nine agents, one per section group, proposed split points across both
+manuscripts and were told to propose seams only, never to rewrite. Two further
+agents checked every proposal against the source: that both anchors appear
+verbatim, that the sentence opening the new paragraph does not depend on the
+one above it, and that the seam does not cut an enumerated run, a worked
+example or a single definition.
+
+Ninety-four seams proposed, sixty-six kept, twenty-eight rejected. The
+rejections are the useful part of the record:
+
+- The conference paper's contribution paragraph ("threefold. First... Secondly...
+  Thirdly...") and its conclusions paragraph of the same shape were refused as
+  enumerated runs: any seam orphans one item from the count that promised three.
+- The feature-construction paragraph, 208 words and the longest body paragraph
+  in the conference paper, was refused because it too is an enumerated run and
+  its only other candidate break would separate the second item from the worked
+  example that justifies it. The verifier's note is worth keeping: the remedy
+  there is not a seam but splitting an 88-word opening sentence, which is a
+  rewrite and was out of scope for this pass.
+- The journal's error-analysis paragraph was refused because the seam fell
+  between a worked example's facts and its conclusion.
+- Fifteen more were refused as already inside the target band (127 to 143
+  words), where a split buys legibility rather than fixing a defect.
+
+Thirty-two joins needed a few words changed so the new paragraph could open on
+its own: "That margin is chosen" became "The 2 016 kg margin is chosen", "A
+flight held back in this way" became "A flight held back by a regulation",
+"This bound falls harder" became "The never-revise limitation falls harder".
+Every one is a noun substituted for a pointer, and each was checked in the
+rendered text.
+
+Result: the journal's median paragraph falls from 114 words to 89, paragraphs
+over 120 from 64 to 39, the longest from 405 to 288, at a cost of one page
+(50 to 51). The conference paper's median falls from 85 to 80 and its
+paragraphs over 180 from five to two, holding 8 pages.
+
+Ten of its eleven seams fit. The eleventh, which would have separated the
+annualised CO2 figures from the caveat that they are computed on flights that
+revised, is the one that did not, and it is recorded here rather than applied.
+Two filler phrases paid for part of the rest ("in the first place", "Last but
+not least"), and one journal line that went overfull at 3.5 pt when a new
+paragraph changed its line breaking was reflowed.
