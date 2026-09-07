@@ -485,3 +485,30 @@ Holding eight pages cost the SID one qualifier, restored from a
 `% Cut for space` comment: that a route closed by a restriction or an
 unavailable conditional route is not one of the cheaper routes the paper
 assumes exist. The journal keeps it.
+
+### Section II-A reordered: the flow-management case first
+
+The author's call: present the revisions caused by flow management first, and
+the fuel and other-reason revisions after them. This reverses the placement
+made in the first round, where "most revisions are not about delay" was put
+*before* the regulation material so that a reader would not misread the whole
+section as being about flow management. The author's order is better for a
+reason the first round could not see: the definition of a regulation now
+precedes every use of the word, so the majority paragraph can say "carry no
+regulation on either route" in the paper's own terms instead of working around
+a term it was not allowed to use yet.
+
+Both subsections now run: what a revision pair is; the sharpest decisions are
+made under flow management, and here is what a regulation is and what delay it
+attributes; the choice it forces is genuinely economic, and its cost is not
+observable from outside the airline; and then, most revisions are not a
+response to flow management at all, seven pairs in ten carrying no regulation
+on either route and differing by a median of one kilogramme of planned fuel.
+
+Two small consequences. The conference paper's majority paragraph says "a
+revision made for any of the other reasons" where the journal names them (a
+forecast update, or the aircraft's earlier legs having moved); there is no
+room on page two to name them, the page being full to its last line. And the
+sentence "the regulated minority is where the choice is sharpest" is gone from
+the conference paper, because after the reorder it restates the sentence that
+now opens the flow-management paragraph.
