@@ -34,6 +34,31 @@ The author block is VISIBLE (\blindfalse), per the organisers' 2026-08-06
 confirmation above. (An earlier version of this line wrongly said the block
 was anonymised.)
 
+AUTHOR REVIEW OF 2026-09-07
+Fourteen comments from the author, all acted on, plus the findings of an
+eight-reader zero-context panel run on the version he read. The full record,
+including what had to be cut to hold 8 pages and the one choice left open, is
+`../AUTHOR_REVIEW_2026-09-07.md`.
+
+Changed here: the abstract is now an overview of the paper rather than a
+summary of its results (224 words, down from 249, and two result figures
+instead of eleven); the introduction gives the en-route charge the opening
+flight also paid and four reasons a plan gets revised rather than one; the
+extra-distance paragraph no longer reads as attributing that distance to
+airlines; Section II-A says before the regulation material that most revisions
+carry no regulation at all, and leads the label argument with the fact that
+nobody knows whether a generated route ever reached the dispatcher; Fig. 1 is
+referred to by a sentence rather than a parenthesis; "escapes" is defined where
+it is used; the calibration subsection is five paragraphs from one, opening on
+a real scored pair; Section V is restructured against the three causes a reader
+measured for its density; and the Conclusions state the limits of the
+bag-of-words route encoding and the encoder trial that failed to replace it.
+
+The paper is exactly 8 pages. Everything removed to keep it there is in a
+`% Cut for space 2026-09-07` comment in the source, verbatim and restorable;
+the largest is the worked proposal of Section V-D, which the journal carries
+in full.
+
 READER PANELS OF 2026-09-05 AND 2026-09-06
 See `../AUTHOR_DECISIONS.md`, which records every item and its disposition.
 Repaired in this paper: the reading of the 0-of-3 stratum (item 1), the
@@ -44,7 +69,7 @@ comment had swallowed (item 13), and five numbers that disagreed with
 themselves or with the journal paper (item 15). Each carries a dated
 `% CORRECTED` comment in the source.
 
-FIG. 2 (2026-09-06): regenerated with Gemini over three rounds and accepted
+FIG. 2 (2026-09-06, unchanged 2026-09-07): regenerated with Gemini over three rounds and accepted
 by the author; it is the same raster the journal paper uses. Every defect the
 original carried is gone and the caption carries no disclaimer. Two labels the
 image model would not correct were repaired by hand in the raster, a

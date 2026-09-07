@@ -57,6 +57,34 @@ the raster is 1425 x 724, which is 278 dpi at the TR-C include width but
 without other edits, or accept 200 dpi for the conference paper, where the
 figure's type is large and legible at printed size.
 
+## The author review of 2026-09-07
+
+Fourteen comments on the conference paper, with the instruction to mirror
+whatever applied here. Full record in `../AUTHOR_REVIEW_2026-09-07.md`.
+
+Changed in this manuscript: the opening flight's en-route charge (466 EUR,
+verified in the archive); four reasons a plan gets revised in place of one,
+including a route that ceased to be filable and is therefore not a choice;
+the extra-distance paragraph reframed so it does not attribute that distance
+to airlines; the filing-message explanation simplified; a statement in the
+Background that most revisions carry no regulation at all; the label argument
+led by the fact that nobody knows whether a generated route ever reached the
+dispatcher; and a new limitation in Section 10 on the route being carried as
+a vocabulary rather than a geometry.
+
+Three corrections against the record, each with a dated `% CORRECTED` comment:
+the feature table's claim that every rotation and context feature is identical
+within a pair (the outbound connection time is not, by design); the
+description of the encoder probe as recovering waypoint identities (it
+separated preferred from abandoned routes, near chance); and an example that
+refuted the claim it illustrated. The manuscript is now 50 pages, up from 49.
+
+Open, and the authors': whether the worked example of Section 7.4 needs its
+vertical caveat. Its chosen route burns 2 016 kg less planned fuel, a quarter
+of the trip fuel, at essentially the same distance and flight time, which a
+domain reader called physically incoherent at a fixed cruise level; the
+archive holds no vertical profile, so the paper cannot attribute it.
+
 ## Author decisions
 
 Everything the 2026-09-05 and 2026-09-06 reader panels raised is settled in

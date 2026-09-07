@@ -162,10 +162,26 @@ mkdir -p "$TMPDIR/sid" "$TMPDIR/trc"
 (cd paper/trc-extension  && ~/.local/bin/tectonic -X compile trc2026.tex --outdir "$TMPDIR/trc")
 ```
 
-Acceptance after every build: SID exactly 8 pages, TRC 49; no `Overfull`
-lines in the log; no `??` in the PDF text; abstract of the TRC at or under
-250 words with LaTeX markup stripped. The committed `sid2026.pdf` and
-`trc2026.pdf` are the builds of the committed sources.
+Acceptance after every build: SID exactly 8 pages, TRC 50 (49 before the
+2026-09-07 additions); no `Overfull` lines in the log; no `??` in the PDF
+text; both abstracts at or under 250 words with LaTeX markup stripped (SID
+224, TRC 246). The committed `sid2026.pdf` and `trc2026.pdf` are the builds
+of the committed sources.
+
+Two checks that only exist because they caught real defects:
+
+- **The comment trap.** A scripted replacement whose new text ends in a `%`
+  comment silently swallows the tail of the matched line, and it has now
+  done so six times on these papers. `paper/tools/trapscan.py` finds the
+  signature (a live line beginning lower-case immediately after a comment
+  block) in one pass over the source; run it before every build. It reports
+  one benign site in the SID, where a `% Cut for space` block sits inside a
+  sentence that resumes correctly.
+- **The fact diff.** Redrafting a paragraph to fix one thing silently drops
+  another it was also carrying, and the result reads perfectly well. Extract
+  every number and every citation marker from the previous build and the new
+  one and list what disappeared; account for each. The 2026-09-07 pass ran
+  this on both papers, and every disappearance traced to a deliberate cut.
 
 ## 5. Content rules that bound any edit
 

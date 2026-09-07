@@ -1,5 +1,9 @@
 # What the 2026-09-06 pass changed, and what is left to the authors
 
+> Superseded at the top by the 2026-09-07 author review, recorded in
+> `AUTHOR_REVIEW_2026-09-07.md`. Nothing below was reopened.
+
+
 This file is the record of the follow-up pass on both manuscripts. It began
 as a list of items the 2026-09-05 zero-context reader panels had raised and
 that had been settled against the study's own artefacts but not acted on. It

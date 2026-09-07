@@ -47,6 +47,26 @@ every section opens with a lead-in paragraph before its first subsection.
 Text cut for the page limit is kept in `% Cut for space:` comments in the
 source, never deleted.
 
+## The author review of 2026-09-07
+
+Fourteen author comments and an eight-reader zero-context panel. The complete
+record is `../AUTHOR_REVIEW_2026-09-07.md`; the short version is that the
+abstract became an overview rather than a results summary, the introduction
+gained the en-route charge and three further reasons a plan is revised, the
+extra-distance paragraph stopped reading as blaming airlines, the label
+argument now leads with the fact that nobody knows whether a generated route
+ever reached the dispatcher, the calibration subsection became five paragraphs
+from one, Section V was restructured against three measured causes of its
+density, and the Conclusions gained the limits of the bag-of-words encoding
+and the encoder trial that failed to replace it.
+
+**What left the paper to hold 8 pages** is listed with its reason in that
+record, and every piece is in a `% Cut for space 2026-09-07` comment here,
+verbatim. The largest is the worked proposal that followed one flight end to
+end; the journal carries it in full. Restore that one first if a page ever
+becomes available. The alternative, measured and also landing at 8 pages, is
+to restore the worked proposal and drop Fig. 1 instead.
+
 ## Corrections made in the 2026-09-04 revision pass
 
 Four claims in this paper were wrong and are now fixed. They are listed

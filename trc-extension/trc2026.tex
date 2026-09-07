@@ -106,9 +106,9 @@ The aim in learning from that record is to cut carbon dioxide by
 offering cheaper routes only where they would be taken. This paper fits
 a pairwise ranking model on 1\,134\,000 pairs, expressing each route's
 indicators relative to the other's, and identifies the chosen route in
-68.1\,\% of held-out decisions. Cost rules fail here: preferring the
-route with less planned fuel scores 45.0\,\%, so the strongest simple
-rule is its inverse, at 55.0\,\%. What a channel needs is therefore a
+68.1\,\% of held-out decisions. Planning cost points the wrong way:
+preferring the route with less planned fuel scores 45.0\,\%, below
+chance, so the strongest simple rule is the inverted one, at 55.0\,\%. What a channel needs is therefore a
 way of telling the flights that would take the cheaper route from those
 that would not, and the model supplies one, being right 94.9\,\% of the
 time on the fifth of cases it is most confident about. Aimed at
@@ -136,30 +136,50 @@ rank \sep revealed preference \sep fuel efficiency \sep flight planning
 On a spring morning in 2026, an Airbus A320 was filed from Amsterdam to
 Barcelona on a route carrying 102 minutes of attributed air traffic
 flow management (ATFM) delay, and the airline subsequently re-filed.
-The new route shed that delay completely, at a cost of 39 minutes of
-flight time and 1\,397\,kg of extra planned fuel. Both routes are held
-in the network's records and so, implicitly, is the airline's judgement
-that the delay would have cost it more than the 39 minutes and 1.4 tonnes
-of fuel that avoiding it consumed.
+The new route shed that delay completely, and it cost the airline on
+each of the three counts an airline pays for directly: 39 minutes of
+flight time, 1\,397\,kg of extra planned fuel, and 466 euros more in
+en-route charges. Both routes are held in the network's records and so,
+implicitly, is the airline's judgement that the delay would have cost it
+more than the detour did.
+% CORRECTED 2026-09-07: the paragraph listed what the detour cost but
+% omitted en-route charges, the third of the three costs the paper uses
+% throughout. Verified for this pair in
+% data/ich_dataset/ich_dataset_2026-05.parquet, pair_id 1421263:
+% kpiRouteChargeIndicator 1274 -> 1740 EUR (units per run_01_eda.py:41).
 
-That judgement is the quantity this paper models. A flight plan is a
-negotiated object: an airline files, the network responds with
-regulations and delay, and the airline may file again. Each revision
-records the route replaced and the route that replaced it, and
-therefore a preference that the airline expressed with its own filing
-system rather than in answer to a survey.
+That judgement is the quantity this paper models. A flight plan is not
+filed once and left alone: an airline may revise it at any time until the
+aircraft leaves, and the response of the network is only one of the
+reasons for doing so. A regulation, and the delay attributed under it, is
+the most visible prompt. An aircraft arriving late from its previous leg
+is another, since the delay it brings with it consumes the slack the
+rotation was holding; and an updated forecast is a third, since changed
+winds change the time and the fuel that every candidate route would need.
+A route may also simply cease to be filable, in which case the revision is
+not a choice at all. What the archive records is what changed rather than
+why, and it does not separate these cases. Every revision
+nonetheless leaves the same trace, namely the route replaced and the
+route that replaced it, and therefore a preference that the airline
+expressed with its own filing system rather than in answer to a
+survey.
 
 The operational interest is concrete, because the extra distance that
 European traffic flies is measured and published every year. Air
 traffic in Europe is planned across national borders by a single
 network function, and an independent commission reviews that
 function's performance annually, reporting how much further than the
-shortest available track the traffic actually flies \citep{prc2026}. The archive used here shows one of the
-behaviours behind that extra distance directly: airlines frequently revise onto routes that
-\emph{cost} fuel in order to escape delay. That fuel-cheaper
-alternatives also go unfiled for want of being noticed in time is a
-premise of this work rather than a finding of it, and
-Section~\ref{sec:validity} says so.
+shortest available track the traffic actually flies \citep{prc2026}. The
+archive used here holds one of the mechanisms behind that figure. A
+regulation protects a volume whose capacity is limited, and a flight that
+routes around such a volume flies further, so that part of the extra
+distance is the cost of keeping traffic within a capacity that has to be
+respected rather than a preference for flying further. Which way that
+trade is worth making is the airline's judgement, and the archive shows
+it being made in both directions. This work assumes, rather than shows, that
+some fuel-cheaper alternatives go unfiled because nobody had reason to
+look for them in time; others go unfiled because they could not have been
+filed at all. Section~\ref{sec:validity} returns to the assumption.
 Candidate routes are readily available; what is hard is knowing which
 candidate is acceptable to this particular airline, on this day, with
 this rotation to protect, and knowing it inside the planning window
@@ -244,20 +264,29 @@ Section~\ref{sec:related}.
 \subsection{Flight-plan revisions as preference data}
 
 In the European network a flight plan is filed before departure and may
-be revised at any time until the flight leaves. Each filing is a separate message and the network keeps the whole
-sequence, so there is no single record holding a route change: what
-exists is a message that changed the horizontal route of the plan, and
-the message that preceded it. Those two messages together describe a
-decision, because the airline had committed to the earlier route and
-then filed the later one for the same flight on the same day, which
-makes the later route the one it chose and the earlier one the route
+be revised at any time until the flight leaves. Every filing is a
+message, and so is every later change, and the network keeps them all, so
+that what it holds for a flight is the whole sequence of messages sent for
+it. A route change is accordingly a pair of consecutive messages rather
+than a record of its own: the message that changed the horizontal route of
+the plan, and the message that preceded it. Those two messages together
+describe a decision, because the airline had committed to the earlier
+route and then filed the later one for the same flight on the same day,
+which makes the later route the one it chose and the earlier one the route
 it abandoned. That the pair
 is assembled from two messages sent at different times is not a
 detail of bookkeeping: it shapes the encoding, and
 Section~\ref{sec:leakage} returns to it.
 
-Revisions are often a response to air traffic flow management, and the
-term used throughout this paper needs stating plainly. When the traffic expected in a
+Most revisions are not a response to flow management at all: seven pairs
+in ten in this archive carry no regulation on either route, and
+Section~\ref{sec:data} reports what that majority looks like. A
+dispatcher re-planning after a forecast update, or after the aircraft's
+earlier legs have moved, leaves the same kind of trace as one escaping a
+delay, and the archive records what changed rather than why. The regulated
+minority is nonetheless where the choice is sharpest and where the terms
+of the trade are clearest, and the term this paper uses for it needs
+stating plainly. When the traffic expected in a
 volume of airspace exceeds what the controllers there can safely handle,
 whether because of demand, staffing, weather or equipment, a
 \emph{regulation} is placed on that volume for a period, and the flights
@@ -382,27 +411,34 @@ preferred and a set of generated proposals (up to eleven route options
 produced by the Network Manager, the network-level flow-management
 function of EUROCONTROL) as less preferred, and on the
 pre-tactical set none of the latter need match the filed route at all.
-The weakness of such a label is easiest to see in a single case.
-Suppose an airline filed route A, and that the training pair ranks A
-above a route B that the analyst generated. Filing A shows only that A was acceptable, since nothing in the record
-shows that the airline ever saw B, still less that it compared B with A and rejected it. The pair
-therefore asserts a preference that was never expressed, and a model
-can satisfy it by learning what a filed plan looks like rather than
-what an airline wants. For instance, a generated candidate may cross
-airspace that the airline never uses, or follow a track that its own
-flight-planning system would discard on company policy; telling such a
-route from a filed plan calls for no knowledge of preference
-whatsoever. Recognising filed plans and ranking routes by preference are different
+The weakness of such a label is easiest to see in a single case. Suppose
+an airline filed route A, and that the training pair ranks A above a route
+B that the analyst generated. Filing A shows only that A was acceptable.
+Nothing in the record shows that B ever reached the dispatcher who planned
+that flight, still less that it was compared with A and rejected, so the
+pair asserts a comparison that may never have taken place. A model can
+satisfy such a label by learning what a filed plan looks like rather than
+what an airline wants. For instance, a generated candidate may join
+published segments in a way no dispatcher would ever file, so that telling
+it from a filed plan can be done on the shape of the route alone, without
+knowing anything about the airline that would fly it.
+% CORRECTED 2026-09-07: the two examples given here, airspace the airline
+% never uses and a track its own system would discard on company policy,
+% are themselves preference facts, so the sentence illustrated the
+% opposite of what it claimed.
+Recognising filed plans and ranking routes by preference are different
 skills, and an accuracy figure cannot distinguish them.
 
-A revision pair carries no such doubt (Fig.~\ref{fig:pairidea}). Both
-routes were filed by the same airline, for the same flight, on the same
-day, so the route labelled less preferred is not an alternative
-constructed after the fact but one the airline had committed to and
-then dropped. Whatever else was happening, both routes were under the airline's own
-consideration, and it moved from one to the other. No dataset offers both label
-sources for the same flights, so this is an argument about how the
-labels are built rather than a measured comparison.
+A revision pair carries no such doubt, and Fig.~\ref{fig:pairidea} draws
+the two constructions side by side on one city pair. Both routes of a
+revision reached the dispatcher's screen, since the airline filed each of
+them in turn, for the same flight, on the same day, so the route labelled
+less preferred is not an alternative constructed after the fact but one
+the airline had committed to and then dropped. Whatever else was
+happening, both routes were under the airline's own consideration, and it
+moved from one to the other. No dataset offers both label sources for the
+same flights, so this is an argument about how the labels are built rather
+than a measured comparison.
 
 The question also narrows, in that the model is not asked what an
 airline will file but which of two routes it prefers, which is a
@@ -573,7 +609,16 @@ and nothing beyond what each example needs is given about them.
 several features (twenty-three in all). The first two groups and the
 last belong to the route and differ within a pair, the indicators
 entering as differences from the pair minimum; the rotation and context
-rows belong to the flight and carry the same value on both routes.}
+rows belong to the flight and carry the same value on both routes, the
+one exception being the outbound connection time, which is shortened on
+the slower route by the difference in flight time and is therefore
+route-dependent after all.}
+% CORRECTED 2026-09-07: the caption claimed every rotation and context
+% feature carries the same value on both routes. turnaroundOutbound does
+% not, by design: _harmonize_pair_features in src/skyrank/data/features.py
+% adjusts it by the within-pair duration delta, and
+% run_02_leakage_audit.py:30 records that it is intentionally excluded
+% from _HARMONIZE_COPY.
 \label{tab:features}
 \centering\small
 \begin{tabular}{ll}
@@ -793,11 +838,12 @@ The operational question is comparative: given two routes for one
 flight, which of them does the airline prefer? Accordingly, the model
 gives each route a single number, which is not a probability and has no
 units, and which is only meaningful next to the number given
-to another route for the same flight. Training pushes those numbers
-apart in the right direction, in that for every historical pair the model is penalised according to
-how far the abandoned route's score sits above the chosen one's, and
-the penalty shrinks as the gap between them grows without ever
-reaching zero \citep{burges2005}. Nothing in the objective asks the model to
+to another route for the same flight. Training pushes those numbers apart in the
+right direction. For every historical pair the model pays a penalty,
+largest when the abandoned route outscores the chosen one; the penalty
+falls as the chosen route's lead grows and never quite reaches zero, so
+the model keeps pressing even once the order is right
+\citep{burges2005}. Nothing in the objective asks the model to
 reproduce a route in isolation, which is what makes the pair the
 natural unit, and which is also what connects the estimator to the
 conditional-logit tradition of Section~\ref{sec:discrete}.
@@ -1156,10 +1202,9 @@ cost indicators favouring new: 0 of 3 & 90\,961 & 79.9 [79.7, 80.2] \\
 \end{table}
 
 The final block of Table~\ref{tab:strata} reads strangely at first and
-repays attention. Where none of the three costs an airline pays for
-directly prefers the newly filed route, the model still identifies the
-move 79.9\,\% of the time, whereas where all three prefer it accuracy
-falls to 53.9\,\%. That first row, the 90\,961 pairs on which no indicator
+repays attention. The model is right 79.9\,\% of the time on the pairs
+where none of the three costs an airline pays for directly is cheaper on
+the newly filed route, and only 53.9\,\% on those where all three are. That first row, the 90\,961 pairs on which no indicator
 prefers the new route, is not a population that moved to a strictly worse
 route, because it also holds every pair on which the two routes are simply
 identical on an indicator, and route charges are identical on 46.4\,\% of
@@ -1268,10 +1313,17 @@ together with its length as a fraction of the whole, and a neural
 encoder was trained on that representation under the same pairwise
 objective. On its own it did worse than the tokens, and supplied alongside them it
 was worth a fraction of a point, far too little to repay a second model
-and a waypoint-coordinate service in the serving path. Fitting a linear classifier on the encoder's own
-representation recovered the waypoint identities barely better than
-chance, which points at the geometric input rather than the training
-objective as the limitation. The likely reason is that what
+and a waypoint-coordinate service in the serving path. A linear classifier fitted on the encoder's own
+representation separated the preferred route from the abandoned one
+barely better than chance, which points at the geometric input rather
+than the training objective as the limitation.
+% CORRECTED 2026-09-07: the probe was described as recovering "the waypoint
+% identities". It did not: the classifier was fitted on the difference
+% between the two routes' embeddings and asked to separate the preferred
+% route from the abandoned one, scoring about 0.54 for the route-only
+% encoder and 0.574 for the end-to-end one, both near chance. See
+% studies/2026-06-improvement/docs/research_ideas.md, sections 1 and 4.
+The likely reason is that what
 the token representation carries is not geometry: an identifier records which published structure a route uses, and two
 geometrically similar routes through different structures are not
 interchangeable to an airline, so the simpler representation was kept. One qualification attaches to that comparison and to no other number
@@ -1957,7 +2009,12 @@ the airline's filing process produced, which folds together its
 economics, its dispatching software, its habits and its
 workload. The model learns this compound, and the compound is arguably
 the right target for a proposal channel, since a proposal is accepted
-or ignored by the same compound. It does mean, however, that nothing in
+or ignored by the same compound. Two consequences follow. The first is that a revision need not be a
+choice at all: a route that ceased to be filable has to be replaced
+whatever the airline would have preferred, and the archive carries no
+field that separates such a revision from a deliberate one, so a share of
+the labels that cannot be quantified here records a constraint rather than
+a preference. The second is that nothing in
 this paper measures a preference in the economic sense of
 \citet{samuelson1938} separately from the process that expresses it,
 and transfers of the learned function to settings where the process
@@ -2012,6 +2069,25 @@ candidate the airline had itself produced. A first trial should
 accordingly draw its candidates from routes that operator has filed
 before on that city pair, where the concern does not arise, rather than
 from a generator.
+
+\paragraph{The route is carried as a vocabulary, not a geometry} The
+waypoint sequence enters the model as a bag of published identifiers, so
+the 1.4 points it is worth are knowledge of a particular vocabulary
+rather than of route shape, and two limits follow. Those identifiers are
+European, so a model fitted here would carry little of that knowledge to
+another region, which is the same non-transferability that the first of
+these limitations predicts for the filing process itself. They are also
+revised from time to time as the route network is republished, so a piece
+of airspace can reappear under a name the model has never met, with
+nothing in the encoding to connect the two; such changes are infrequent,
+and the effect is correspondingly slow, but it is a drift that only
+retraining repairs. Section~\ref{sec:ablation-sec} reports the attempt to
+replace the vocabulary with a learned representation of route shape, and
+why it did not succeed. A representation that does not depend on names
+would nonetheless be what makes the model portable, and it remains the
+most valuable direction on this axis.
+% Added 2026-09-07 at the author's request; the encoder trial it points at
+% was already reported in Section 6.3.
 
 \paragraph{Planned fuel is not burned fuel} Every fuel figure rests on
 planned fuel, and the two differ by whatever the tactical phase imposes
