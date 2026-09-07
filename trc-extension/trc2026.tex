@@ -102,23 +102,23 @@
 \begin{abstract}
 Every flight-plan revision records a choice an airline actually made:
 the route it dropped and the route it filed instead. Eighteen months of European traffic contain 1.48 million such pairs.
-The aim in learning from that record is to cut carbon dioxide by
-offering cheaper routes only where they would be taken. This paper fits
+The aim is to cut carbon dioxide by offering cheaper routes only where
+they would be taken. This paper fits
 a pairwise ranking model on 1\,134\,000 pairs, expressing each route's
 indicators relative to the other's, and identifies the chosen route in
 68.1\,\% of held-out decisions. Planning cost points the wrong way:
 preferring the route with less planned fuel scores 45.0\,\%, below
-chance, so the strongest simple rule is the inverted one, at 55.0\,\%. What a channel needs is therefore a
+chance, so the strongest simple rule is its inverse, at 55.0\,\%. What a channel needs is a
 way of telling the flights that would take the cheaper route from those
 that would not, and the model supplies one, being right 94.9\,\% of the
 time on the fifth of cases it is most confident about. Aimed at
 80\,\% precision and measured on a held-out quarter, such a channel
 reached
-79.2\,\%, and its proposals carried a planned-fuel saving of 20.1
-kilotonnes per quarter on routes the airlines went on to file, or, on
-two annualisation bases, 222 to 254 kilotonnes of CO$_2$ a year. Refitted on earlier data and watched for six months, the model ages by
+79.2\,\%, its proposals carrying a planned-fuel saving of 20.1
+kilotonnes per quarter on routes the airlines went on to file, or 222 to
+254 kilotonnes of CO$_2$ a year on two annualisation bases. Refitted on earlier data and watched for six months, the model ages by
 proposing less rather than by erring more. The clearest gap is the flights that never revise, on which this
-archive cannot speak; even so, airline route acceptance is learnable
+archive is silent; even so, airline route acceptance is learnable
 from operational records alone.
 \end{abstract}
 
@@ -179,7 +179,8 @@ trade is worth making is the airline's judgement, and the archive shows
 it being made in both directions. This work assumes, rather than shows, that
 some fuel-cheaper alternatives go unfiled because nobody had reason to
 look for them in time; others go unfiled because they could not have been
-filed at all. Section~\ref{sec:validity} returns to the assumption.
+filed at all, a restriction or an unavailable conditional route having
+closed them. Section~\ref{sec:validity} returns to the assumption.
 Candidate routes are readily available; what is hard is knowing which
 candidate is acceptable to this particular airline, on this day, with
 this rotation to protect, and knowing it inside the planning window
@@ -646,7 +647,8 @@ by the regulation context in which each revision was made.
 \begin{table}[t]
 \caption{The revision archive by decision context, over all eighteen
 months. A pair is counted as regulated here when a regulation was
-attributed to the route, which leaves the delay itself free to be zero;
+attributed to the flight while it was filed on that route, which leaves
+the delay itself free to be zero;
 Table~\ref{tab:context} sorts the held-out quarter by the delay instead,
 and the two conventions do not give the same counts. Unregulated pairs
 carry no regulation on either route, escapes carry one on the abandoned
@@ -723,10 +725,19 @@ A second, much smaller dataset was therefore constructed, in which
 flights on the same day, with the same origin, destination and aircraft
 type, that flew different routes and neither of which revised its plan,
 and let us suppose that one of them was caught by a regulation while
-the other was not. The regulated flight had both a reason to move and a
-demonstrated alternative, namely the route that its twin was flying
-that same day, and yet it stayed; its route is accordingly labelled as
-preferred, and that of its twin as the alternative it declined. The
+the other was not. The regulated flight had a reason to move and an
+alternative that was demonstrably flyable that day, namely the route its
+twin was flying, and yet it stayed; its route is accordingly labelled as
+preferred, and that of its twin as the alternative it declined. What the
+twin does not establish is that the same routing was open to the stayed
+flight at its own departure hour, since route availability in Europe is
+conditioned on the time of day, and that limit sits alongside the
+regulation confound described next.
+% CORRECTED 2026-09-07: "a demonstrated alternative" claimed more than the
+% construction supports. Same-day, same-city-pair, same-type matching does
+% not establish that the twin's routing was filable at the other flight's
+% own departure hour.
+The
 conditions are restrictive and the yield is correspondingly low: 6\,672
 such \emph{stay pairs} (pairs in which the preferred route is the one
 that was kept rather than the one that replaced it),

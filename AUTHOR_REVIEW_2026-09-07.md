@@ -181,6 +181,75 @@ but not the commonest. And the channel's fuel total now says at first mention
 that it is counted only where the airline's own later filing chose the route
 proposed, which is what one reader could not establish.
 
+## A third round, and what it confirmed against the source
+
+The seven fresh readers' findings were ranked by an eighth agent, which checked
+several against the source rather than taking the readers' word. Four were
+confirmed as real, not misreadings, and all four are now fixed.
+
+- **The abstract said the model is fitted on the first fifteen months** while
+  Section IV says fourteen, the fifteenth being the tuning month. Introduced by
+  this pass's abstract rewrite; now stated as fourteen, tuned on the fifteenth.
+- **Four readers explained the 55.0 % baseline back wrongly**, taking it for a
+  sensible cost heuristic. It is the inverse of one, and the abstract says so.
+- **The delay rule's 14.6 % against Table III's 24.0 %** — the omitted
+  "and the two differ" condition, above.
+- **τ was used in Section IV-B and given a value only three pages later.**
+
+Six more were fixed because a reader failed on them rather than disliked them:
+"the pairs that cost fuel lie elsewhere", whose antecedent this pass had moved
+two pages away; the `therefore` in "route structure therefore carries
+information", whose premise lived only inside Fig. 4 until the three attribution
+values were put on the page; the change-bias sentence, which opened on a
+before-and-after of an unnamed metric; "could not have been filed at all", which
+two readers could not interpret at all and which now names a restriction or an
+unavailable conditional route; 67.5 % denoting both the tuning month and the
+low end of the test range, now with the months named; and "a demonstrated
+alternative" in the stay-pair construction, which claimed more than same-day,
+same-city-pair, same-type matching supports — the journal now discloses the
+availability limit alongside the regulation confound.
+
+One correction of domain fact, in both papers: **a regulation is attributed to
+a flight, not to a route.** The papers said a route counts as regulated when a
+regulation was attributed to *it*; they now say when the flight, while filed on
+that route, had one attributed.
+
+Paying for those cost one more cut: the Conclusions' second finding restated
+the label-construction argument that the Introduction claims and Section II-A
+argues over three paragraphs, and a reader reported meeting it three times. It
+is replaced by a result the Introduction cannot state, namely that the model's
+margin is widest where cost logic fails.
+
+**The panel's verdict is that the paper is still not clean by the zero-context
+standard**, and that is reported honestly rather than smoothed over: seven
+readers returned thirty "confusing" verdicts between them, most on the second
+and third readings of dense material. What survives is listed below and is
+either fenced or structural.
+
+## Surviving, and why each was not acted on
+
+1. **Table III's strata are defined on quantities derived from the label**, so
+   conditioning accuracy on them and reading the spread as evidence about the
+   model is arguably circular. The reader's proposed test — report the inverted
+   fuel rule's own accuracy inside each stratum — would settle it and would
+   strengthen the finding if the model wins everywhere. That is new analysis and
+   a change to what a results table presents.
+2. **Section IV-A carries twelve ideas in one undifferentiated run**, and the
+   proposed fix is to split it into two subsections. That is a structure change.
+3. **Fig. 2's stage-1 annotation says "same flight, same day, same airline"**,
+   which contradicts the stay-pair construction drawn two boxes to its right,
+   and stage 3 draws one bar per indicator where the caption promises a pair.
+   The figure was closed on 2026-09-06 after three generation rounds; this needs
+   a fourth.
+4. **The provenance of the four cost indicators is never given** — no
+   performance model, no forecast source, no charging formula or unit-rate
+   vintage. Since the two routes of a pair are costed hours apart, part of a
+   fuel difference may be the forecast update rather than the route. Neither
+   paper can answer this from the record; the authors can.
+5. **The compelled-revision share is unquantified.** Both papers now say a
+   revision need not be a choice, and the journal says the archive holds no
+   field that separates the two. A bound would need work outside this archive.
+
 ## The one choice left open
 
 Holding 8 pages cost the worked proposal. There is exactly one alternative of

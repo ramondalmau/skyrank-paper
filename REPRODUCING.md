@@ -165,7 +165,7 @@ mkdir -p "$TMPDIR/sid" "$TMPDIR/trc"
 Acceptance after every build: SID exactly 8 pages, TRC 50 (49 before the
 2026-09-07 additions); no `Overfull` lines in the log; no `??` in the PDF
 text; both abstracts at or under 250 words with LaTeX markup stripped (SID
-224, TRC 246). The committed `sid2026.pdf` and `trc2026.pdf` are the builds
+229, TRC 247). The committed `sid2026.pdf` and `trc2026.pdf` are the builds
 of the committed sources.
 
 Two checks that only exist because they caught real defects:
