@@ -1,4 +1,4 @@
-# TR-C extension — Learning airline route preferences from flight-plan revisions
+# TR-C extension — Predicting airline acceptance of fuel-saving reroutes from flight-plan revisions
 
 Journal extension of `../sid2026` for Transportation Research Part C.
 `trc2026.tex` is the manuscript; `SUBMISSION_NOTES.md` the evidence map and
@@ -13,7 +13,7 @@ mkdir -p "$TMPDIR/trc"
 ~/.local/bin/tectonic -X compile trc2026.tex --outdir "$TMPDIR/trc"
 ```
 
-Currently 46 pages, zero errors, zero undefined references. The
+Currently 37 pages, zero errors, zero undefined references. The
 `latex_sanity.py` brace-delta warning on this file is a known false positive
 of that naive counter; do not chase it.
 
@@ -29,10 +29,13 @@ of that naive counter; do not chase it.
   (accuracy, coverage and baselines; accuracy by stratum; ablation and change
   bias; error analysis; feature attribution) · 7 Proposal channel (policy and
   operating points; concentration of the value; sensitivity to the bias
-  correction; a worked example) · 8 Model ageing · 9 Threats to validity ·
-  10 Conclusions, then the Disclaimer and the elsarticle declarations.
-  Headings are plain noun phrases; every section opens with a lead-in
-  paragraph.
+  correction; a worked example) · 8 Threats to validity · 9 Conclusions, then
+  the Disclaimer and the elsarticle declarations. Headings are plain noun
+  phrases; every section opens with a lead-in paragraph.
+  Model ageing (formerly Section 8, `studies/2026-08-trc-horizon/`) was cut
+  entirely at the author's request on 2026-09-09 for length; the removed
+  prose is kept in `% Cut for space` comments in `trc2026.tex` and the study
+  itself is untouched on disk if it is ever restored.
 - **The SID prose is the core.** Sections shared with the conference paper
   were carried over nearly verbatim and the journal material written around
   them. The abstract is held at 250 words under the strictest count: strip
@@ -220,3 +223,41 @@ Opportunely, Needless to say, Last but not least) are voice and stay.
 - **A repair to the archive** had been referred to without being described. It
   is now stated: pair completeness had been keyed on an identifier reused
   across days, which dropped about a quarter of the valid pairs.
+
+## The length and framing pass of 2026-09-09
+
+The manuscript went from 51 to 35 pages through a mix of redundancy removal,
+whole-float cuts and prose consolidation (verified compile-clean and
+reference-clean after every step), then back up to 37 after the author asked
+for four of the cut figures back, paid for with further prose consolidation
+in Background rather than by re-cutting figures. **Cut entirely**: the Model
+Ageing section (see above), `fig_pipeline.png` (its own AI-disclosure text
+says it carries no data, measurement or result), `fig:shapdir`, `fig:tradeoff`
+and `fig:concentration` (each redundant with a number already stated in
+prose), `tab:calibration`, `tab:sweep`, `tab:operating` and `tab:strata`'s
+magnitude block. **Restored after the author's objection**: `fig:pairidea`,
+`fig:shap`, `fig:example` and `fig:maps`, each with its original caption; see
+the `% Restored 2026-09-09` comments in `trc2026.tex`.
+
+Two other passes ran the same day:
+
+1. **Institutional neutrality.** Two sentences overstated EUROCONTROL's own
+   function as institutionally necessary rather than descriptive ("air
+   traffic ... is planned across national borders by a single network
+   function"; "what the network lacks is therefore a proposal channel").
+   Both reworded to describe the Network Manager's actual, narrower role and
+   to frame the channel as one possible gap-filler rather than a stated need;
+   see the `% CORRECTED 2026-09-09 (author's request, institutional
+   neutrality)` comments.
+2. **Research-only framing.** All ~12 uses of "deploy/deployed/deployment"
+   and both proposals for a shadow-mode operational trial were reworded to
+   conditional, hypothetical phrasing ("a channel used in practice", "were
+   such a channel ever introduced"). The paper describes an analysis, not an
+   operational rollout; confirmed by grep that no live (non-comment)
+   "deploy" instance remains.
+
+**Title changed** from "Learning airline route preferences from flight-plan
+revisions" to "Predicting airline acceptance of fuel-saving reroutes from
+flight-plan revisions", at the author's request: the old title read as
+surveillance of airline behaviour; the new one names the service's
+fuel-saving goal instead.
