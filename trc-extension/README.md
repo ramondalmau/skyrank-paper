@@ -13,7 +13,7 @@ mkdir -p "$TMPDIR/trc"
 ~/.local/bin/tectonic -X compile trc2026.tex --outdir "$TMPDIR/trc"
 ```
 
-Currently 37 pages, zero errors, zero undefined references. The
+Currently 33 pages, zero errors, zero undefined references. The
 `latex_sanity.py` brace-delta warning on this file is a known false positive
 of that naive counter; do not chase it.
 
@@ -22,8 +22,8 @@ of that naive counter; do not chase it.
 - **Class**: `elsarticle` preprint, 12pt, author-year (`elsarticle-harv`),
   single column.
 - **Sections**: 1 Introduction · 2 Background (revisions as preference data;
-  two operational use cases; revealed preference and the construction of
-  pairs) · 3 Related work · 4 Data and pair construction (the archive,
+  potential uses of the predictions; revealed preference and the construction
+  of pairs) · 3 Related work · 4 Data and pair construction (the archive,
   including its composition; stay pairs; encoding and leakage control;
   splits) · 5 Model, training and calibration · 6 Predictive performance
   (accuracy, coverage and baselines; accuracy by stratum; ablation and change
@@ -261,3 +261,31 @@ revisions" to "Predicting airline acceptance of fuel-saving reroutes from
 flight-plan revisions", at the author's request: the old title read as
 surveillance of airline behaviour; the new one names the service's
 fuel-saving goal instead.
+
+## The clarity revision of 2026-09-17
+
+Both manuscripts (`sid2026.tex` and `trc2026.tex`, plus `highlights.tex`) were
+rewritten by an external ChatGPT-based pass ("Astra") on top of commit
+`9739cb2` (the length/framing pass above), then hand-copied into the repo and
+verified here. The full rationale is in `../REVISION_NOTES_2026-09-17.md`;
+the short version: revision pairs and stay pairs are now explained
+separately, chosen/abandoned labels are defined before use, context alignment
+and within-pair normalisation are distinguished, and the model/calibration/
+threshold chain is explained in order. Several overstated interpretations
+were walked back to what the evidence supports: calibration does not
+guarantee later precision, the 10% stay-pair error is not a confident-rejection
+rate, three similar test months do not rule out model ageing, attribution
+does not establish causal airline preference, and the journal's McNemar/
+p-value claims were replaced with effect sizes (existing uncertainty
+intervals kept). The conference section "Two operational use cases" was
+renamed "Potential uses of the predictions", continuing the same
+research-only framing as the 2026-09-09 pass. Titles, author blocks,
+citation keys, the EUROCONTROL disclaimers and the section structure are
+unchanged; no figures were added, removed or replaced.
+
+Verified before committing: both files rebuilt with this repo's own
+tectonic chain against the existing figures and `refs.bib` (both unchanged
+from the base commit) — 8 conference pages, 33 journal pages (down from 37;
+see the page-count line above), zero undefined references in either log, no
+reintroduction of "deploy"/"shadow trial" language or unhedged institutional
+claims in live text.
