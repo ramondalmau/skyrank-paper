@@ -1,0 +1,126 @@
+% =====================================================================
+% TITLE PAGE for double-anonymized review (Journal of Air Transport
+% Management). Submitted as a file separate from the anonymized
+% manuscript (trc2026_blind.tex); not sent to reviewers. Carries every
+% item the anonymized manuscript withholds: author names and
+% affiliations, Acknowledgements, Declaration of competing interest,
+% CRediT authorship statement, Disclaimer and Data availability
+% statement. Keep in sync with trc2026.tex by hand.
+% =====================================================================
+\documentclass[preprint,authoryear,12pt]{elsarticle}
+
+\usepackage{cmap}
+\usepackage[T1]{fontenc}
+\usepackage[hidelinks]{hyperref}
+
+% the class's first-page footline ("Preprint submitted to <journal>
+% <date>") is wider than the text block with this journal's full name;
+% same fix as trc2026.tex, one point smaller so it fits the measure
+\makeatletter
+\def\ps@pprintTitle{%
+  \let\@oddhead\@empty \let\@evenhead\@empty
+  \def\@oddfoot{\fontsize{9}{11}\selectfont\itshape
+    Preprint submitted to Journal of Air Transport Management%
+    \hfill\enspace\today}%
+  \let\@evenfoot\@oddfoot}
+\makeatother
+
+\journal{Journal of Air Transport Management}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Predicting airline acceptance of fuel-saving reroutes from
+flight-plan revisions}
+
+\author[ih]{Ramon Dalmau\corref{cor}}
+\ead{ramon.dalmau-codina@eurocontrol.int}
+\author[muac]{David Perez}
+\author[muac]{Seddik Belkoura}
+\author[ih]{Franck Ballerini}
+\author[muac]{Vincent Taverniers}
+\author[muac]{Gratiel Marius Marin}
+\author[ih]{Robin Deransy}
+\author[hq]{Benjamin Cramet}
+\author[hq]{Grigori Gustin}
+\cortext[cor]{Corresponding author.}
+\affiliation[ih]{organization={EUROCONTROL Innovation Hub},
+  city={Br\'etigny-sur-Orge}, country={France}}
+\affiliation[muac]{organization={EUROCONTROL Maastricht Upper Area
+  Control Centre}, city={Maastricht}, country={the Netherlands}}
+\affiliation[hq]{organization={EUROCONTROL Headquarters},
+  city={Brussels}, country={Belgium}}
+
+\begin{abstract}
+Flight-plan revisions provide direct comparisons for learning route
+preferences: a route previously filed for a flight and its replacement.
+We use 1.48 million pairs from eighteen months of European traffic to
+train a ranking model with route indicators, flight context and waypoint
+identifiers. Shared flight attributes prevent message timing from
+revealing the label. On a later test quarter, the model identifies the
+replacement in 68.1\,\% of cases, compared with 55.0\,\% for the best
+single-indicator rule and 57.5\,\% for the strongest logistic baseline.
+Accuracy reaches 94.9\,\% on the fifth of pairs with the highest
+confidence. Matched examples of retained routes improve predictions on
+a smaller stay-pair test set. A retrospective policy then selects
+lower-fuel routes above a calibrated probability threshold. At an
+operating point targeting 80\,\% precision, 79.2\,\% of selections
+match the subsequent filing and account for 20.1\,kilotonnes of
+planned-fuel differences over the quarter. These results establish
+useful prediction and confidence-based selection from revision records.
+The fuel total describes historical choices; acceptance of actual
+proposals and additional savings require prospective evaluation.
+\end{abstract}
+
+\begin{keyword}
+air traffic flow management \sep airline preferences \sep learning to
+rank \sep fuel efficiency
+\end{keyword}
+
+\end{frontmatter}
+
+\section*{Acknowledgements}
+None.
+
+\section*{Declaration of competing interest}
+The authors declare that they have no known competing financial
+interests or personal relationships that could have appeared to
+influence the work reported in this paper.
+
+% NOTE: the role assignment below is INFERRED from author order and
+% affiliations (first author = modelling and drafting; MUAC authors =
+% operational domain, data and validation; Innovation Hub senior
+% author = project administration; HQ authors = supervision). Every
+% author must confirm or correct their roles before submission.
+\section*{CRediT authorship contribution statement}
+\textbf{Ramon Dalmau:} Conceptualization, Methodology, Software, Data
+curation, Formal analysis, Investigation, Visualization, Writing --
+original draft. \textbf{David Perez:} Conceptualization, Resources,
+Validation, Writing -- review \& editing. \textbf{Seddik Belkoura:}
+Methodology, Validation, Writing -- review \& editing.
+\textbf{Franck Ballerini:} Validation, Writing -- review \& editing.
+\textbf{Vincent Taverniers:} Resources, Data curation, Writing --
+review \& editing. \textbf{Gratiel Marius Marin:} Resources,
+Validation, Writing -- review \& editing. \textbf{Robin Deransy:} Conceptualization, Project
+administration, Writing -- review \& editing. \textbf{Benjamin
+Cramet:} Supervision, Writing -- review \& editing. \textbf{Grigori
+Gustin:} Supervision, Project administration, Writing -- review \&
+editing.
+
+\section*{Disclaimer}
+The views expressed are those of the authors and do not necessarily
+reflect the official position of EUROCONTROL or of its Member States.
+This paper reports research and does not commit to any operational
+service.
+
+\section*{Data availability}
+The data used in this study is operational air traffic data held by
+EUROCONTROL and processed under existing data-handling arrangements; it
+cannot be made publicly available. Aggregated tables underlying every
+figure are available from the corresponding author upon reasonable
+request, in the de-identified form this paper itself uses: operators,
+city pairs and waypoints appear in them by rank rather than by name,
+which leaves every number and every ordering unchanged. Per-flight tables are excluded from the release.
+
+\end{document}
