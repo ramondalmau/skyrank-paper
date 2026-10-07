@@ -1,9 +1,9 @@
 # SESAR Innovation Days 2026 paper
 
-*Which Reroute Will an Airline Accept? Learning Route Preferences from
-Revisions*
+*Learning Airline Route Preferences from Flight-Plan Revisions to Support
+Fuel-Efficient Alternatives*
 
-Dalmau, Perez, Ballerini, Belkoura, Taverniers, Marin, Deransy, Cramet,
+Dalmau, Perez, Belkoura, Ballerini, Taverniers, Marin, Deransy, Cramet,
 Gustin
 (EUROCONTROL).
 
