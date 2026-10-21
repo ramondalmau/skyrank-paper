@@ -85,7 +85,8 @@ revealing which route came later. On a later, held-out quarter, it
 identifies the chosen route in 68.1\,\% of cases, compared with
 55.0\,\% for the best single-indicator rule. Accuracy reaches
 94.9\,\% on the fifth of pairs with the highest confidence. A smaller
-set of matched flights that kept their routes helps the model represent
+set of flights that kept their routes, matched to similar flights by
+day, origin, destination and aircraft type, helps the model represent
 that behaviour as well. To illustrate how the predictions could guide
 fuel-saving proposals, we evaluate a policy that selects the lower-fuel
 route only above a calibrated confidence threshold. Of its selected
@@ -395,7 +396,7 @@ Table~\ref{tab:features}. The two routes of a pair are separated in time as
 well as in geography, however, and that must be addressed before
 anything is learned. The replacement is by
 construction the later message, so any feature that drifts with time
-identifies the answer without saying anything about the quality of the
+identifies the answer without needing to assess the quality of the
 route. The time remaining to departure is the clearest case: it is
 necessarily smaller for the route that replaced the other, so a model given
 it in raw form could answer ``the one filed later'', be right on essentially
@@ -1017,11 +1018,11 @@ one; incorrect selections contribute nothing to this sum. The total is
 20.1\,kt, equivalent to 63.5\,kt of CO$_2$ at 3.16\,kg per kilogramme
 of fuel.
 
-Two annualisation assumptions give 222 to 254\,kt of CO$_2$.
-Multiplying the quarter's total by four gives 254\,kt. Applying the
-per-eligible-pair rate to an annual eligible volume estimated from the
-archive gives 222\,kt. These are two ways to scale the historical
-result, not statistical bounds or forecasts of additional savings.
+Two annualisation assumptions scale the historical planned-fuel
+differences to 222 to 254\,kt of CO$_2$; these are not forecasts of
+additional savings. Multiplying the quarter's total by four gives
+254\,kt. Applying the per-eligible-pair rate to an annual eligible
+volume estimated from the archive gives 222\,kt.
 
 These are sums of planned-fuel differences on matching historical
 revisions. They are neither measured fuel burn nor additional savings
