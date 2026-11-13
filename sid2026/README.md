@@ -9,14 +9,12 @@ Gustin
 
 ## Status
 
-Exactly 8 of 8 permitted pages. **Not yet submitted.** See `COMPLIANCE.md` for
-the venue rules and the two items to settle before upload:
+9 of 9 permitted pages (the editor raised the limit from 8 to 9 for this
+submission). **Not yet submitted.** Set in the official SIDs 2026 template
+(IEEEtran conference, A4) with page numbers restored; see `COMPLIANCE.md` for
+the full review-response record (2026-11-13). One item to settle before upload:
 
-1. `sid2026.tex` is a *drafting scaffold* on IEEEtran, not the official SID
-   class. The submission must be transplanted into the official template from
-   EasyChair and the page count re-checked there; a denser template will
-   overflow.
-2. The public venue page describes a triple-blind review; the organisers told
+1. The public venue page describes a triple-blind review; the organisers told
    the authors that author details are not withheld for this edition. The
    paper is built with `\blindfalse`. Re-confirm before upload.
 
@@ -32,7 +30,7 @@ mkdir -p "$TMPDIR/sid"
 ```
 
 The committed `figures/*.pdf` and `figures/fig_pipeline.png` are sufficient to build. There is no `pdflatex`
-on the analysis host; use tectonic. Check after every build: page count 8, no
+on the analysis host; use tectonic. Check after every build: page count 9, no
 `Overfull` lines, no `??` in the PDF.
 
 ## Structure

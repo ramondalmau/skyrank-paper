@@ -3,9 +3,68 @@
 Target: SESAR Innovation Days 2026 (SIDs 2026), full paper
 Official source: https://www.sesarju.eu/SIDS2026
 Checked: 2026-08-06
+Last revision: 2026-11-13 (review response — see the section below, which
+supersedes the "8 pages", "drafting scaffold" and "transplant is a human
+step" statements further down).
+
+REVIEW-RESPONSE REVISION — 2026-11-13
+This section records the changes made to answer the three reviews and the
+editor's note. It supersedes, where it conflicts, the "8 pages", "drafting
+scaffold" and "transplant is a human step" statements further down.
+
+WHAT CHANGED
+- OFFICIAL TEMPLATE. The manuscript was transplanted from the drafting
+  scaffold into the official SIDs 2026 preamble (IEEEtran conference, A4),
+  keeping only the paper's own deliberate typesetting settings on top of the
+  venue preamble. The body text is byte-identical to the pre-transplant draft
+  apart from the changes listed here; the scaffold is backed up at
+  `~/.cache/claude-tmp/sid2026_draft_scaffold.bak`.
+- PAGE NUMBERS (R1). IEEEtran `[conference]` emits no page numbers in this
+  tectonic build. `\pagestyle{plain}` was added after `\maketitle`, which
+  restores the standard bottom-centre numbers on pages 2–9 (page 1 is blank,
+  the IEEEtran first-page convention). Verified in the rendered PDF.
+- PAGE LIMIT (editor). The editor raised the limit from 8 to 9. The paper now
+  runs to exactly 9 pages, build exit 0, 0 undefined references.
+- REFERENCES (R1, R2). Ten references were added and verified against
+  CrossRef / arXiv / OpenAlex / the issuing bodies (NASA airborne-reroute and
+  route-structure work; European route-choice discrete-choice economics;
+  UPC pre-tactical route/flight-level prediction; two collaborative-ATFM
+  entries released from a cut note). See the response letter for the list.
+- READABILITY (R1-4, R3-1). The method and results sections were run past a
+  four-reader zero-context panel; every passage they flagged on a first read
+  was redrafted. Changes: the weather/planned-fuel paragraph leads with the
+  simple point; the flight-level vs route-level feature split is one
+  connected paragraph; undefined group labels and the broken "left regulation"
+  quote are fixed; the group-weight, "old route only" stratum and 53.2%
+  baseline arithmetic are now explained where used; "cost indicator" is
+  restored to "route indicator"; the undefined "channel" is replaced by the
+  paper's own "policy"; and the two confidence slices are distinguished.
+- CAPTION CONTENT (R2-3). The operational explanations carried in the captions
+  of Table I, Table II and Figure 4 were moved into the body text.
+- AI DISCLOSURE (editor). The voluntary "Use of artificial intelligence"
+  statement is at the end of the paper.
+
+TABLE ORDERING (R3-2, R3-3). Both complaints were checked against the current
+build and do NOT reproduce: tables are numbered I–IV in source order (verified
+in the `.aux`), Tables I–III render in order I, II, III on page 4 immediately
+after their first reference, and Table IV renders on page 6 with its strata
+analysis. No table is numbered or placed before its predecessor.
+
+RESPONSE LETTER. `~/.cache/claude-tmp/sid-panel/response_draft.md` holds the
+point-by-point response, including the interpretability-revisions list tied to
+each reader-flagged sentence. It is not yet in the repo; copy it in when the
+authors finalise.
+
+STILL OPEN (carry-forward from earlier notes)
+- Fig. 2 print resolution (200 dpi at full-width include) — see below.
+- Re-confirm the page-count/limits and the non-blind review policy with the
+  organisers before upload.
+
+---
 
 VERIFIED FROM THE OFFICIAL PAGE
-- Page limit: "up to 8 pages"
+- Page limit: "up to 8 pages" (RAISED TO 9 BY THE EDITOR for this submission;
+  the paper is 9 pages, see the section above).
 - Review: the public page describes a "triple-blind peer review", but the
   organisers confirmed to the authors (2026-08-06) that author details are NOT
   withheld for this edition. The paper is therefore submitted with the author
@@ -26,7 +85,8 @@ NOT VERIFIED / MUST BE CONFIRMED BEFORE SUBMISSION
 - Required sections, if any
 - Anonymisation specifics (author block, self-citation phrasing, metadata)
 
-CONSEQUENCE FOR THIS DRAFT
+CONSEQUENCE FOR THIS DRAFT  [SUPERSEDED 2026-11-13 — the transplant is now
+DONE; see the review-response section above. Kept for the record.]
 The .tex here is a DRAFTING SCAFFOLD, not the official template. Before
 submission the text must be transplanted into the official SID LaTeX template
 downloaded from EasyChair, and the page count re-checked in that template.
@@ -82,6 +142,9 @@ raster is 200 dpi, below IEEE's 300 dpi guidance for raster art and below the
 printed size, but a larger render would settle it.
 
 CAMERA-READY STATUS (2026-09-02; supersedes 2026-08-21)
+[The "8 pages" and "transplant is the remaining human step" lines below were
+superseded on 2026-11-13 — the paper is now 9 pages in the official template
+with page numbers restored; see the review-response section above.]
 - Build verified: exactly 8 pages, 0 overfull boxes, 0 undefined references,
   figures drawn at print size (see README). Section structure simplified to
   plain IMRAD headings on 2026-09-02.

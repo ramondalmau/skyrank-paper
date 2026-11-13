@@ -144,18 +144,6 @@
   year      = {2015}
 }
 
-% arXiv API, id 1802.06588v2, submitted 2018-02-19. Author comment states it was
-% submitted to Transportation Research Part C; no journal reference or DOI is
-% registered, so it is cited as a preprint.
-@techreport{prc2026,
-  author      = {{Performance Review Commission}},
-  title       = {{PRR} 2025: Performance Review Report -- An Assessment of Air
-                 Traffic Management in Europe},
-  institution = {EUROCONTROL},
-  year        = {2026},
-  month       = mar
-}
-
 % --- 5. Revealed preference ---------------------------------------------------
 
 % CrossRef 10.2307/2548836: Economica 5(17), first page 61, February 1938.
@@ -185,4 +173,123 @@
   pages   = {102124},
   year    = {2021},
   doi     = {10.1016/j.jairtraman.2021.102124}
+}
+
+% --- Added for the SIDs 2026 revision (reviewer 1: NASA route work; author
+% request: Mateos / Prats UPC route work). Each entry was verified against a
+% live source by an independent check on 2026-11-13; provenance per entry.
+% Nothing here is reconstructed from memory. Caveats: mateos2020routes and
+% mateos2020fl carry no DOI (venues from the authors' UPC repository records);
+% karr2018's year is inferred from the NTRS accession number.
+
+% NASA: predicting or generating operationally acceptable reroutes (R1)
+@article{evans2018,
+  author  = {Evans, Antony D. and Lee, Paul and Sridhar, Banavar},
+  title   = {Predicting the operational acceptance of airborne flight reroute
+             requests using data mining},
+  journal = {Transp. Res. Part C: Emerging Technol.},
+  volume  = {96},
+  pages   = {270--289},
+  year    = {2018},
+  doi     = {10.1016/j.trc.2018.09.024}
+}
+
+@techreport{evans2019,
+  author       = {Evans, Antony and Lee, Paul},
+  title        = {Using machine-learning to dynamically generate operationally
+                  acceptable strategic reroute options},
+  institution  = {NASA Ames Research Center},
+  year         = {2019},
+  number       = {ARC-E-DAA-TN69401},
+  note         = {NTRS 20190027644; conference paper}
+}
+
+@inproceedings{lee2021,
+  author    = {Lee, Paul U. and Brasil, Connie and Gabriel, Conrad
+               and Garzon, Kevin and Buckley, Nathan and Kalush, Scott},
+  title     = {Demonstration of airline-based airborne reroute operations using
+               trajectory option sets and third-party tools},
+  booktitle = {AIAA AVIATION 2021 Forum},
+  year      = {2021},
+  doi       = {10.2514/6.2021-2328}
+}
+
+% NASA: route structure / published waypoints (R1)
+@article{zelinski2011,
+  author  = {Zelinski, Shannon and Jastrzebski, Michael},
+  title   = {Defining dynamic route structure for airspace configuration},
+  journal = {Proc. {IMechE} Part G: J. Aerospace Eng.},
+  volume  = {226},
+  number  = {9},
+  pages   = {1161--1170},
+  year    = {2011},
+  doi     = {10.1177/0954410011417354}
+}
+
+@inproceedings{paradis2022,
+  author    = {Paradis, Carlos and Davies, Misty D.},
+  title     = {Visualizing corridors in terminal airspace using trajectory
+               clustering},
+  booktitle = {Proc. 41st IEEE/AIAA Digital Avionics Systems Conf. ({DASC})},
+  year      = {2022},
+  pages     = {1--9},
+  doi       = {10.1109/DASC55683.2022.9925823}
+}
+
+@techreport{karr2018,
+  author       = {Karr, David A. and Vivona, Robert A. and Wing, David J.},
+  title        = {Costs of limiting route optimization to published waypoints in
+                  the traffic aware planner},
+  institution  = {NASA Langley Research Center},
+  year         = {2018},
+  number       = {NF1676L-15962},
+  note         = {NTRS 20180001345; year inferred from accession number}
+}
+
+% Airline route choice as a stated discrete-choice trade (route-choice economics)
+@inproceedings{sha2015,
+  author    = {Sha, Zhenghui and Moolchandani, Kushal A. and Maheshwari, Apoorv
+               and Thekinen, Joseph and Panchal, Jitesh and
+               DeLaurentis, Daniel A.},
+  title     = {Modeling airline decisions on route planning using discrete
+               choice models},
+  booktitle = {15th AIAA Aviation Technology, Integration, and Operations
+               Conf. ({ATIO})},
+  year      = {2015},
+  doi       = {10.2514/6.2015-2438}
+}
+
+% UPC (Mateos / Prats): machine-learning prediction of pre-tactical routes/levels
+@inproceedings{mateos2020routes,
+  author    = {Mateos Villar, Manuel and Mart{\'{\i}}n, Ignacio
+               and Castillo, Pablo and Herranz, Ricardo
+               and Garc{\'{\i}}a, Oliva and Prats Men{\'e}ndez, Xavier},
+  title     = {Full-scale pre-tactical route prediction: machine learning to
+               increase pre-tactical demand forecast accuracy},
+  booktitle = {Proc. Int. Conf. on Air Resource Management ({ICRAT})},
+  year      = {2020},
+  note      = {OpenAlex W3171915093; UPC repository 2117/341212; no DOI}
+}
+
+@inproceedings{mateos2020fl,
+  author    = {Mateos Villar, Manuel and Mart{\'{\i}}n, Ignacio
+               and Castillo, Pablo and Alcolea Rodr{\'{\i}}guez, Rub{\'e}n
+               and Herranz, Ricardo and Garc{\'{\i}}a, Oliva
+               and Prats Men{\'e}ndez, Xavier},
+  title     = {Predicting requested flight levels with machine learning},
+  booktitle = {Proc. SESAR Innovation Days ({SIDs})},
+  year      = {2020},
+  note      = {OpenAlex W3157757530; UPC repository 2117/341211; no DOI}
+}
+
+% UPC (Prats): collaborative ATFM with trajectory options
+@article{xu2020framework,
+  author  = {Xu, Wei and Dalmau, Marc and Melgosa, David
+             and Montlaur, Alexandre and Prats, Xavier},
+  title   = {A framework for collaborative air traffic flow management
+             minimizing costs for airspace users: enabling trajectory options
+             and flexible pre-tactical delay management},
+  journal = {Transp. Res. Part B: Methodol.},
+  year    = {2020},
+  doi     = {10.1016/j.trb.2020.02.012}
 }
